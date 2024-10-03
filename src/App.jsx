@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS
-import SignUp from './signup'; // Import the signup component
+import SignUp from './SignUp'; // Import the SignUp component
 import './App.css'
 
 function App() {
@@ -165,12 +165,12 @@ function App() {
                     </a>
                     <ul className="dropdown-menu text-center">
                       <li>
-                        <Link className="dropdown-item" to="/signup">
+                        <Link className="dropdown-item" to="/SignUp">
                           SIGN UP
                         </Link>
                       </li>
                       <li>
-                        <Link className="dropdown-item" to="/signin">
+                        <Link className="dropdown-item" to="/SignIn">
                           SIGN IN
                         </Link>
                       </li>
@@ -185,7 +185,7 @@ function App() {
           <div className="container">
             {/* Define Routes for SignUp and SignIn */}
             <Routes>
-              <Route path="/signup" element={<SignUp />} />
+              <Route path="/SignUp" element={<SignUp />} />
               {/* Other routes can go here */}
             </Routes>
           </div>
