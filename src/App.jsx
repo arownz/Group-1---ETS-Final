@@ -116,7 +116,7 @@ function App() {
           <nav className="navbar navbar-expand-lg bg-white fixed-top navbar-light p-3 shadow-sm">
             <div className="container">
               <a className="navbar-brand" href="#">
-                <img src="/src/assets/logo.png" alt="logo" style={{ height: 60 }} />
+                <img src="./src/assets/logo.png" alt="logo" style={{ height: 60 }} />
               </a>
               <button
                 className="navbar-toggler"
