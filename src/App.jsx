@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS
 import SignUp from './signup'; // Import the signup component
-import SignIn from './signin'; // Import the signin component
 import './App.css'
 
 function App() {
@@ -187,7 +186,6 @@ function App() {
             {/* Define Routes for SignUp and SignIn */}
             <Routes>
               <Route path="/signup" element={<SignUp />} />
-              <Route path="/signin" element={<SignIn />} />
               {/* Other routes can go here */}
             </Routes>
           </div>
