@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS
-import SignUp from './SignUp'; // Import the SignUp component
-import SignIn from './SignIn'; // Import the SignIn component
+import SignUp from './signup'; // Import the signup component
+import SignIn from './signin'; // Import the signin component
 import './App.css'
 
 function App() {
@@ -171,7 +171,7 @@ function App() {
                         </Link>
                       </li>
                       <li>
-                        <Link className="dropdown-item" to="/signup">
+                        <Link className="dropdown-item" to="/signin">
                           SIGN IN
                         </Link>
                       </li>
@@ -220,7 +220,7 @@ function App() {
               <div className="col-md-6">
                 <br />
                 <img
-                  src="/src/assets/new1.jpg"
+                  src="./src/assets/new1.jpg"
                   alt=""
                   style={{ height: 300 }}
                   className="rounded-3 img-fluid"
@@ -237,7 +237,7 @@ function App() {
               <div className="row py-5">
                 <div className="col-md-6">
                   <img
-                    src="/src/assets/about us"
+                    src="./src/assets/about us"
                     alt=""
                     style={{ height: "auto", maxHeight: 400, width: "100%" }}
                     className="rounded-3 img-fluid"
@@ -440,7 +440,7 @@ function App() {
                 </div>
                 <div className="col-lg-6 text-center ">
                   <img
-                    src="/src/assets/what"
+                    src="./src/assets/your need.webp"
                     alt=""
                     style={{ maxHeight: 500, width: "100%" }}
                     className="rounded-3 img-fluid"
@@ -594,14 +594,14 @@ function App() {
                 </div>
                 <div className="col">
                   <img
-                    src="/src/assets/advisor1.webp"
+                    src="./src/assets/advisor1.webp"
                     alt=""
                     style={{ height: 250, paddingLeft: 75 }}
                   />
                 </div>
                 <div className="col">
                   <img
-                    src="/src/assets/advisor2.png" alt="advisor2"
+                    src="./src/assets/advisor2.png" alt="advisor2"
                     style={{ height: 250, paddingLeft: 75 }}
                   />
                 </div>
@@ -648,7 +648,7 @@ function App() {
                   {/* Content */}
                   <h6 className="text-uppercase fw-bold mb-4">
                     <i className="fas fa-gem me-3" />
-                    <img src="/src/assets/logo.png" alt="" style={{ height: 50 }} />
+                    <img src="./src/assets/logo.png" alt="" style={{ height: 50 }} />
                   </h6>
                   <p>
                     Here you can use rows and columns to organize your footer content.
