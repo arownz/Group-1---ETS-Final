@@ -235,7 +235,7 @@ function App() {
               <div className="row py-5">
                 <div className="col-md-6">
                   <img
-                    src="./src/assets/about us"
+                    src="./src/assets/about us.png"
                     alt=""
                     style={{ height: "auto", maxHeight: 400, width: "100%" }}
                     className="rounded-3 img-fluid"
@@ -438,7 +438,7 @@ function App() {
                 </div>
                 <div className="col-lg-6 text-center ">
                   <img
-                    src="./src/assets/your need.webp"
+                    src="./src/assets/what.png"
                     alt=""
                     style={{ maxHeight: 500, width: "100%" }}
                     className="rounded-3 img-fluid"
