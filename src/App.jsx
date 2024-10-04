@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS
 import SignUp from './SignUp'; // Import the SignUp component
-
-import SignUp from './SignUp'; // Import the SignUp component
 import './App.css'
 
 function App() {
