@@ -159,7 +159,7 @@ function ContactUs() {
                                 </div>
                                 <div className="row">
                                     <p>
-                                        Thank you for your interest in Spend Wise's services. Please
+                                        Thank you for your interest in Spend Wise&#39;s services. Please
                                         provide the following information about your business needs to
                                         help us serve you better. This information will enable us to
                                         route your request to the appropriate person. You should receive
@@ -191,7 +191,7 @@ function ContactUs() {
                                         aria-describedby="emailHelp"
                                     />
                                     <div id="emailHelp" className="form-text">
-                                        We'll never share your email with anyone else.
+                                        We&#39;ll never share your email with anyone else.
                                     </div>
                                 </div>
                                 <div className="mb-3">
@@ -313,3 +313,5 @@ function ContactUs() {
         </>
     );
 }
+
+export default ContactUs;
