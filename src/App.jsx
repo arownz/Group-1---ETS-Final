@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS
 import SignUp from './SignUp'; // Import the SignUp component
 import './App.css'
+import './App1.css'
 
 function App() {
   useEffect(() => {
@@ -86,6 +87,7 @@ function App() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {/* styling  */}
         <link rel="stylesheet" href="App.css" />
+        <link rel="stylesheet" href="./src/css/App1.css" />
         {/* font  */}
         <link
           href="https://fonts.googleapis.com/css?family=Open+Sans"
@@ -104,12 +106,6 @@ function App() {
         />
         {/* favicon */}
         <link rel="icon" type="image/x-icon" href="/src/assets/rounded-1.png" />
-        <style
-          dangerouslySetInnerHTML={{
-            __html:
-              "\n  * {\n      margin: 0px;\n      padding: 0px;\n  }\n\n  a {\n      text-decoration: none !important;\n  }\n\n  .progress-container {\n      width: 100%;\n      background-color: #f1f1f1;\n  }\n\n  "
-          }}
-        />
         {/* Navbar Section */}
         <header>
           <nav className="navbar navbar-expand-lg bg-white fixed-top navbar-light p-3 shadow-sm">

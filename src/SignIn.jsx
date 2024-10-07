@@ -1,4 +1,5 @@
 import './App.css';
+import './SignIn.css';
 
 function SignIn() {
   return (
@@ -29,18 +30,13 @@ function SignIn() {
       />
       <title> Sign in | Spend Wise</title>
       <link rel="icon" type="image/x-icon" href="Images/rounded-1.png" />
-      <style
-        dangerouslySetInnerHTML={{
-          __html:
-            "\n*{\n  margin: 0px;\n  padding: 0px;\n}\n\nbody{\n  padding-top: 100px;\n}\n.progress-container {\n  width: 100%;\n  background-color: #f1f1f1;\n}\n\n.progress-bar {\n  height: 3px;\n  background-color: #4caf50;\n  width: 0%;\n}\n\n@media (max-width: 991.98px) {\n  .navbar-collapse {\n    display: none !important;\n  }\n}\na{\n  text-decoration: none;\n}\n"
-        }}
-      />
+      <link rel="stylesheet" href="SignIn.css" />
       <header>
         {/* Navbar */}
         <nav className="navbar navbar-expand-lg bg-white fixed-top navbar-light p-3 shadow-sm">
           <div className="container">
             {/* Logo */}
-            <a className="navbar-brand" href="index.html">
+            <a className="navbar-brand" href="App.jsx">
               <img src="Images/logo.png" alt="logo" style={{ height: 60 }} />
             </a>
             {/* Toggler/collapsing button */}
@@ -62,20 +58,20 @@ function SignIn() {
                 <li className="nav-item">
                   <a
                     className="nav-link mx-2 text-uppercase"
-                    href="dashboard1.html"
+                    href="Dashboard.jsx"
                   >
                     Dashboard
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link mx-2 text-uppercase" href="about-us.html">
+                  <a className="nav-link mx-2 text-uppercase" href="AboutUs.jsx">
                     About us
                   </a>
                 </li>
                 <li className="nav-item">
                   <a
                     className="nav-link mx-2 text-uppercase"
-                    href="contact-us.html"
+                    href="ContactUs.jsx"
                   >
                     contact-us
                   </a>
@@ -95,12 +91,12 @@ function SignIn() {
                   </a>
                   <ul className="dropdown-menu text-center">
                     <li>
-                      <a className="dropdown-item" href="sign-up.html">
+                      <a className="dropdown-item" href="SignUp.jsx">
                         SIGN UP
                       </a>
                     </li>
                     <li>
-                      <a className="dropdown-item" href="sign.in.html">
+                      <a className="dropdown-item" href="SignIn.jsx">
                         SIGN IN
                       </a>
                     </li>
@@ -139,9 +135,9 @@ function SignIn() {
               </h2>
               <form
                 className="py-4"
-                action="dashboard1.html"
+                action="Dashboard.jsx"
                 name="myForm"
-                onsubmit="return validateForm()"
+                onSubmit="return validateForm()"
               >
                 <div className="mb-3">
                   <label htmlFor="exampleInputEmail1" className="form-label">
@@ -161,7 +157,7 @@ function SignIn() {
                     placeholder="Email"
                   />
                   <div id="emailHelp" className="form-text">
-                    We'll never share your email with anyone else.
+                    We&apos;ll never share your email with anyone else.
                   </div>
                 </div>
                 <div className="mb-3">

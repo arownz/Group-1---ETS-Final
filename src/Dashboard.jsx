@@ -7,7 +7,7 @@ function Dashboard() {
             <meta charSet="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             {/* styling  */}
-            {/* <link rel="stylesheet" href="style.css"> */}
+            < link rel="stylesheet" href="App.css" />
             {/* font  */}
             <link
                 href="https://fonts.googleapis.com/css?family=Open+Sans"
@@ -30,15 +30,10 @@ function Dashboard() {
                 rel="stylesheet"
                 href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
             />
-            <title>Spend Wise</title>
+            <title>ExpenseWize</title>
             <link rel="icon" type="image/x-icon" href="Images/rounded-1.png" />
             <link rel="stylesheet" href="BlueBox.css" />
-            <style
-                dangerouslySetInnerHTML={{
-                    __html:
-                        "\n*{\n  margin: 0px;\n  padding: 0px;\n}\n\nbody{\n  padding-top: 100px;\n}\n\na{\n  text-decoration: none !important;\n}\n\n.progress-container {\n  width: 100%;\n  background-color: #f1f1f1;\n}\n\n.progress-bar {\n  height: 3px;\n  background-color: #4caf50;\n  width: 0%;\n}\n\n@media (max-width: 991.98px) {\n  .navbar-collapse {\n    display: none !important;\n  }\n}\na{\n  text-decoration: none;\n}\n\n"
-                }}
-            />
+            <link rel="stylesheet" href="Dashboard.css" />
             <header>
                 {/* Navbar */}
                 <nav className="navbar navbar-expand-lg bg-white fixed-top navbar-light p-3 shadow-sm">
@@ -66,7 +61,7 @@ function Dashboard() {
                                 <li className="nav-item">
                                     <a
                                         className="nav-link mx-2 text-uppercase"
-                                        href="dashboard1.html"
+                                        href="Dashboard.jsx"
                                     >
                                         Dashboard
                                     </a>

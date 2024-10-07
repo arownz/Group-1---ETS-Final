@@ -1,0 +1,13 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.progress-container {
+  width: 100%;
+  background-color: #f1f1f1;
+}

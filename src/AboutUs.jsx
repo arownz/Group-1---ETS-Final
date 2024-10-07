@@ -1,9 +1,36 @@
 import './App.css';
+import './AboutUs.css';
 
 function AboutUs() {
     return (
         <>
+            {/* styling  */}
+            <link rel="stylesheet" href="style.css" />
+            {/* font  */}
+            <link
+                href="https://fonts.googleapis.com/css?family=Open+Sans"
+                rel="stylesheet"
+                type="text/css"
+            />
+            {/* bootstrap  */}
+            <link
+                href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+                rel="stylesheet"
+                integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+                crossOrigin="anonymous"
+            />
+            <link
+                rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+            />
+            {/* icons  */}
+            <link
+                rel="stylesheet"
+                href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+            />
             <title> About us | Spend Wise</title>
+            <link rel="icon" type="image/x-icon" href="Images/rounded-1.png" />
+            <link rel="stylesheet" href="AboutUs.css" />
             <header>
                 {/* Navbar */}
                 <nav className="navbar navbar-expand-lg bg-white fixed-top navbar-light p-3 shadow-sm">
@@ -103,7 +130,7 @@ function AboutUs() {
                             <p>
                                 Our mission is to empower individuals and businesses with the tools
                                 and insights they need to make informed financial decisions. Whether
-                                you&apos;re tracking personal expenses, managing a small business, or
+                                you're tracking personal expenses, managing a small business, or
                                 planning for retirement, Spend Wise is here to support you every
                                 step of the way.
                             </p>
@@ -123,7 +150,7 @@ function AboutUs() {
                             </p>
                             <p>
                                 Join thousands of satisfied users who trust Spend Wise to streamline
-                                their financial journey. Whether you&apos;re just starting or well on
+                                their financial journey. Whether you're just starting or well on
                                 your way to financial success, Spend Wise is here to help you
                                 thrive.
                             </p>
