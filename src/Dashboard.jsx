@@ -1,5 +1,7 @@
 import './App.css';
-import { Link, Routes, Route } from 'react-router-dom';
+import './Dashboard.css';
+import App from './App';
+import { Link } from 'react-router-dom';
 
 function Dashboard() {
 
@@ -36,7 +38,7 @@ function Dashboard() {
             <header>
                 <nav className="navbar navbar-expand-lg bg-white fixed-top navbar-light p-3 shadow-sm">
                     <div className="container">
-                        <Link className="navbar-brand" to="#">
+                        <Link className="navbar-brand" to="/App">
                             <img src="./src/assets/logo.png" alt="logo" style={{ height: 60 }} />
                         </Link>
                         <button
@@ -238,10 +240,6 @@ function Dashboard() {
               ExpenseWize
             </Link>
           </div>
-          <Routes>
-          <Route path="/" element={<App />} />
-          {/* Other routes can go here */}
-        </Routes>
         </footer>
             {/* hidden div script  */}
             {/* fade in  */}

@@ -1,6 +1,6 @@
 import './App.css';
 import './AboutUs.css';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function AboutUs() {
     return (
@@ -29,17 +29,16 @@ function AboutUs() {
                 rel="stylesheet"
                 href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
             />
-            <link rel="icon" type="image/x-icon" href="Images/rounded-1.png" />
+            <link rel="icon" type="image/x-icon" href="/src/assets/rounded-1.png" />
             <link rel="stylesheet" href="AboutUs.css" />
+
+            {/* Navbar Section */}
             <header>
-                {/* Navbar */}
                 <nav className="navbar navbar-expand-lg bg-white fixed-top navbar-light p-3 shadow-sm">
                     <div className="container">
-                        {/* Logo */}
-                        <a className="navbar-brand" href="index.html">
-                            <img src="Images/logo.png" alt="logo" style={{ height: 60 }} />
-                        </a>
-                        {/* Toggler/collapsing button */}
+                        <Link className="navbar-brand" to="/App">
+                            <img src="./src/assets/logo.png" alt="logo" style={{ height: 60 }} />
+                        </Link>
                         <button
                             className="navbar-toggler"
                             type="button"
@@ -51,33 +50,27 @@ function AboutUs() {
                         >
                             <span className="navbar-toggler-icon" />
                         </button>
-                        {/* Collapsible content */}
                         <div className="collapse navbar-collapse" id="navbarNavDropdown">
-                            {/* Navigation links */}
                             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li className="nav-item">
-                                    <a
-                                        className="nav-link mx-2 text-uppercase"
-                                        href="dashboard1.html"
-                                    >
+                                    <Link className="nav-link mx-2 text-uppercase" to="/Dashboard">
                                         Dashboard
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link mx-2 text-uppercase" href="about-us.html">
+                                    <Link className="nav-link mx-2 text-uppercase" to="/AboutUs">
                                         About us
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <a
+                                    <Link
                                         className="nav-link mx-2 text-uppercase"
-                                        href="contact-us.html"
+                                        to="/ContactUs"
                                     >
-                                        contact-us
-                                    </a>
+                                        Contact Us
+                                    </Link>
                                 </li>
                             </ul>
-                            {/* Additional actions */}
                             <ul className="navbar-nav">
                                 <li className="nav-item dropdown">
                                     <a
@@ -91,14 +84,14 @@ function AboutUs() {
                                     </a>
                                     <ul className="dropdown-menu text-center">
                                         <li>
-                                            <a className="dropdown-item" href="sign-up.html">
+                                            <Link className="dropdown-item" to="/SignUp">
                                                 SIGN UP
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
-                                            <a className="dropdown-item" href="sign.in.html">
+                                            <Link className="dropdown-item" to="/SignIn">
                                                 SIGN IN
-                                            </a>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </li>
@@ -130,7 +123,7 @@ function AboutUs() {
                             <p>
                                 Our mission is to empower individuals and businesses with the tools
                                 and insights they need to make informed financial decisions. Whether
-                                you're tracking personal expenses, managing a small business, or
+                                you&apos;re tracking personal expenses, managing a small business, or
                                 planning for retirement, Spend Wise is here to support you every
                                 step of the way.
                             </p>
@@ -150,7 +143,7 @@ function AboutUs() {
                             </p>
                             <p>
                                 Join thousands of satisfied users who trust Spend Wise to streamline
-                                their financial journey. Whether you're just starting or well on
+                                their financial journey. Whether you&apos;re just starting or well on
                                 your way to financial success, Spend Wise is here to help you
                                 thrive.
                             </p>
@@ -249,84 +242,80 @@ function AboutUs() {
                 </div>
             </main>
             <footer className=" container-fluid text-lg-start  text-muted ">
-          {/* Section: Social media */}
-          <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
-            {/* Left */}
-            <div className="me-5 d-none d-lg-block">
-              <span>Get connected with us on social networks:</span>
-            </div>
-            {/* Right */}
-            <div>
-              <a href="" className="me-4 text-reset">
-                <i className="bi bi-facebook fs" />
-              </a>
-              <a href="" className="me-4 text-reset">
-                <i className="bi bi-twitter-x" />
-              </a>
-              <a href="" className="me-4 text-reset">
-                <i className="bi bi-google" />
-              </a>
-              <a href="" className="me-4 text-reset">
-                <i className="bi bi-instagram" />
-              </a>
-              <a href="" className="me-4 text-reset">
-                <i className="bi bi-linkedin" />
-              </a>
-              <a href="" className="me-4 text-reset">
-                <i className="bi bi-github" />
-              </a>
-            </div>
-          </section>
-          {/* Section: Links  */}
-          <section className="">
-            <div className="container text-center text-md-start mt-5">
-              {/* Grid row */}
-              <div className="row mt-3">
-                {/* Grid column */}
-                <div className="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                  {/* Content */}
-                  <h6 className="text-uppercase fw-bold mb-4">
-                    <i className="fas fa-gem me-3" />
-                    <img src="./src/assets/logo.png" alt="" style={{ height: 50 }} />
-                  </h6>
-                  <p>
-                    Here you can use rows and columns to organize your footer content.
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  </p>
+                {/* Section: Social media */}
+                <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+                    {/* Left */}
+                    <div className="me-5 d-none d-lg-block">
+                        <span>Get connected with us on social networks:</span>
+                    </div>
+                    {/* Right */}
+                    <div>
+                        <a href="" className="me-4 text-reset">
+                            <i className="bi bi-facebook fs" />
+                        </a>
+                        <a href="" className="me-4 text-reset">
+                            <i className="bi bi-twitter-x" />
+                        </a>
+                        <a href="" className="me-4 text-reset">
+                            <i className="bi bi-google" />
+                        </a>
+                        <a href="" className="me-4 text-reset">
+                            <i className="bi bi-instagram" />
+                        </a>
+                        <a href="" className="me-4 text-reset">
+                            <i className="bi bi-linkedin" />
+                        </a>
+                        <a href="" className="me-4 text-reset">
+                            <i className="bi bi-github" />
+                        </a>
+                    </div>
+                </section>
+                {/* Section: Links  */}
+                <section className="">
+                    <div className="container text-center text-md-start mt-5">
+                        {/* Grid row */}
+                        <div className="row mt-3">
+                            {/* Grid column */}
+                            <div className="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                                {/* Content */}
+                                <h6 className="text-uppercase fw-bold mb-4">
+                                    <i className="fas fa-gem me-3" />
+                                    <img src="./src/assets/logo.png" alt="" style={{ height: 50 }} />
+                                </h6>
+                                <p>
+                                    Here you can use rows and columns to organize your footer content.
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                </p>
+                            </div>
+                            {/* Grid column */}
+                            {/* Grid column */}
+                            {/* Grid column */}
+                            {/* Grid column */}
+                            {/* Grid column */}
+                            <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                                {/* Links */}
+                                <h6 className="text-uppercase fw-bold mb-4">Contact</h6>
+                                <p>
+                                    <i className="bi bi-house" /> Philippines, PH 10012, PH
+                                </p>
+                                <p>
+                                    <i className="bi bi-envelope" />
+                                    .  info@example.com
+                                </p>
+                                <p>
+                                    <i className="bi bi-telephone" /> + 63 123 456 78
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div className="text-center p-4">
+                    © 2024 Copyright:
+                    <Link className="text-reset" to="#">
+                        ExpenseWize
+                    </Link>
                 </div>
-                {/* Grid column */}
-                {/* Grid column */}
-                {/* Grid column */}
-                {/* Grid column */}
-                {/* Grid column */}
-                <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                  {/* Links */}
-                  <h6 className="text-uppercase fw-bold mb-4">Contact</h6>
-                  <p>
-                    <i className="bi bi-house" /> Philippines, PH 10012, PH
-                  </p>
-                  <p>
-                    <i className="bi bi-envelope" />
-                    .  info@example.com
-                  </p>
-                  <p>
-                    <i className="bi bi-telephone" /> + 63 123 456 78
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-          <div className="text-center p-4">
-            © 2024 Copyright:
-            <Link className="text-reset" to="#">
-              ExpenseWize
-            </Link>
-          </div>
-          <Routes>
-          <Route path="/" element={<App />} />
-          {/* Other routes can go here */}
-        </Routes>
-        </footer>
+            </footer>
             {/* hidden div script  */}
         </>
 

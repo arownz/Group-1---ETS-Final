@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, Routes, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './App.css';
 import './SignUp.css';
 
@@ -130,74 +130,74 @@ function Signup() {
       {/* favicon */}
       <link rel="icon" type="image/x-icon" href="/src/assets/rounded-1.png" />
       <link rel="stylesheet" href="SignUp.css" />
-     
+
       {/* Navbar Section */}
       <header>
-          <nav className="navbar navbar-expand-lg bg-white fixed-top navbar-light p-3 shadow-sm">
-            <div className="container">
-              <Link className="navbar-brand" to="#">
-                <img src="./src/assets/logo.png" alt="logo" style={{ height: 60 }} />
-              </Link>
-              <button
-                className="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-                <span className="navbar-toggler-icon" />
-              </button>
-              <div className="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li className="nav-item">
-                    <Link className="nav-link mx-2 text-uppercase" to="/Dashboard">
-                      Dashboard
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link mx-2 text-uppercase" to="/AboutUs">
-                      About us
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link
-                      className="nav-link mx-2 text-uppercase"
-                      to="/ContactUs"
-                    >
-                      Contact Us
-                    </Link>
-                  </li>
-                </ul>
-                <ul className="navbar-nav">
-                  <li className="nav-item dropdown">
-                    <a
-                      className="nav-link dropdown-toggle"
-                      href="#"
-                      role="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      ACCOUNT
-                    </a>
-                    <ul className="dropdown-menu text-center">
-                      <li>
-                        <Link className="dropdown-item" to="/SignUp">
-                          SIGN UP
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="dropdown-item" to="/SignIn">
-                          SIGN IN
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
+        <nav className="navbar navbar-expand-lg bg-white fixed-top navbar-light p-3 shadow-sm">
+          <div className="container">
+            <Link className="navbar-brand" to="/App">
+              <img src="./src/assets/logo.png" alt="logo" style={{ height: 60 }} />
+            </Link>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNavDropdown"
+              aria-controls="navbarNavDropdown"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon" />
+            </button>
+            <div className="collapse navbar-collapse" id="navbarNavDropdown">
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item">
+                  <Link className="nav-link mx-2 text-uppercase" to="/Dashboard">
+                    Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link mx-2 text-uppercase" to="/AboutUs">
+                    About us
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link mx-2 text-uppercase"
+                    to="/ContactUs"
+                  >
+                    Contact Us
+                  </Link>
+                </li>
+              </ul>
+              <ul className="navbar-nav">
+                <li className="nav-item dropdown">
+                  <a
+                    className="nav-link dropdown-toggle"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    ACCOUNT
+                  </a>
+                  <ul className="dropdown-menu text-center">
+                    <li>
+                      <Link className="dropdown-item" to="/SignUp">
+                        SIGN UP
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/SignIn">
+                        SIGN IN
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
             </div>
-          </nav>
+          </div>
+        </nav>
         {/* progress bar */}
         <div className="progress-container">
           <div className="progress-bar" id="myBar" />
@@ -449,11 +449,7 @@ function Signup() {
               ExpenseWize
             </Link>
           </div>
-          <Routes>
-          <Route path="/" element={<App />} />
-          {/* Other routes can go here */}
-        </Routes>
-        </footer>
+      </footer>
     </>
   );
 }
