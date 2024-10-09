@@ -3,54 +3,54 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-  padding-top: 70px;
+  padding-top: 70px; 
 }
-
-a {
-  font-size: 14px;
-  font-weight: 700;
+  
+  a{
+  font-size:14px;
+  font-weight:700;
   text-decoration: none;
-}
-
-.hidden {
+  }
+  
+  .hidden {
   opacity: 0;
   transition: opacity 1s ease-in-out;
-}
-
-.visible {
+  }
+  
+  .visible {
   opacity: 1;
   transition: opacity 0.5s ease-in-out;
-}
-
-.fade-element {
+  }
+  
+  .fade-element {
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
-}
-
-.fade-in {
+  }
+  
+  .fade-in {
   opacity: 1;
-}
-
-.card:hover {
+  }
+  
+ .card:hover {
   transform: scale(1.1);
-}
-
-.card {
+  }
+  
+  .card {
   transition: transform 0.5s;
-}
+  }
+  
+  .card {
+    transition: transform 0.5s;
+      background: linear-gradient(to left, white 50%, #14A44D 50%);
+      background-size: 200%;
+      background-position: right;  
+    }
+    .card:hover {
+      background-position: left;
+      color: white;
+    }
+    .card {
+      transition: background-position 0.5s ease-in-out;
+    }
 
-.card {
-  transition: transform 0.5s;
-  background: linear-gradient(to left, white 50%, #14A44D 50%);
-  background-size: 200%;
-  background-position: right;
-}
-
-.card:hover {
-  background-position: left;
-  color: white;
-}
-
-.card {
-  transition: background-position 0.5s ease-in-out;
-}
+    

@@ -110,10 +110,10 @@ function ContactUs() {
                     <div className="row">
                         <div className="col-lg-12">
                             <h1 style={{ fontSize: 50, fontWeight: "bolder" }}>
-                                Contact Spend Wise
+                                Contact ExpenseWize
                             </h1>
                             <p>
-                                We appreciate your interest in Spend Wise. Please select from the
+                                We appreciate your interest in ExpenseWize. Please select from the
                                 options below.
                             </p>
                         </div>
@@ -125,7 +125,7 @@ function ContactUs() {
                         <div className="row">
                             <div className="col-md-4">
                                 <h3 style={{ fontWeight: "bolder" }}>1 (877) 889-9009</h3>
-                                <p>Toll-free from the United States and Canada</p>
+                                <p>Toll-free from the Philippines</p>
                             </div>
                             <div className="col-md-4">
                                 <h3 style={{ fontWeight: "bolder" }}>
@@ -133,11 +133,11 @@ function ContactUs() {
                                     <br />
                                     +6566778140
                                 </h3>
-                                <p>Outside the United States and Canada</p>
+                                <p>Outside the Philippines</p>
                             </div>
                             <div className="col-md-4">
                                 <h3 style={{ fontWeight: "bolder" }}>Find A Location</h3>
-                                <p>View a list of local Spend Wise office information.</p>
+                                <p>View a list of local ExpenseWize office information.</p>
                             </div>
                         </div>
                         <div className="container py-5">
@@ -149,7 +149,7 @@ function ContactUs() {
                                 </div>
                                 <div className="row">
                                     <p>
-                                        Thank you for your interest in Spend Wise&#39;s services. Please
+                                        Thank you for your interest in ExpenseWize&#39;s services. Please
                                         provide the following information about your business needs to
                                         help us serve you better. This information will enable us to
                                         route your request to the appropriate person. You should receive
@@ -209,8 +209,8 @@ function ContactUs() {
                                     />
                                     <label className="form-check-label" htmlFor="exampleCheck1">
                                         I agree to the use or processing of my personal information by
-                                        Spend Wise for the purpose of fulfilling this request and in
-                                        accordance with Spend Wise’s Privacy Statement
+                                        ExpenseWize for the purpose of fulfilling this request and in
+                                        accordance with ExpenseWize’s Privacy Statement
                                     </label>
                                 </div>
                                 <button type="submit" className="btn btn-primary px-5 my-4">
@@ -292,7 +292,7 @@ function ContactUs() {
           </section>
           <div className="text-center p-4">
             © 2024 Copyright:
-            <Link className="text-reset" to="#">
+            <Link className="text-reset" to="/App">
               ExpenseWize
             </Link>
           </div>

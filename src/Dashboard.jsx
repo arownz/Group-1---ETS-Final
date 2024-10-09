@@ -1,6 +1,5 @@
 import './App.css';
 import './Dashboard.css';
-import App from './App';
 import { Link } from 'react-router-dom';
 
 function Dashboard() {
@@ -236,7 +235,7 @@ function Dashboard() {
           </section>
           <div className="text-center p-4">
             © 2024 Copyright:
-            <Link className="text-reset" to="#">
+            <Link className="text-reset" to="/App">
               ExpenseWize
             </Link>
           </div>

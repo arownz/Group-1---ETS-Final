@@ -7,8 +7,6 @@ import SignUp from './SignUp';
 import SignIn from './SignIn';
 import AboutUs from './AboutUs';
 import ContactUs from './ContactUs';
-import './App.css'
-import './App1.css'
 
 function App() {
   useEffect(() => {
@@ -88,8 +86,6 @@ function App() {
     <Router>
       <>
         {/* styling  */}
-        <link rel="stylesheet" href="App.css" />
-        <link rel="stylesheet" href="App1.css" />
         {/* font  */}
         <link
           href="https://fonts.googleapis.com/css?family=Open+Sans"
@@ -142,8 +138,7 @@ function App() {
                   <li className="nav-item">
                     <Link
                       className="nav-link mx-2 text-uppercase"
-                      to="/ContactUs"
-                    >
+                      to="/ContactUs">
                       Contact Us
                     </Link>
                   </li>
@@ -152,7 +147,7 @@ function App() {
                   <li className="nav-item dropdown">
                     <a
                       className="nav-link dropdown-toggle"
-                      href="#"
+                      href="/"
                       role="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
@@ -177,14 +172,14 @@ function App() {
             </div>
           </nav>
           <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/Dashboard" element={<Dashboard />} />
-          <Route path="/ContactUs" element={<ContactUs />} />
-          <Route path="/AboutUs" element={<AboutUs />} /> 
-          <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/SignIn" element={<SignIn />} />
-          {/* Other routes can go here */}
-        </Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/Dashboard" element={<Dashboard />} />
+            <Route path="/ContactUs" element={<ContactUs />} />
+            <Route path="/AboutUs" element={<AboutUs />} />
+            <Route path="/SignUp" element={<SignUp />} />
+            <Route path="/SignIn" element={<SignIn />} />
+            {/* Other routes can go here */}
+          </Routes>
         </header>
         <main>
           <div className="container py-5">
@@ -275,12 +270,12 @@ function App() {
                       step of the way.&quot;
                     </p>
                     <Link to="/AboutUs"
-                    className="text-white"
-                    style={{ fontSize: 18 }}
-                  >
-                    <button type="button" className="btn btn-success btn-lg">
-                      Read more
-                    </button>
+                      className="text-white"
+                      style={{ fontSize: 18 }}
+                    >
+                      <button type="button" className="btn btn-success btn-lg">
+                        Read more
+                      </button>
                     </Link>
                   </div>
                 </div>
@@ -578,16 +573,15 @@ function App() {
                     industry-leading experts and gain valuable insights to optimize
                     your financial strategy and achieve your goals.&quot;
                   </p>
-                  <button type="button" className="btn btn-success  btn-lg">
                     <Link
-                      to="/ContactUs "
+                      to="/ContactUs"
                       className="text-white"
-                      target="_blank"
                       style={{ fontSize: 18 }}
                     >
+                      <button type="button" className="btn btn-success btn-lg">
                       Contact Us
-                    </Link>
                   </button>
+                  </Link>
                 </div>
                 <div className="col">
                   <img
@@ -667,7 +661,7 @@ function App() {
                   </p>
                   <p>
                     <i className="bi bi-envelope" />
-                    .  info@example.com
+                    .  ExpenseWize@gmail.com
                   </p>
                   <p>
                     <i className="bi bi-telephone" /> + 63 123 456 78
@@ -678,7 +672,7 @@ function App() {
           </section>
           <div className="text-center p-4">
             © 2024 Copyright:
-            <Link className="text-reset" to="#">
+            <Link className="text-reset" to="/App">
               ExpenseWize
             </Link>
           </div>

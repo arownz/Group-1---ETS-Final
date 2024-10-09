@@ -445,7 +445,7 @@ function Signup() {
           </section>
           <div className="text-center p-4">
             © 2024 Copyright:
-            <Link className="text-reset" to="#">
+            <Link className="text-reset" to="/App">
               ExpenseWize
             </Link>
           </div>

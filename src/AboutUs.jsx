@@ -115,8 +115,8 @@ function AboutUs() {
                     <div className="row">
                         <div className="col-md-8">
                             <p>
-                                Welcome to Spend Wise, your reliable companion in achieving
-                                financial wellness. At Spend Wise, we understand the importance of
+                                Welcome to ExpenseWize, your reliable companion in achieving
+                                financial wellness. At ExpenseWize, we understand the importance of
                                 managing your finances effectively to reach your goals and secure
                                 your future.
                             </p>
@@ -124,7 +124,7 @@ function AboutUs() {
                                 Our mission is to empower individuals and businesses with the tools
                                 and insights they need to make informed financial decisions. Whether
                                 you&apos;re tracking personal expenses, managing a small business, or
-                                planning for retirement, Spend Wise is here to support you every
+                                planning for retirement, ExpenseWize is here to support you every
                                 step of the way.
                             </p>
                             <p>
@@ -136,32 +136,32 @@ function AboutUs() {
                             </p>
                             <p>
                                 Backed by a team of finance experts and technology enthusiasts,
-                                Spend Wise is committed to innovation and excellence. We
+                                ExpenseWize is committed to innovation and excellence. We
                                 continuously strive to enhance our platform, incorporating the
                                 latest advancements in financial technology to deliver an
                                 unparalleled user experience.
                             </p>
                             <p>
-                                Join thousands of satisfied users who trust Spend Wise to streamline
+                                Join thousands of satisfied users who trust ExpenseWize to streamline
                                 their financial journey. Whether you&apos;re just starting or well on
-                                your way to financial success, Spend Wise is here to help you
+                                your way to financial success, ExpenseWize is here to help you
                                 thrive.
                             </p>
-                            <p>Start your journey to financial wellness today with Spend Wise.</p>
+                            <p>Start your journey to financial wellness today with ExpenseWize.</p>
                         </div>
                         <div className="col-md-4 px-md-5 mt-5 mt-md-0">
                             <h3 className="text-success" style={{ fontWeight: "bolder" }}>
                                 {" "}
-                                Spend Wise HQ
+                                ExpenseWize HQ
                             </h3>
                             <h6 style={{ fontWeight: "bolder" }}>ABC Street</h6>
                             <p>
-                                Spend Wise AB <br />
-                                Regeringsgatan 19 <br />
-                                SE-111 53 Stockholm <br />
-                                Sweden <br />
+                            ExpenseWize PH <br />
+                                Pilipins 19 <br />
+                                SE-111 53 Etivac <br />
+                                Philippines <br />
                                 Reg no: 556703-7485 <br />
-                                office@SpendWise.com
+                                office@ExpenseWize.com
                             </p>
                         </div>
                     </div>
@@ -179,10 +179,10 @@ function AboutUs() {
                                         <a href="#" className="text-success">
                                             1. Community.{" "}
                                         </a>{" "}
-                                        Get fast support from expert Spend Wise users. If there isn’t
+                                        Get fast support from expert ExpenseWize users. If there isn’t
                                         already an answer there to your question, post it and someone
                                         will quickly answer. You can also suggest and vote on new ideas
-                                        for Spend Wise or simply discuss music with other fans.
+                                        for ExpenseWize or simply discuss music with other fans.
                                     </p>
                                     <p>
                                         <a href="#" className="text-success">
@@ -213,7 +213,7 @@ function AboutUs() {
                             </h2>
                             <ul>
                                 <li>
-                                    Advertising on Spend Wise?{" "}
+                                    Advertising on ExpenseWize?{" "}
                                     <a href="" className="text-success">
                                         Advertisers section
                                     </a>
@@ -233,8 +233,8 @@ function AboutUs() {
                                 </li>
                             </ul>
                             <p style={{ marginLeft: 20 }}>
-                                Spend Wise USA, Inc. provides the Spend Wise service to users in the
-                                United States. Spend Wise AB provides the Spend Wise service to
+                            ExpenseWize PH, Inc. provides the ExpenseWize service to users in the
+                                United States. ExpenseWize PH provides the ExpenseWize service to
                                 users in all other markets.
                             </p>
                         </div>
@@ -311,7 +311,7 @@ function AboutUs() {
                 </section>
                 <div className="text-center p-4">
                     © 2024 Copyright:
-                    <Link className="text-reset" to="#">
+                    <Link className="text-reset" to="/App">
                         ExpenseWize
                     </Link>
                 </div>
