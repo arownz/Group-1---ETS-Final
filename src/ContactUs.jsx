@@ -1,11 +1,12 @@
 import './App.css';
 import './ContactUs.css';
+import { Link } from 'react-router-dom';
 
 function ContactUs() {
     return (
         <>
             {/* styling  */}
-            <link rel="stylesheet" href="style.css" />
+            <link rel="stylesheet" href="App.css" />
             {/* font  */}
             <link
                 href="https://fonts.googleapis.com/css?family=Open+Sans"
@@ -28,19 +29,17 @@ function ContactUs() {
                 rel="stylesheet"
                 href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
             />
-            <title>Contact us | Spend Wise</title>
-            <link rel="icon" type="image/x-icon" href="Images/rounded-1.png" />
+            {/* favicon */}
+            <link rel="icon" type="image/x-icon" href="/src/assets/rounded-1.png" />
             <link rel="stylesheet" href="ContactUs.css" />
-            
+
+            {/* Navbar Section */}
             <header>
-                {/* Navbar */}
                 <nav className="navbar navbar-expand-lg bg-white fixed-top navbar-light p-3 shadow-sm">
                     <div className="container">
-                        {/* Logo */}
-                        <a className="navbar-brand" href="index.html">
-                            <img src="Images/logo.png" alt="logo" style={{ height: 60 }} />
-                        </a>
-                        {/* Toggler/collapsing button */}
+                        <Link className="navbar-brand" to="#">
+                            <img src="./src/assets/logo.png" alt="logo" style={{ height: 60 }} />
+                        </Link>
                         <button
                             className="navbar-toggler"
                             type="button"
@@ -52,33 +51,27 @@ function ContactUs() {
                         >
                             <span className="navbar-toggler-icon" />
                         </button>
-                        {/* Collapsible content */}
                         <div className="collapse navbar-collapse" id="navbarNavDropdown">
-                            {/* Navigation links */}
                             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li className="nav-item">
-                                    <a
-                                        className="nav-link mx-2 text-uppercase"
-                                        href="dashboard1.html"
-                                    >
+                                    <Link className="nav-link mx-2 text-uppercase" to="/Dashboard">
                                         Dashboard
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link mx-2 text-uppercase" href="about-us.html">
+                                    <Link className="nav-link mx-2 text-uppercase" to="/AboutUs">
                                         About us
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <a
+                                    <Link
                                         className="nav-link mx-2 text-uppercase"
-                                        href="contact-us.html"
+                                        to="/ContactUs"
                                     >
-                                        contact-us
-                                    </a>
+                                        Contact Us
+                                    </Link>
                                 </li>
                             </ul>
-                            {/* Additional actions */}
                             <ul className="navbar-nav">
                                 <li className="nav-item dropdown">
                                     <a
@@ -92,14 +85,14 @@ function ContactUs() {
                                     </a>
                                     <ul className="dropdown-menu text-center">
                                         <li>
-                                            <a className="dropdown-item" href="sign-up.html">
+                                            <Link className="dropdown-item" to="/SignUp">
                                                 SIGN UP
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
-                                            <a className="dropdown-item" href="sign.in.html">
+                                            <Link className="dropdown-item" to="/SignIn">
                                                 SIGN IN
-                                            </a>
+                                            </Link>
                                         </li>
                                     </ul>
                                 </li>
@@ -228,6 +221,7 @@ function ContactUs() {
                     </div>
                 </div>
             </main>
+            
             <footer className=" container-fluid text-lg-start  text-muted ">
                 {/* Section: Social media */}
                 <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
@@ -267,7 +261,7 @@ function ContactUs() {
                                 {/* Content */}
                                 <h6 className="text-uppercase fw-bold mb-4">
                                     <i className="fas fa-gem me-3" />
-                                    <img src="Images/logo.png" alt="" style={{ height: 50 }} />
+                                    <img src="/src/assets/logo.png" alt="" style={{ height: 50 }} />
                                 </h6>
                                 <p>
                                     Here you can use rows and columns to organize your footer content.
@@ -283,7 +277,7 @@ function ContactUs() {
                                 {/* Links */}
                                 <h6 className="text-uppercase fw-bold mb-4">Contact</h6>
                                 <p>
-                                    <i className="bi bi-house" /> New York, NY 10012, US
+                                    <i className="bi bi-house" /> Philippines, PH 10012, PH
                                 </p>
                                 <p>
                                     <i className="bi bi-envelope" />
@@ -302,11 +296,10 @@ function ContactUs() {
                 <div className="text-center p-4">
                     © 2024 Copyright:
                     <a className="text-reset" href="#">
-                        Spend Wise
+                        ExpenseWize
                     </a>
                 </div>
             </footer>
-            {/* hidden div script  */}
         </>
     );
 }

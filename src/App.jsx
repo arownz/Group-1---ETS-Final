@@ -2,7 +2,11 @@ import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS
-import SignUp from './SignUp'; // Import the SignUp component
+import Dashboard from './Dashboard';
+import SignUp from './SignUp';
+import SignIn from './SignIn';
+import AboutUs from './AboutUs';
+import ContactUs from './ContactUs';
 import './App.css'
 import './App1.css'
 
@@ -83,11 +87,9 @@ function App() {
   return (
     <Router>
       <>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {/* styling  */}
         <link rel="stylesheet" href="App.css" />
-        <link rel="stylesheet" href="./src/css/App1.css" />
+        <link rel="stylesheet" href="App1.css" />
         {/* font  */}
         <link
           href="https://fonts.googleapis.com/css?family=Open+Sans"
@@ -106,13 +108,14 @@ function App() {
         />
         {/* favicon */}
         <link rel="icon" type="image/x-icon" href="/src/assets/rounded-1.png" />
+
         {/* Navbar Section */}
         <header>
           <nav className="navbar navbar-expand-lg bg-white fixed-top navbar-light p-3 shadow-sm">
             <div className="container">
-              <a className="navbar-brand" href="#">
+              <Link className="navbar-brand" to="#">
                 <img src="./src/assets/logo.png" alt="logo" style={{ height: 60 }} />
-              </a>
+              </Link>
               <button
                 className="navbar-toggler"
                 type="button"
@@ -127,17 +130,22 @@ function App() {
               <div className="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                   <li className="nav-item">
-                    <a className="nav-link mx-2 text-uppercase" href="AboutUs.jsx">
-                      About us
-                    </a>
+                    <Link className="nav-link mx-2 text-uppercase" to="/Dashboard">
+                      Dashboard
+                    </Link>
                   </li>
                   <li className="nav-item">
-                    <a
+                    <Link className="nav-link mx-2 text-uppercase" to="/AboutUs">
+                      About us
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
                       className="nav-link mx-2 text-uppercase"
-                      href="ContactUs.jsx"
+                      to="/ContactUs"
                     >
                       Contact Us
-                    </a>
+                    </Link>
                   </li>
                 </ul>
                 <ul className="navbar-nav">
@@ -168,16 +176,15 @@ function App() {
               </div>
             </div>
           </nav>
-
-          {/* Main Content */}
-          <div className="container">
-            {/* Define Routes for SignUp and SignIn */}
-            <Routes>
-              <Route path="/SignUp" element={<SignUp />} />
-              {/* Other routes can go here */}
-            </Routes>
-          </div>
-
+          <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/ContactUs" element={<ContactUs />} />
+          <Route path="/AboutUs" element={<AboutUs />} /> 
+          <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/SignIn" element={<SignIn />} />
+          {/* Other routes can go here */}
+        </Routes>
         </header>
         <main>
           <div className="container py-5">
@@ -192,14 +199,14 @@ function App() {
                 </p>
                 <div className="row">
                   <div className="col-8 col-md-12">
-                    <a href="SignUp.jsx">
+                    <Link to="/SignIn">
                       <button
                         type="button"
                         className="btn btn-success btn-lg btn-block"
                       >
                         Start Now
                       </button>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -214,7 +221,7 @@ function App() {
               </div>
             </div>
           </div>
-          {/* About us   */}
+          {/* About us */}
           <div
             className="container-fluid rounded-3 py-5"
             style={{ backgroundColor: "#FAF9F6" }}
@@ -240,15 +247,14 @@ function App() {
                     complexities of wealth management and achieve your financial
                     goals.
                   </p>
-                  <a
-                    href="AboutUs.jsx"
+                  <Link to="/AboutUs"
                     className="text-white"
                     style={{ fontSize: 18 }}
                   >
                     <button type="button" className="btn btn-success btn-lg">
                       Read more
                     </button>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -259,8 +265,8 @@ function App() {
               <div className="row py-5">
                 <div className="col-lg-6 d-flex align-items-center">
                   <div className="text-center">
-                    <h5 className="text-success fw-bolder">Our Services</h5>
-                    <h2>What we offer</h2>
+                    <h5 className="text-success fw-bolder">About</h5>
+                    <h2>What is this tool for?</h2>
                     <p>
                       &quot;Experience comprehensive financial solutions tailored to your
                       needs. Our offerings include personalized financial planning,
@@ -268,9 +274,14 @@ function App() {
                       Let us guide you towards financial security and success, every
                       step of the way.&quot;
                     </p>
+                    <Link to="/AboutUs"
+                    className="text-white"
+                    style={{ fontSize: 18 }}
+                  >
                     <button type="button" className="btn btn-success btn-lg">
                       Read more
                     </button>
+                    </Link>
                   </div>
                 </div>
                 <div className="col-lg-6">
@@ -568,14 +579,14 @@ function App() {
                     your financial strategy and achieve your goals.&quot;
                   </p>
                   <button type="button" className="btn btn-success  btn-lg">
-                    <a
-                      href="ContactUs.jsx "
+                    <Link
+                      to="/ContactUs "
                       className="text-white"
                       target="_blank"
                       style={{ fontSize: 18 }}
                     >
-                      Read more
-                    </a>
+                      Contact Us
+                    </Link>
                   </button>
                 </div>
                 <div className="col">
@@ -594,6 +605,8 @@ function App() {
               </div>
             </div>
           </section>
+
+          {/* Other routes can go here */}
         </main>
         <footer className=" container-fluid text-lg-start  text-muted ">
           {/* Section: Social media */}
@@ -654,13 +667,10 @@ function App() {
                   </p>
                   <p>
                     <i className="bi bi-envelope" />
-                    info@example.com
+                    .  info@example.com
                   </p>
                   <p>
-                    <i className="bi bi-telephone" /> + 01 234 567 88
-                  </p>
-                  <p>
-                    <i className="bi bi-printer" /> + 01 234 567 89
+                    <i className="bi bi-telephone" /> + 63 123 456 78
                   </p>
                 </div>
               </div>
@@ -668,10 +678,14 @@ function App() {
           </section>
           <div className="text-center p-4">
             © 2024 Copyright:
-            <a className="text-reset" href="#">
+            <Link className="text-reset" to="#">
               ExpenseWize
-            </a>
+            </Link>
           </div>
+          <Routes>
+          <Route path="/" element={<App />} />
+          {/* Other routes can go here */}
+        </Routes>
         </footer>
       </>
     </Router>
