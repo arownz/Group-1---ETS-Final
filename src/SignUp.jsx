@@ -17,7 +17,7 @@ function Signup() {
       var username = document.getElementById("name");
       var email = document.getElementById("email");
       var phone = document.getElementById("phone");
-      var password = document.getElementById("pass");
+      var password = document.getElementById("pass"); 
 
       if (username.value.trim() === "") {
         document.getElementById("name").style.border = "solid 2px red";

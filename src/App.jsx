@@ -127,14 +127,6 @@ function App() {
               <div className="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                   <li className="nav-item">
-                    <a
-                      className="nav-link mx-2 text-uppercase"
-                      href="Dashboard.jsx"
-                    >
-                      Dashboard
-                    </a>
-                  </li>
-                  <li className="nav-item">
                     <a className="nav-link mx-2 text-uppercase" href="AboutUs.jsx">
                       About us
                     </a>
