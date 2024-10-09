@@ -154,14 +154,14 @@ function AboutUs() {
                                 {" "}
                                 ExpenseWize HQ
                             </h3>
-                            <h6 style={{ fontWeight: "bolder" }}>ABC Street</h6>
+                            <h6 style={{ fontWeight: "bolder" }}>Etivac Street</h6>
                             <p>
                             ExpenseWize PH <br />
-                                Pilipins 19 <br />
+                                Pilipins 69 <br />
                                 SE-111 53 Etivac <br />
                                 Philippines <br />
                                 Reg no: 556703-7485 <br />
-                                office@ExpenseWize.com
+                                ExpenseWize@gmail.com
                             </p>
                         </div>
                     </div>
