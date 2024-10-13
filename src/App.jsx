@@ -1,115 +1,24 @@
-import { useEffect } from 'react';
+import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS
-import Dashboard from './Dashboard';
-import SignUp from './SignUp';
-import SignIn from './SignIn';
-import AboutUs from './AboutUs';
-import ContactUs from './ContactUs';
+import Dashboard from './components/dashboard/Dashboard';
+import SignUp from './components/useraccess/SignUp';
+import SignIn from './components/useraccess/SignIn';
+import AboutUs from './components/aboutus/AboutUs';
+import ContactUs from './components/contactus/ContactUs';
 
 function App() {
-  useEffect(() => {
-    // Load Bootstrap JavaScript
-    const script = document.createElement('script');
-    script.src = "https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    // Inline JavaScript code
-    document.addEventListener("DOMContentLoaded", function () {
-      var nextButton = document.querySelector('.next-screen');
-      var prevButton = document.querySelector('.prev-screen');
-      // Select the pagination dots
-      var dots = document.querySelectorAll('.walkthrough-pagination .dot');
-
-      nextButton.addEventListener('click', function () {
-        navigateScreens('next');
-      });
-
-      prevButton.addEventListener('click', function () {
-        navigateScreens('prev');
-      });
-
-      // Function to navigate between screens
-      function navigateScreens(direction) {
-        var currentScreen = document.querySelector('.screen.active');
-        var nextScreen = direction === 'next' ? currentScreen.nextElementSibling : currentScreen.previousElementSibling;
-        if (nextScreen) {
-          currentScreen.classList.remove('active');
-          nextScreen.classList.add('active');
-          updateActiveDot(nextScreen);
-        }
-      }
-
-      // Function to update the active dot
-      function updateActiveDot(nextScreen) {
-        var index = Array.from(nextScreen.parentNode.children).indexOf(nextScreen);
-        dots.forEach(function (dot, i) {
-          if (i === index) {
-            dot.classList.add('active');
-          } else {
-            dot.classList.remove('active');
-          }
-        });
-      }
-      // Check if elements with class 'fade-element' are in viewport and add 'fade-in' class
-      window.addEventListener('scroll', function () {
-        const fadeElements = document.querySelectorAll('.fade-element');
-        fadeElements.forEach(function (element) {
-          if (isElementInViewport(element)) {
-            element.classList.add('fade-in');
-          }
-        });
-      });
-
-      function isElementInViewport(el) {
-        const rect = el.getBoundingClientRect();
-        return (
-          rect.top >= 0 &&
-          rect.left >= 0 &&
-          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
-      }
-
-      // Add other JavaScript code here if needed
-    });
-
-    return () => {
-      // Cleanup event listeners on component unmount
-      document.removeEventListener("DOMContentLoaded", function () { });
-    };
-  }, []);
 
   return (
     <Router>
       <>
-        {/* styling  */}
-        {/* font  */}
-        <link
-          href="https://fonts.googleapis.com/css?family=Open+Sans"
-          rel="stylesheet"
-          type="text/css"
-        />
-        {/* bootstrap  */}
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-        />
-        {/* icons  */}
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-        />
-        {/* favicon */}
-        <link rel="icon" type="image/x-icon" href="/src/assets/rounded-1.png" />
-
+      
         {/* Navbar Section */}
         <header>
           <nav className="navbar navbar-expand-lg bg-white fixed-top navbar-light p-3 shadow-sm">
             <div className="container">
-              <Link className="navbar-brand" to="/App">
+              <Link className="navbar-brand" to="/Home">
                 <img src="./src/assets/logo.png" alt="logo" style={{ height: 60 }} />
               </Link>
               <button
@@ -672,7 +581,7 @@ function App() {
           </section>
           <div className="text-center p-4">
             © 2024 Copyright:
-            <Link className="text-reset" to="/App">
+            <Link className="text-reset" to="/Home">
               ExpenseWize
             </Link>
           </div>
