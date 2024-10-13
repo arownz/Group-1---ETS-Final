@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 
-function Home() {
+function Welcome() {
     return (
-<main>
+      <>
           <div className="container py-5">
             <div className="row justify-content-left align-items-center py-5">
               <div className="col-md-6">
@@ -420,10 +420,8 @@ function Home() {
               </div>
             </div>
           </section>
-
-        </main>
-
+          </>
     )
 };
 
-export default Home;
+export default Welcome;
