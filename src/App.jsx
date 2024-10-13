@@ -2,7 +2,7 @@ import './App.css'
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS
-import Home from './components/Home/Home';
+import Welcome from './components/welcome/Welcome';
 import Dashboard from './components/dashboard/Dashboard';
 import SignUp from './components/useraccess/SignUp';
 import SignIn from './components/useraccess/SignIn';
@@ -79,17 +79,17 @@ function App() {
           </nav>
         </header>
 
-        {/* Routing for main content */}
+        {/* Main Content Section */}
         <main>
           <Routes>
-            {/* This route points to your Home page or welcome content */}
-            <Route path="/" element={<Home />} />
+            {/* This route displays Home component by default */}
+            <Route path="/" element={<Welcome />} />
             <Route path="/Dashboard" element={<Dashboard />} />
             <Route path="/ContactUs" element={<ContactUs />} />
             <Route path="/AboutUs" element={<AboutUs />} />
             <Route path="/SignUp" element={<SignUp />} />
             <Route path="/SignIn" element={<SignIn />} />
-            {/* Add other routes here */}
+            {/* Add other routes as needed */}
           </Routes>
         </main>
 
