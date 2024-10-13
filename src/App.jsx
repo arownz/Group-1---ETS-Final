@@ -11,7 +11,7 @@ import ContactUs from './components/contactus/ContactUs';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/Group-1-ETS-Final">
       <>
         {/* Navbar Section */}
         <header>

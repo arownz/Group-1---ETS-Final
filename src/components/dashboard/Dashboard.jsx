@@ -9,7 +9,7 @@ function Dashboard() {
                 <div className="container py-5">
                     <div className="card">
                         <div className="card-header bg-success text-center">
-                            <h1 className="fw-bold text-white">Expense Tracker</h1>
+                            <h1 className="fw-bold text-white">Expense Tracker Tool</h1>
                         </div>
                         <div className="card-body">
                             <form id="expenseForm">
@@ -33,7 +33,7 @@ function Dashboard() {
                                     </div>
                                     <div className="col-md-3 mb-3">
                                         <div className="input-group">
-                                            <span className="input-group-text">$</span>
+                                            <span className="input-group-text">₱</span>
                                             <input
                                                 type="number"
                                                 className="form-control"
@@ -56,7 +56,7 @@ function Dashboard() {
                             <div id="expenseList" />
                             <div className="total-box mt-4">
                                 <h3>Total Money Spent</h3>
-                                <p id="totalAmount">$0</p>
+                                <p id="totalAmount">₱ 0</p>
                             </div>
                             <div className="mt-5">
                                 <canvas id="expenseChart" width={800} height={400} />
