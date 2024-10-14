@@ -79,8 +79,7 @@ function App() {
           </nav>
         </header>
 
-        {/* Main Content Section */}
-        <main>
+        {/* Route Nav Section */}
           <Routes>
             {/* This route displays Home component by default */}
             <Route path="/" element={<Welcome />} />
@@ -91,7 +90,6 @@ function App() {
             <Route path="/SignIn" element={<SignIn />} />
             {/* Add other routes as needed */}
           </Routes>
-        </main>
 
         {/* Footer */}
         <footer className="container-fluid text-lg-start text-muted">
