@@ -1,7 +1,7 @@
 // Left Side Navigation
 import  { useState } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
-import logo from '/public/ETSlogo-removebg-preview.png';
+import logo from '/src/assets/ETSlogo-removebg-preview.png';
 
 const LeftSideNavigation = () => {
   const [show, setShow] = useState(false);
