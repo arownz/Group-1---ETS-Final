@@ -1,5 +1,3 @@
-import './ContactUs.css';
-
 function ContactUs() {
     return (
         <div>

@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import './SignUp.css';
 
 function Signup() {
   useEffect(() => {
@@ -187,7 +186,7 @@ function Signup() {
                 </div>
                 <div className="row">
                   <button type="submit" className="btn btn-success btn-lg my-4">
-                    Submit
+                    Register
                   </button>
                 </div>
                 <div className="row text-center">

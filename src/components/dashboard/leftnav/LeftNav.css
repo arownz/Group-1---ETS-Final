@@ -1,0 +1,32 @@
+.leftnav {
+  position: fixed;
+  left: 0;
+  top: 60px; /* Adjust based on your header height */
+  bottom: 0;
+  width: 200px;
+  background-color: #14A44D;
+  color: #fff;
+  padding: 20px;
+  transition: transform 0.3s ease; /* Smooth transition when hiding */
+  z-index: 100; /* Ensure it's on top of the content */
+}
+
+.leftnav.hidden {
+  transform: translateX(-100%); /* Moves the nav off-screen */
+}
+
+.nav-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.nav-list li {
+  margin: 20px 0;
+  cursor: pointer;
+}
+
+.logout-section {
+  position: absolute;
+  bottom: 20px;
+  cursor: pointer;
+}

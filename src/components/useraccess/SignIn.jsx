@@ -1,6 +1,14 @@
-import './SignIn.css';
+import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
+  const navigate = useNavigate();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Temporarily navigate to Dashboard without authentication
+    navigate('/dashboard');
+  };
+
   return (
     <>
         
@@ -28,9 +36,7 @@ function SignIn() {
               </h2>
               <form
                 className="py-4"
-                action="Dashboard.jsx"
-                name="myForm"
-                onSubmit="return validateForm()"
+                onSubmit={handleSubmit}
               >
                 <div className="mb-3">
                   <label htmlFor="exampleInputEmail1" className="form-label">
@@ -83,10 +89,10 @@ function SignIn() {
                   <label className="form-check-label" htmlFor="exampleCheck1">
                     Remember me
                   </label>
-                </div>
+                </div>  
                 <div className="row">
                   <button type="submit" className="btn btn-success btn-lg  my-4">
-                    Submit
+                    Log In
                   </button>
                 </div>
                 <div className="row text-center">

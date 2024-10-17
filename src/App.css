@@ -1,14 +1,10 @@
-#root {
-  width: 100%; /* Ensure it takes full width */
-  margin: 0 auto;
-  padding: 2rem;
-}
-
+body {
+  padding-top: 70px; 
+  }
+  
   a{
   font-size:14px;
-  font-weight:700;
-  text-decoration: none;
-  text-decoration: none !important;
+  font-weight:700
   }
   
   .hidden {
@@ -30,16 +26,19 @@
   opacity: 1;
   }
   
- .card:hover {
+  a{
+  text-decoration: none;
+  }
+  
+   .card:hover {
   transform: scale(1.1);
   }
   
-  .card {
+ /* .card {
   transition: transform 0.5s;
-  }
+  } 
   
   .card {
-    transition: transform 0.5s;
       background: linear-gradient(to left, white 50%, #14A44D 50%);
       background-size: 200%;
       background-position: right;  
@@ -50,11 +49,4 @@
     }
     .card {
       transition: background-position 0.5s ease-in-out;
-    }
-
-    .progress-container {
-      width: 100%;
-      background-color: #f1f1f1;
-    }
-
-    
+    }*/
