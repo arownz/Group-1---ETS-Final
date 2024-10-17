@@ -6,6 +6,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearSca
 import { Bar } from 'react-chartjs-2';
 import { Pie } from 'react-chartjs-2';
 import { Link } from 'react-router-dom'; // Importing Link for navigation
+import { Outlet } from 'react-router-dom'; // Import Outlet for nested routes
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
@@ -57,14 +58,15 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="allmenu-container">
       {/* Pass toggleNav and navVisible state to Header and LeftNav */}
       <Header title="Dashboard" toggleNav={toggleNav} navVisible={navVisible} />
       <LeftNav isVisible={navVisible} />
 
-      <div className={`dashboard-content ${navVisible ? 'nav-visible' : 'nav-hidden'}`}>
+      <div className={`allmenu-content ${navVisible ? 'nav-visible' : 'nav-hidden'}`}>
         {/* Main Dashboard Content */}
-        <div className="dashboard-content-inner">
+        <div className="allmenu-content-inner">
+
           {/* Key Expense Stats */}
           <div className="expense-summary">
             <div className="stat-card card">
@@ -112,6 +114,8 @@ const Dashboard = () => {
               />
             </div>
           </div>
+          {/* Child routes will be rendered here */}
+          <Outlet />
 
           <button className="floating-add-btn">
             <Link to="/expensemenu/Expense">+</Link>

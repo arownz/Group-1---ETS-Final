@@ -1,4 +1,4 @@
-.dashboard-main {
+.allmenu-main {
   display: flex;
   flex-direction: column;
   margin-left: 200px;
@@ -6,28 +6,28 @@
   transition: margin-left 0.3s ease;
 }
 
-.dashboard-main.collapsed {
+.allmenu-main.collapsed {
   margin-left: 0;
   /* When the left nav is hidden */
 }
 
-.dashboard-container {
+.allmenu-container {
   display: flex;
   flex-direction: column;
 }
 
-.dashboard-content {
+.allmenu-content {
   flex-grow: 1;
   padding: 50px;
   margin-left: 200px; /* Set margin to accommodate left nav */
   transition: margin-left 0.3s ease; /* Smooth transition when toggling nav */
 }
 
-.dashboard-content.nav-visible {
+.allmenu-content.nav-visible {
   margin-left: 200px; /* Adjust when nav is visible */
 }
 
-.dashboard-content.nav-hidden {
+.allmenu-content.nav-hidden {
   margin-left: 0; /* Adjust when nav is hidden */
 }
 

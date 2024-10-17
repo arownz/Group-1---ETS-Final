@@ -1,15 +1,20 @@
-import './App.css'
+import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Welcome from './components/welcome/Welcome';
-import Dashboard from './components/dashboard/Dashboard';
 import SignUp from './components/useraccess/SignUp';
 import SignIn from './components/useraccess/SignIn';
 import AboutUs from './components/aboutus/AboutUs';
 import ContactUs from './components/contactus/ContactUs';
 import GuestLayout from './components/layout/GuestLayout';
-
+import Dashboard from './components/dashboard/Dashboard';
+import Expense from './components/dashboard/expensesmenu/Expense';
+import ManageExpense from './components/dashboard/expensesmenu/ManageExpense';
+import Lending from './components/dashboard/lendingmenu/Lending';
+import ManageLending from './components/dashboard/lendingmenu/ManageLending';
+import Report from './components/dashboard/reportmenu/Report';
+import Setting from './components/dashboard/settingmenu/Setting';
 
 function App() {
   return (
@@ -25,7 +30,14 @@ function App() {
         </Route>
 
         {/* User routes */}
-        <Route path="/Dashboard" element={<Dashboard />} />
+        <Route path="/Dashboard" element={<Dashboard />}>
+          <Route path="expensesmenu/Expense" element={<Expense />} />
+          <Route path="expensesmenu/ManageExpense" element={<ManageExpense />} />
+          <Route path="lendingmenu/Lending" element={<Lending />} />
+          <Route path="lendingmenu/ManageLending" element={<ManageLending />} />
+          <Route path="reportmenu/Report" element={<Report />} />
+          <Route path="settingmenu/Setting" element={<Setting />} />
+        </Route>
       </Routes>
     </Router>
   );

@@ -4,7 +4,7 @@
   top: 0;
   bottom: 0;
   width: 200px;
-  background-color: #14A44D;
+  background-color: #abddb7;
   color: #fff;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
@@ -34,6 +34,24 @@
 .nav-list li:hover {
   background-color: #f1f1f1;
   color: #14A44D;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  padding: 1px;
+  margin-bottom: 20px;
+}
+
+.logo {
+  height: 53px;
+  margin-right: 5px;
+}
+
+.logo-title {
+  font-size: 16px;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
 }
 
 .logout-section {
