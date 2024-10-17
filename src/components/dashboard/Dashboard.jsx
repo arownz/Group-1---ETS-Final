@@ -5,11 +5,11 @@ import LeftNav from './leftnav/LeftNav'; // Left Navigation component
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { Pie } from 'react-chartjs-2';
+import { Link } from 'react-router-dom'; // Importing Link for navigation
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
 const Dashboard = () => {
-
   const [navVisible, setNavVisible] = useState(true); // Toggle state for nav
 
   // Toggle function for left nav
@@ -59,28 +59,28 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       {/* Pass toggleNav and navVisible state to Header and LeftNav */}
-      <Header title="Dashboard" toggleNav={toggleNav} />
+      <Header title="Dashboard" toggleNav={toggleNav} className={navVisible ? 'nav-visible' : 'nav-hidden'} />
       <LeftNav isVisible={navVisible} />
 
-      <div className={`dashboard-content ${navVisible ? 'nav-visible' : ''}`}>
-
+      <div className={`dashboard-content ${navVisible ? 'nav-visible' : 'nav-hidden'}`}>
         {/* Main Dashboard Content */}
         <div className="dashboard-content">
           {/* Key Expense Stats */}
-          <div className="expense-summary card">
-            <div className="stat-card">
+          <div className="expense-summary">
+            {/* Wrap each stat card separately */}
+            <div className="stat-card card">
               <h4>Today’s Expense</h4>
               <p>₱{expenseStats.todayExpense}</p>
             </div>
-            <div className="stat-card">
+            <div className="stat-card card">
               <h4>Yesterday’s Expense</h4>
               <p>₱{expenseStats.yesterdayExpense}</p>
             </div>
-            <div className="stat-card">
+            <div className="stat-card card">
               <h4>Number of Expenses</h4>
               <p>{expenseStats.numberOfExpenses}</p>
             </div>
-            <div className="stat-card">
+            <div className="stat-card card">
               <h4>Total Expense</h4>
               <p>₱{expenseStats.totalExpense}</p>
             </div>
@@ -89,34 +89,34 @@ const Dashboard = () => {
           {/* Monthly Expense Chart */}
           <div className="chart-section card">
             <h3>Monthly Expense Chart</h3>
-            <Bar
-              data={barChartData}
-              options={{
-                maintainAspectRatio: false,
-                responsive: true,
-                height: 300 // Add this line
-              }}  
-            />
+            <div className="chart-container">
+              <Bar
+                data={barChartData}
+                options={{
+                  maintainAspectRatio: false,
+                  responsive: true,
+                }}
+              />
+            </div>
           </div>
 
           {/* Category Pie Chart */}
           <div className="chart-section card">
             <h3>Expense Category Breakdown</h3>
-            <Pie
-              data={pieChartData}
-              options={{
-                maintainAspectRatio: false,
-                responsive: true,
-                height: 300 // Add this line
-              }}
-            />
+            <div className="chart-container">
+              <Pie
+                data={pieChartData}
+                options={{
+                  maintainAspectRatio: false,
+                  responsive: true,
+                }}
+              />
+            </div>
           </div>
 
-          {/* Floating Button */}
-          <button className="floating-add-btn" onClick={() => window.location.href = '/expense'}>
-            +
+          <button className="floating-add-btn">
+            <Link to="/expensemenu/Expense">+</Link>
           </button>
-
         </div>
       </div>
     </div>

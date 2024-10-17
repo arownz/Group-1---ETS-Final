@@ -1,21 +1,22 @@
-import { FaHome, FaMoneyBillAlt, FaCog, FaSignOutAlt, FaMoneyBillWave, FaMoneyCheck } from 'react-icons/fa';
+import { FaHome, FaMoneyBillAlt, FaCog, FaSignOutAlt, FaMoneyCheck } from 'react-icons/fa';
 import './LeftNav.css';
 import { FaHandHoldingDollar, FaPrint, FaSackDollar } from 'react-icons/fa6';
+import { Link } from 'react-router-dom'; // Importing Link for navigation
 
 const LeftNav = ({ isVisible }) => {
-  return (
+  return (  
     <nav className={`leftnav ${isVisible ? '' : 'hidden'}`}>
       <ul className="nav-list">
-        <li><FaHome /> Dashboard</li>
-        <li><FaMoneyBillAlt /> Expenses</li>
-        <li><FaMoneyCheck /> Manage Expenses</li>
-        <li><FaHandHoldingDollar /> Lending Expenses</li>
-        <li><FaSackDollar /> Manage Lending</li>
-        <li><FaPrint /> Report/Print</li>
-        <li><FaCog /> Settings</li>
+        <li><FaHome /> <Link to="/Dashboard">Dashboard</Link></li>
+        <li><FaMoneyBillAlt /> <Link to="/expensemenu/Expense">Expenses</Link></li>
+        <li><FaMoneyCheck /> <Link to="/expensemenu/ManageExpense">Manage Expenses</Link></li>
+        <li><FaHandHoldingDollar /> <Link to="/lendingmenu/Lending">Lending</Link></li>
+        <li><FaSackDollar /> <Link to="/lendingmenu/ManageLending">Manage Lending</Link></li>
+        <li><FaPrint /> <Link to="/reportmenu/Report">Report</Link></li>
+        <li><FaCog /> <Link to="/settingmenu/Setting">Settings</Link></li>
       </ul>
       <div className="logout-section">
-        <FaSignOutAlt /> Logout
+        <FaSignOutAlt /> <Link to="/">Logout</Link>
       </div>
     </nav>
   );
