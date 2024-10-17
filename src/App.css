@@ -38,8 +38,8 @@ body {
   transition: transform 0.5s;
   } 
   
- /*  .card {
-      background: linear-gradient(to left, white 50%, #14A44D 50%);
+ .card {
+      background: linear-gradient(to left, rgb(255, 255, 255) 50%, #abddb7 50%);
       background-size: 200%;
       background-position: right;  
     }

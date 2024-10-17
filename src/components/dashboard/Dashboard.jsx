@@ -59,15 +59,14 @@ const Dashboard = () => {
   return (
     <div className="dashboard-container">
       {/* Pass toggleNav and navVisible state to Header and LeftNav */}
-      <Header title="Dashboard" toggleNav={toggleNav} className={navVisible ? 'nav-visible' : 'nav-hidden'} />
+      <Header title="Dashboard" toggleNav={toggleNav} navVisible={navVisible} />
       <LeftNav isVisible={navVisible} />
 
       <div className={`dashboard-content ${navVisible ? 'nav-visible' : 'nav-hidden'}`}>
         {/* Main Dashboard Content */}
-        <div className="dashboard-content">
+        <div className="dashboard-content-inner">
           {/* Key Expense Stats */}
           <div className="expense-summary">
-            {/* Wrap each stat card separately */}
             <div className="stat-card card">
               <h4>Today’s Expense</h4>
               <p>₱{expenseStats.todayExpense}</p>

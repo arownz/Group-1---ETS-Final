@@ -18,7 +18,7 @@
 
 .dashboard-content {
   flex-grow: 1;
-  padding: 20px;
+  padding: 50px;
   margin-left: 200px; /* Set margin to accommodate left nav */
   transition: margin-left 0.3s ease; /* Smooth transition when toggling nav */
 }

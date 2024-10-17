@@ -1,7 +1,8 @@
+/* Default header styles */
 .dashboard-header {
     position: fixed;
     top: 0;
-    left: 200px; /* Adjust this based on left nav width */
+    left: 200px; /* When nav is visible */
     right: 0;
     z-index: 1000;
     display: flex;
@@ -11,7 +12,16 @@
     padding: 10px;
     background-color: #fff;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: left 0.3s ease; /* Add transition for left nav toggle */
+    transition: left 0.3s ease; /* Smooth movement for left nav toggle */
+}
+
+/* When left nav is hidden */
+.nav-hidden {
+    left: 0px; /* Move header to the left when nav is hidden */
+}
+
+.nav-visible {
+    left: 200px; /* Align the header with left nav when visible */
 }
 
 .header-left {
@@ -67,7 +77,6 @@
     background-color: #f1f1f1;
 }
 
-/* Add this to adjust the main content */
 body {
     padding-top: 60px; /* Adjust based on your header height */
-  }
+}
