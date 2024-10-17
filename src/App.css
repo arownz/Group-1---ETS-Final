@@ -45,7 +45,7 @@ body {
     }
     .card:hover {
       background-position: left;
-      color: white;
+      color: rgb(2, 1, 1);
     }
     .card {
       transition: background-position 0.5s ease-in-out;
