@@ -1,15 +1,13 @@
 import './Dashboard.css'; // Custom styles
-import { useState } from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Link } from 'react-router-dom'; // Importing Link for navigation
-import { Outlet } from 'react-router-dom'; // Import Outlet for nested routes
+import ExpenseSummary from './datafetcher/ExpenseSummary';
+import MonthlyExpenseChart from './datafetcher/MonthlyExpenseChart';
+import CategoryExpenseChart from './datafetcher/CategoryExpenseChart';
 
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
 const Dashboard = () => {
-  const [navVisible, setNavVisible] = useState(true); // Toggle state for nav
-
-  // Toggle function for left nav
 
   // Dummy data for expense stats
   const expenseStats = {
@@ -55,65 +53,20 @@ const Dashboard = () => {
   return (
     <div className="allmenu-container">
 
-        {/* Main Dashboard Content */}
-        <div className="allmenu-content-inner">
+      <div className="allmenu-content-inner">
 
-          {/* Key Expense Stats */}
-          <div className="expense-summary">
-            <div className="stat-card card">
-              <h4>Today’s Expense</h4>
-              <p>₱{expenseStats.todayExpense}</p>
-            </div>
-            <div className="stat-card card">
-              <h4>Yesterday’s Expense</h4>
-              <p>₱{expenseStats.yesterdayExpense}</p>
-            </div>
-            <div className="stat-card card">
-              <h4>Number of Expenses</h4>
-              <p>{expenseStats.numberOfExpenses}</p>
-            </div>
-            <div className="stat-card card">
-              <h4>Total Expense</h4>
-              <p>₱{expenseStats.totalExpense}</p>
-            </div>
-          </div>
+        <ExpenseSummary stats={expenseStats} />
 
-          {/* Monthly Expense Chart */}
-          <div className="chart-section card">
-            <h3>Monthly Expense Chart</h3>
-            <div className="chart-container">
-              <Bar
-                data={barChartData}
-                options={{
-                  maintainAspectRatio: false,
-                  responsive: true,
-                }}
-              />
-            </div>
-          </div>
+        <MonthlyExpenseChart data={barChartData} />
 
-          {/* Category Pie Chart */}
-          <div className="chart-section card">
-            <h3>Expense Category Breakdown</h3>
-            <div className="chart-container">
-              <Pie
-                data={pieChartData}
-                options={{
-                  maintainAspectRatio: false,
-                  responsive: true,
-                }}
-              />
-            </div>
-          </div>
-          {/* Child routes will be rendered here */}
-          <Outlet />
+        <CategoryExpenseChart data={pieChartData} />
 
-          <button className="floating-add-btn">
-            <Link to="/expensemenu/Expense">+</Link>
-          </button>
-        </div>
+        <button className="floating-add-btn">
+          <Link to="/expensemenu/Expense">+</Link>
+        </button>
       </div>
+    </div>
   );
 };
 
-export default Dashboard;
+export default Dashboard; 
