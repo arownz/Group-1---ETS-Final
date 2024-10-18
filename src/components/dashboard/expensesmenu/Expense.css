@@ -1,155 +1,39 @@
-.allmenu-main {
-    display: flex;
-    flex-direction: column;
-    margin-left: 200px;
-    /* Adjust this based on left nav width */
-    transition: margin-left 0.3s ease;
-  }
-  
-  .allmenu-main.collapsed {
-    margin-left: 0;
-    /* When the left nav is hidden */
-  }
-  
-  .allmenu-container {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .allmenu-content {
-    flex-grow: 1;
-    padding: 50px;
-    margin-left: 200px; /* Set margin to accommodate left nav */
-    transition: margin-left 0.3s ease; /* Smooth transition when toggling nav */
-  }
-  
-  .allmenu-content.nav-visible {
-    margin-left: 200px; /* Adjust when nav is visible */
-  }
-  
-  .allmenu-content.nav-hidden {
-    margin-left: 0; /* Adjust when nav is hidden */
-  }
-  
-  .header {
-    width: 100%;
-    padding: 15px;
-    background-color: #1a1515;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
-  
-  .header.nav-visible {
-    margin-left: 200px; /* Adjust when nav is visible */
-  }
-  
-  .header.nav-hidden {
-    margin-left: 0; /* Adjust when nav is hidden */
-  }
-  
-  .leftnav {
-    width: 200px;
-    background-color: #333;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    transition: transform 0.3s ease;
-  }
-  
-  .leftnav.nav-hidden {
-    transform: translateX(-100%);
-  }
-  
-  .leftnav.nav-visible {
-    transform: translateX(0);
-  }
-  
-  .expense-summary {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .stat-card {
-    flex: 1;
-    background-color: #fff;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    margin-right: 10px;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .stat-card.card {
-    margin-right: 10px;
-    /* Space between cards */
-  }
-  
-  .stat-card:last-child {
-    margin-right: 0;
-    /* Remove the margin from the last card */
-  }
-  
-  .chart-section {
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    width: 100%;
-  }
-  
-  .chart-container {
-    position: relative;
-    width: 100%;
-    height: 400px; /* Set chart height */
-  }
-  
-  .chart-section canvas {
-    max-width: 100%;
-    height: auto;
-  }
-  
-  .pie-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .pie-chart {
-    max-width: 300px;
-    max-height: 300px;
-  }
-  
-  .floating-add-btn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: #14A44D; /* Green color */
-    color: #fff;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    font-size: 30px;
-    border: none;
-    outline: none;
-    z-index: 1000;
-    transition: background-color 0.3s ease;
-  }
-  
-  .floating-add-btn a {
-    text-decoration: none;
-    color: #fff;
-    font-size: 30px;
-  }
-  
-  .floating-add-btn:hover {
-    background-color: #119437; /* Darker green on hover */
-  }
-  
+/* Expense.css */
+.container {
+  max-width: 1000px;
+}
+
+.form-label {
+  font-weight: bold;
+}
+
+.form-control {
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.form-select {
+  padding: 10px;
+}
+
+.btn-secondary {
+  border-radius: 5px;
+}
+
+button {
+  margin-top: 20px;
+}
+
+textarea {
+  resize: none;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.d-flex {
+  display: flex;
+  align-items: center;
+}
