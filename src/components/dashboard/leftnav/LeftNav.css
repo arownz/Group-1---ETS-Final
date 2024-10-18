@@ -3,7 +3,7 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 200px;
+  width: 210px;
   background-color: #abddb7 !important;
   color: #fff;
   padding: 20px;
@@ -16,19 +16,44 @@
   transform: translateX(-100%);
 }
 
+/* Logo Section */
+.logo-section {
+  display: flex;
+  align-items: center;
+  padding: 1px;
+  margin-bottom: 25px;
+}
+
+.logo {
+  height: 53px;
+  margin-right: 10px;
+}
+
+.logo-title {
+  font-size: 15px;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+}
+
+/* Navigation List */
 .nav-list {
   list-style-type: none;
   padding: 0;
 }
 
 .nav-list li {
-  margin: 20px 0;
-  cursor: pointer;
-  padding: 10px;
-  border-bottom: 1px solid white; /* Add white line */
-  font-size: 16px;
   display: flex;
   align-items: center;
+  margin: 18px 0; /* Increased spacing */
+  padding: 10px;
+  border-bottom: 1px solid white;
+  font-size: 16px;
+}
+
+.nav-icon {
+  margin-right: 10px; /* Added space between icon and text */
+  font-size: 18px;
+  color: #080505; /* Ensure the icon color matches the theme */
 }
 
 .nav-list li:hover {
@@ -36,26 +61,29 @@
   color: #14A44D;
 }
 
-.logo-section {
-  display: flex;
-  align-items: center;
-  padding: 1px;
-  margin-bottom: 20px;
+.nav-list li a {
+  color: #110d0d;
+  text-decoration: none;
 }
 
-.logo {
-  height: 53px;
-  margin-right: 5px;
+.nav-list li:hover a {
+  color: #14A44D; /* Make text color change on hover */
 }
 
-.logo-title {
-  font-size: 16px;
-  color: rgb(0, 0, 0);
-  font-weight: bold;
-}
-
+/* Logout Section */
 .logout-section {
   position: absolute;
   bottom: 20px;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.logout-section a {
+  color: #fff;
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+.logout-section:hover a {
+  color: #14A44D;
 }
