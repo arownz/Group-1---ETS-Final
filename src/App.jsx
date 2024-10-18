@@ -8,6 +8,7 @@ import SignIn from './components/useraccess/SignIn';
 import AboutUs from './components/aboutus/AboutUs';
 import ContactUs from './components/contactus/ContactUs';
 import GuestLayout from './components/layout/GuestLayout';
+import UserLayout from './components/layout/UserLayout';
 import Dashboard from './components/dashboard/Dashboard';
 import Expense from './components/dashboard/expensesmenu/Expense';
 import ManageExpense from './components/dashboard/expensesmenu/ManageExpense';
@@ -29,14 +30,15 @@ function App() {
           <Route path="/SignIn" element={<SignIn />} />
         </Route>
 
-        {/* User routes */}
-        <Route path="/Dashboard" element={<Dashboard />}>
-          <Route path="expensesmenu/Expense" element={<Expense />} />
-          <Route path="expensesmenu/ManageExpense" element={<ManageExpense />} />
-          <Route path="lendingmenu/Lending" element={<Lending />} />
-          <Route path="lendingmenu/ManageLending" element={<ManageLending />} />
-          <Route path="reportmenu/Report" element={<Report />} />
-          <Route path="settingmenu/Setting" element={<Setting />} />
+        {/* User routes with fixed layout (LeftNav + Header) */}
+        <Route element={<UserLayout />}>
+          <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/expensesmenu/Expense" element={<Expense />} />
+          <Route path="/expensesmenu/ManageExpense" element={<ManageExpense />} />
+          <Route path="/lendingmenu/Lending" element={<Lending />} />
+          <Route path="/lendingmenu/ManageLending" element={<ManageLending />} />
+          <Route path="/reportmenu/Report" element={<Report />} />
+          <Route path="/settingmenu/Setting" element={<Setting />} />
         </Route>
       </Routes>
     </Router>

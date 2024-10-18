@@ -1,6 +1,6 @@
 import { FaHome, FaMoneyBillAlt, FaCog, FaSignOutAlt, FaMoneyCheck } from 'react-icons/fa';
-import './LeftNav.css';
 import { FaHandHoldingDollar, FaPrint, FaSackDollar } from 'react-icons/fa6';
+import './LeftNav.css';
 import { Link } from 'react-router-dom';
 import logo from '/src/assets/ETSlogo-removebg-preview.png'; // Importing the logo
 
@@ -15,18 +15,40 @@ const LeftNav = ({ isVisible }) => {
 
       {/* Navigation List */}
       <ul className="nav-list">
-        <li><FaHome /> <Link to="/Dashboard">Dashboard</Link></li>
-        <li><FaMoneyBillAlt /> <Link to="/expensesmenu/Expense">Expenses</Link></li>
-        <li><FaMoneyCheck /> <Link to="/expensesmenu/ManageExpense">Manage Expenses</Link></li>
-        <li><FaHandHoldingDollar /> <Link to="/lendingmenu/Lending">Lending</Link></li>
-        <li><FaSackDollar /> <Link to="/lendingmenu/ManageLending">Manage Lending</Link></li>
-        <li><FaPrint /> <Link to="/reportmenu/Report">Report</Link></li>
-        <li><FaCog /> <Link to="/settingmenu/Setting">Settings</Link></li>
+        <li>
+          <FaHome className="nav-icon" /> 
+          <Link to="/Dashboard">Dashboard</Link>
+        </li>
+        <li>
+          <FaMoneyBillAlt className="nav-icon" /> 
+          <Link to="/expensesmenu/Expense">Expenses</Link>
+        </li>
+        <li>
+          <FaMoneyCheck className="nav-icon" /> 
+          <Link to="/expensesmenu/ManageExpense">Manage Expenses</Link>
+        </li>
+        <li>
+          <FaHandHoldingDollar className="nav-icon" /> 
+          <Link to="/lendingmenu/Lending">Lending</Link>
+        </li>
+        <li>
+          <FaSackDollar className="nav-icon" /> 
+          <Link to="/lendingmenu/ManageLending">Manage Lending</Link>
+        </li>
+        <li>
+          <FaPrint className="nav-icon" /> 
+          <Link to="/reportmenu/Report">Report</Link>
+        </li>
+        <li>
+          <FaCog className="nav-icon" /> 
+          <Link to="/settingmenu/Setting">Settings</Link>
+        </li>
       </ul>
 
       {/* Logout Section */}
       <div className="logout-section">
-        <FaSignOutAlt /> <Link to="/">Logout</Link>
+        <FaSignOutAlt className="nav-icon" />
+        <Link to="/">Logout</Link>
       </div>
     </nav>
   );

@@ -6,7 +6,7 @@ function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Temporarily navigate to Dashboard without authentication
-    navigate('/dashboard');
+    navigate('/Dashboard');
   };
 
   return (

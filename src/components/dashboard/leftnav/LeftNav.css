@@ -4,7 +4,7 @@
   top: 0;
   bottom: 0;
   width: 200px;
-  background-color: #abddb7;
+  background-color: #abddb7 !important;
   color: #fff;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
