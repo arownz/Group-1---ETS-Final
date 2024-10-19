@@ -11,8 +11,8 @@ const Dashboard = () => {
 
   // Dummy data for expense stats
   const expenseStats = {
-    todayExpense: 270,
-    yesterdayExpense: 250,
+    thisWeekExpense: 270,
+    thisMonthExpense: 250,
     numberOfExpenses: 2,
     totalExpense: 520
   };
@@ -33,7 +33,7 @@ const Dashboard = () => {
 
   // Pie chart data (for category-wise expenses)
   const pieChartData = {
-    labels: ['Food', 'Transport', 'Entertainment', 'Bills', 'Others'],
+    labels: ['Grocery', 'Entertainment', 'Bills', 'Games', 'Rent'],
     datasets: [
       {
         label: 'Expense Category',

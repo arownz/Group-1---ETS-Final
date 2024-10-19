@@ -4,11 +4,11 @@ const ExpenseSummary = ({ stats }) => {
       <div className="expense-summary">
         <div className="stat-card card">
           <h4>Today’s Expense</h4>
-          <p>₱{stats.todayExpense}</p>
+          <p>₱{stats.thisWeekExpense}</p>
         </div>
         <div className="stat-card card">
           <h4>Yesterday’s Expense</h4>
-          <p>₱{stats.yesterdayExpense}</p>
+          <p>₱{stats.thisMonthExpense}</p>
         </div>
         <div className="stat-card card">
           <h4>Number of Expenses</h4>
