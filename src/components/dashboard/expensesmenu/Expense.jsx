@@ -1,147 +1,86 @@
-import { useState } from 'react';
-import './Expense.css'; // Assuming you have the Expense.css file for styling
+import React, { useState } from 'react';
+import styles from './Expense.module.css'; // CSS Module
 
-function Expense() {
-  const [expense, setExpense] = useState({
-    title: '',
-    category: '',
-    date: '',
-    cost: '',
-    description: ''
-  });
+const Expense = () => {
+  const [categories, setCategories] = useState(['Grocery', 'Entertainment', 'Bills', 'Games', 'Rent']);
+  const [newCategory, setNewCategory] = useState('');
+  const [showAddCategory, setShowAddCategory] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState('');
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setExpense({ ...expense, [name]: value });
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Submit expense logic here
-    console.log(expense);
-  };
-
-  const openAddCategoryPopup = () => {
-    // Logic to handle opening the "Add Category" popup
-    alert('Add Category popup');
+  const addCategory = () => {
+    if (newCategory) {
+      setCategories([...categories, newCategory]);
+      setNewCategory('');
+      setShowAddCategory(false);
+      setConfirmationMessage('Category added successfully!');
+      
+      // Remove confirmation message after 3 seconds
+      setTimeout(() => setConfirmationMessage(''), 3000);
+    }
   };
 
   return (
-    <>
-      <main>
-        <div
-          className="container shadow my-5 p-5 rounded"
-          style={{ backgroundColor: "white" }}
-        >
-          <div className="row text-center">
-            <h1 style={{ fontSize: 40, fontWeight: "bolder" }}>
-              Add New Expense
-            </h1>
+    <div className={styles.expenseContainer}>
+      <h2>Add Expense</h2>
+
+      <form className={styles.expenseForm}>
+        <div className={styles.formGroup}>
+          <label>Date of Expense</label>
+          <input type="date" name="expenseDate" required />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>Category</label>
+          <select name="category">
+            <option value="">Choose Category</option>
+            {categories.map((category, index) => (
+              <option key={index} value={category}>{category}</option>
+            ))}
+          </select>
+          <button type="button" onClick={() => setShowAddCategory(true)} className={styles.addCategoryBtn}>
+            + Add Category
+          </button>
+        </div>
+
+        {/* Confirmation message */}
+        {confirmationMessage && (
+          <div className={styles.confirmationMessage}>
+            {confirmationMessage}
           </div>
-          <div className="row py-5 justify-content-center">
-            <div className="col-md-8">
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label htmlFor="expenseTitle" className="form-label">
-                    Expense Title
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="expenseTitle"
-                    name="title"
-                    value={expense.title}
-                    onChange={handleInputChange}
-                    placeholder="Enter expense title"
-                    required
-                  />
-                </div>
+        )}
 
-                <div className="mb-3">
-                  <label htmlFor="category" className="form-label">
-                    Category
-                  </label>
-                  <div className="d-flex">
-                    <select
-                      className="form-select"
-                      id="category"
-                      name="category"
-                      value={expense.category}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value="">Select a category</option>
-                      <option value="Grocery">Grocery</option>
-                      <option value="Entertainment">Entertainment</option>
-                      <option value="Bills">Bills</option>
-                      <option value="Rent">Rent</option>
-                    </select>
-                    <button
-                      type="button"
-                      className="btn btn-secondary ms-2"
-                      onClick={openAddCategoryPopup}
-                    >
-                      Add Category
-                    </button>
-                  </div>
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="date" className="form-label">
-                    Date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="date"
-                    name="date"
-                    value={expense.date}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="cost" className="form-label">
-                    Cost
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="cost"
-                    name="cost"
-                    value={expense.cost}
-                    onChange={handleInputChange}
-                    placeholder="Enter amount"
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="description" className="form-label">
-                    Description
-                  </label>
-                  <textarea
-                    className="form-control"
-                    id="description"
-                    name="description"
-                    value={expense.description}
-                    onChange={handleInputChange}
-                    placeholder="Enter a brief description"
-                    rows="3"
-                  ></textarea>
-                </div>
-
-                <button type="submit" className="btn btn-success btn-lg">
-                  Add Expense
-                </button>
-              </form>
+        {showAddCategory && (
+          <div className={styles.modal}>
+            <div className={styles.modalContent}>
+              <h4>Add New Category</h4>
+              <input
+                type="text"
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+                placeholder="New Category Name"
+              />
+              <div className={styles.modalButtons}>
+                <button className={styles.addCategoryModalBtn} onClick={addCategory}>Add</button>
+                <button className={styles.closeModalBtn} onClick={() => setShowAddCategory(false)}>Cancel</button>
+              </div>
             </div>
           </div>
+        )}
+
+        <div className={styles.formGroup}>
+          <label>Cost of Item</label>
+          <input type="number" name="cost" required />
         </div>
-      </main>
-    </>
+
+        <div className={styles.formGroup}>
+          <label>Description</label>
+          <textarea name="description" rows="4" />
+        </div>
+
+        <button type="submit" className={styles.addExpenseBtn}>Add Expense</button>
+      </form>
+    </div>
   );
-}
+};
 
 export default Expense;

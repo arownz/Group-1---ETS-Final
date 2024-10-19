@@ -1,81 +1,118 @@
-import React, { useState } from 'react';
-import './Expense.css'; // Include your custom CSS
+import { useState } from 'react';
+import styles from './ManageExpenses.module.css'; // CSS Module
 
-const ManageExpense = () => {
+const ManageExpenses = () => {
   const [expenses, setExpenses] = useState([
-    // Dummy data for now
-    {
-      id: 1,
-      title: 'Grocery Shopping',
-      category: 'Grocery',
-      date: '2024-10-17',
-      cost: 100,
-      description: 'Weekly groceries',
-      registered: '2024-10-17',
-    },
+    { id: 1, title: 'Rent', category: 'Housing', cost: 20000, date: '2023-04-18', description: 'Monthly Rent', registeredDate: '2023-04-19' },
+    { id: 2, title: 'Entertainment', category: 'Leisure', cost: 500, date: '2023-04-17', description: 'Movie tickets', registeredDate: '2023-04-18' },
+    // Add more dummy data as needed...
   ]);
-  const [editExpense, setEditExpense] = useState(null);
-  const [deleteExpense, setDeleteExpense] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState(null);
 
-  const handleEditExpense = (expense) => {
-    setEditExpense(expense);
-    // Logic to open edit popup
-    alert(`Edit expense: ${expense.title}`);
+  // Open Edit Modal
+  const handleEdit = (expense) => {
+    setSelectedExpense(expense);
+    setShowEditModal(true);
   };
 
-  const handleDeleteExpense = (expenseId) => {
-    setDeleteExpense(expenseId);
-    // Logic to open delete confirmation
-    alert(`Delete expense with ID: ${expenseId}`);
+  // Open Delete Modal
+  const handleDelete = (expense) => {
+    setSelectedExpense(expense);
+    setShowDeleteModal(true);
   };
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4">Manage Expenses</h1>
-      <table className="table table-striped table-hover">
-        <thead className="thead-dark">
+    <div className={styles.manageExpensesContainer}>
+      <h2>Manage Expense</h2>
+
+      <div className={styles.tableHeader}>
+        <label>Show
+          <select>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select> entries
+        </label>
+      </div>
+
+      <table className={styles.expenseTable}>
+        <thead>
           <tr>
-            <th>ID#</th>
-            <th>Title</th>
+            <th>#</th>
+            <th>Expense Title</th>
             <th>Category</th>
-            <th>Date</th>
             <th>Cost</th>
+            <th>Expense Date</th>
             <th>Description</th>
             <th>Registered Date</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {expenses.map((exp) => (
-            <tr key={exp.id}>
-              <td>{exp.id}</td>
-              <td>{exp.title}</td>
-              <td>{exp.category}</td>
-              <td>{exp.date}</td>
-              <td>{exp.cost}</td>
-              <td>{exp.description}</td>
-              <td>{exp.registered}</td>
+          {expenses.map((expense, index) => (
+            <tr key={expense.id}>
+              <td>{expense.id}</td>
+              <td>{expense.title}</td>
+              <td>{expense.category}</td>
+              <td>{expense.cost}</td>
+              <td>{expense.date}</td>
+              <td>{expense.description}</td>
+              <td>{expense.registeredDate}</td>
               <td>
-                <button
-                  className="btn btn-sm btn-primary me-2"
-                  onClick={() => handleEditExpense(exp)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="btn btn-sm btn-danger"
-                  onClick={() => handleDeleteExpense(exp.id)}
-                >
-                  Delete
-                </button>
+                <button className={styles.actionBtn} onClick={() => handleEdit(expense)}>Edit</button>
+                <button className={styles.actionBtn} onClick={() => handleDelete(expense)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {/* Pagination and Filter components could go here */}
+
+      {/* Pagination */}
+      <div className={styles.pagination}>
+        <button className={styles.pageBtn}>Previous</button>
+        <button className={styles.pageBtn}>Next</button>
+      </div>
+
+      {/* Edit Modal */}
+      {showEditModal && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h4>Edit Expense</h4>
+            <input
+              type="text"
+              value={selectedExpense.title}
+              onChange={(e) => setSelectedExpense({ ...selectedExpense, title: e.target.value })}
+              placeholder="Expense Title"
+            />
+            {/* Add more input fields as needed */}
+            <div className={styles.modalButtons}>
+              <button className={styles.addBtn} onClick={() => setShowEditModal(false)}>Save</button>
+              <button className={styles.closeBtn} onClick={() => setShowEditModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h4>Are you sure you want to delete this expense?</h4>
+            <div className={styles.modalButtons}>
+              <button className={styles.addBtn} onClick={() => {
+                setExpenses(expenses.filter(e => e.id !== selectedExpense.id));
+                setShowDeleteModal(false);
+              }}>Yes</button>
+              <button className={styles.closeBtn} onClick={() => setShowDeleteModal(false)}>No</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ManageExpense;
+export default ManageExpenses;
