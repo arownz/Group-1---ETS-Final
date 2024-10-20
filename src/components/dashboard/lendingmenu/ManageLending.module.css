@@ -52,6 +52,7 @@
 }
 
 .lendingTable td:nth-child(1),
+.lendingTable td:nth-child(3),
 .lendingTable td:nth-child(4),
 .lendingTable td:nth-child(5),
 .lendingTable td:nth-child(6),
@@ -234,4 +235,25 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.statusIndicator {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.pending {
+  color: #c05621; /* Dark orange for text */
+  background-color: #feebc8; /* Light orange for background */
+  border: 1px solid #f6ad55; /* Medium orange for border */
+}
+
+.received {
+  color: #2f855a; /* Dark green for text */
+  background-color: #c6f6d5; /* Light green for background */
+  border: 1px solid #68d391; /* Medium green for border */
 }

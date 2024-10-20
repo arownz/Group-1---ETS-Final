@@ -111,7 +111,7 @@ function ContactUs() {
                                         accordance with ExpenseWize’s Privacy Statement
                                     </label>
                                 </div>
-                                <button type="submit" className="btn btn-primary px-5 my-4">
+                                <button type="submit" className="btn btn-success px-5 my-4">
                                     Submit
                                 </button>
                             </form>

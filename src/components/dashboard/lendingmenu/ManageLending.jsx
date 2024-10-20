@@ -5,8 +5,8 @@ import styles from './ManageLending.module.css';
 
 const ManageLending = () => {
   const [lendings, setLendings] = useState([
-    { id: 1, title: 'Personal Loan', name: 'John Doe', dateLending: '2024-05-01', dateDeadline: '2024-06-01', amount: 1000, description: 'Emergency fund', status: 'Pending', registeredDate: '2024-04-30' },
-    { id: 2, title: 'Business Loan', name: 'Jane Smith', dateLending: '2024-05-05', dateDeadline: '2024-07-05', amount: 5000, description: 'Startup capital', status: 'Received', registeredDate: '2024-05-04' },
+    { id: 1, title: 'Personal Loan', name: 'John Doe', dateLending: '2024-05-01', datePayBack: '2024-06-01', amount: 1000, description: 'Emergency fund', status: 'Pending', registeredDate: '2024-04-30' },
+    { id: 2, title: 'Business Loan', name: 'Jane Smith', dateLending: '2024-05-05', datePayBack: '2024-07-05', amount: 5000, description: 'Startup capital', status: 'Received', registeredDate: '2024-05-04' },
     // Add more dummy data as needed...
   ]);
 
@@ -21,7 +21,7 @@ const ManageLending = () => {
     status: '',
     amountOrder: '',
     dateLendingOrder: '',
-    dateDeadlineOrder: '',
+    datePayBackOrder: '',
     registeredDateOrder: ''
   });
 
@@ -44,8 +44,8 @@ const ManageLending = () => {
       result.sort((a, b) => filters.dateLendingOrder === 'asc' ? new Date(a.dateLending) - new Date(b.dateLending) : new Date(b.dateLending) - new Date(a.dateLending));
     }
 
-    if (filters.dateDeadlineOrder) {
-      result.sort((a, b) => filters.dateDeadlineOrder === 'asc' ? new Date(a.dateDeadline) - new Date(b.dateDeadline) : new Date(b.dateDeadline) - new Date(a.dateDeadline));
+    if (filters.datePayBackOrder) {
+      result.sort((a, b) => filters.datePayBackOrder === 'asc' ? new Date(a.datePayBack) - new Date(b.datePayBack) : new Date(b.datePayBack) - new Date(a.datePayBack));
     }
 
     if (filters.registeredDateOrder) {
@@ -68,7 +68,7 @@ const ManageLending = () => {
       status: '',
       amountOrder: '',
       dateLendingOrder: '',
-      dateDeadlineOrder: '',
+      datePayBackOrder: '',
       registeredDateOrder: ''
     });
   };
@@ -135,8 +135,8 @@ const ManageLending = () => {
           </select>
 
           <select
-            value={filters.dateDeadlineOrder}
-            onChange={(e) => handleFilterChange('dateDeadlineOrder', e.target.value)}
+            value={filters.datePayBackOrder}
+            onChange={(e) => handleFilterChange('datePayBackOrder', e.target.value)}
           >
             <option value="">Sort by Deadline Date</option>
             <option value="desc">Date (Newest First)</option>
@@ -163,7 +163,7 @@ const ManageLending = () => {
             <th>Title of Lending</th>
             <th>Name of Lender</th>
             <th>Date of Lending</th>
-            <th>Date of Deadline</th>
+            <th>Date of Pay Back</th>
             <th>Amount</th>
             <th>Description</th>
             <th>Status</th>
@@ -179,10 +179,14 @@ const ManageLending = () => {
               <td>{lending.title}</td>
               <td>{lending.name}</td>
               <td>{lending.dateLending}</td>
-              <td>{lending.dateDeadline}</td>
+              <td>{lending.datePayBack}</td>
               <td>{lending.amount}</td>
               <td>{lending.description}</td>
-              <td>{lending.status}</td>
+              <td>
+                <span className={`${styles.statusIndicator} ${styles[lending.status.toLowerCase()]}`}>
+                  {lending.status}
+                </span>
+              </td>
               <td>{new Date().toLocaleString()}</td>
               <td>{lending.registeredDate}</td>
               <td>
@@ -261,11 +265,11 @@ const ManageLending = () => {
               </div>
 
               <div className={styles.formGroup}>
-                <label>Date of Deadline</label>
+                <label>Date of Pay Back</label>
                 <input
                   type="date"
-                  value={selectedLending.dateDeadline}
-                  onChange={(e) => setSelectedLending({ ...selectedLending, dateDeadline: e.target.value })}
+                  value={selectedLending.datePayBack}
+                  onChange={(e) => setSelectedLending({ ...selectedLending, datePayBack: e.target.value })}
                   required
                 />
               </div>
@@ -309,7 +313,7 @@ const ManageLending = () => {
                     setEditConfirmationMessage('');
                     setShowEditModal(false);
                   }, 2000);
-                }}>Save</button>  
+                }}>Save</button>
                 <button type="button" className={styles.closeModalBtn} onClick={() => setShowEditModal(false)}>Cancel</button>
               </div>
               {editConfirmationMessage && (

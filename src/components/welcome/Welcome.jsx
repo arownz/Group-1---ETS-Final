@@ -80,8 +80,8 @@ function Welcome() {
             <div className="container py-5">
               <div className="row py-5">
                 <div className="col-lg-6 d-flex align-items-center">
-                  <div className="text-center">
-                    <h5 className="text-success fw-bolder">About</h5>
+                  <div className="text-right">
+                    <h5 className="text-success fw-bolder">Services</h5>
                     <h2>What is this tool for?</h2>
                     <p>
                       &quot;Experience comprehensive financial solutions tailored to your
@@ -90,7 +90,7 @@ function Welcome() {
                       Let us guide you towards financial security and success, every
                       step of the way.&quot;
                     </p>
-                    <Link to="/AboutUs"
+                    <Link to="/Services"
                       className="text-white"
                       style={{ fontSize: 18 }}
                     >
@@ -337,11 +337,11 @@ function Welcome() {
             </div>
           </div>
 
-          {/* blue section  */}
+          {/* dark green section  */}
           <section>
             <div
               className="container-fluid rounded-3 py-5"
-              style={{ backgroundColor: "#0d084d" }}
+              style={{ backgroundColor: "#2f855a" }}
             >
               <div className="container py-5">
                 <div className="row">

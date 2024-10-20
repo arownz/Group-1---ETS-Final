@@ -80,11 +80,11 @@ const Lending = () => {
         </div>
 
         <div className={styles.formGroup}>
-          <label>Date of Deadline</label>
+          <label>Date of Pay Back</label>
           <input
             type="date"
-            name="dateOfDeadline"
-            value={lendingData.dateOfDeadline}
+            name="dateOfPayBack"
+            value={lendingData.dateOfPayBack}
             onChange={handleInputChange}
             required
           />
