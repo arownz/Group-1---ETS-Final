@@ -1,0 +1,219 @@
+/* Setting.module.css */
+.settingsContainer {
+  display: flex;
+  background-color: #f0f4f8;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+
+.miniNav {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  margin-right: 20px;
+}
+
+.navButton {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.navButton:hover {
+  background-color: #cbd5e0;
+}
+
+.navButton.active {
+  background-color: #2f855a;
+  color: white;
+}
+
+/* Setting.module.css (continued) */
+.mainContent {
+  flex: 1;
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  text-align: left;
+  color: #2d3748;
+}
+
+.settingsForm {
+  background-color: #edf2f7;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.accountForm,
+.passwordForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.profileImageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profileImage {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.imageInput {
+  width: 100%;
+  max-width: 300px;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.formGroup label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #4a5568;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cbd5e0;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.formGroup input:disabled {
+  background-color: #e2e8f0;
+  cursor: not-allowed;
+}
+
+.currentPassword {
+  background-color: #e2e8f0;
+  cursor: not-allowed;
+}
+
+.newPassword,
+.confirmPassword {
+  background-color: #ffffff;
+}
+
+.passwordInputGroup {
+  display: flex;
+  align-items: center;
+}
+
+.passwordInputGroup input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.viewPasswordButton {
+  padding: 10px 15px;
+  background-color: #2f855a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.viewPasswordButton:hover {
+  background-color: #2f855a;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.editButton,
+.updateButton,
+.cancelButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.editButton {
+  background-color: #2f855a;
+  color: white;
+}
+
+.editButton:hover {
+  background-color: #2f855a;
+}
+
+.updateButton {
+  background-color: #2f855a;
+  color: white;
+}
+
+.updateButton:hover {
+  background-color: #276749;
+}
+
+.cancelButton {
+  background-color: #e53e3e;
+  color: white;
+}
+
+.cancelButton:hover {
+  background-color: #c53030;
+}
+
+.confirmationMessage {
+  background-color: #c6f6d5;
+  color: #2f855a;
+  border: 1px solid #68d391;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .settingsContainer {
+    flex-direction: column;
+  }
+
+  .miniNav {
+    flex-direction: row;
+    justify-content: center;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .navButton {
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
+}
