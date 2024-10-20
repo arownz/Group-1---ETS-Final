@@ -164,7 +164,7 @@ const ManageExpenses = () => {
             <th>Cost</th>
             <th>Expense Date</th>
             <th>Description</th>
-            <th>Registered Date</th>
+            <th>Expense Registered Date</th>
             <th>Action</th>
           </tr>
         </thead>

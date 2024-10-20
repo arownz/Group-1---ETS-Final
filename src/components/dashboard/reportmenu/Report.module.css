@@ -1,0 +1,65 @@
+.printBtn {
+    float: right;
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .reportTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .reportTable th,
+  .reportTable td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .reportTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .reportTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .grandTotal {
+    font-weight: bold;
+  }
+  
+  .grandTotal td:last-child {
+    border-left: 2px solid #2f855a;
+  }
+  
+  @media print {
+    .reportForm,
+    .printBtn {
+      display: none;
+    }
+  
+    .reportContainer {
+      padding: 0;
+      background-color: white;
+    }
+  
+    .printableReport {
+      margin-top: 0;
+    }
+  
+    .reportTable {
+      border: 1px solid #000;
+    }
+  
+    .reportTable th,
+    .reportTable td {
+      border: 1px solid #000;
+    }
+  }

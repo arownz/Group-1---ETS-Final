@@ -168,7 +168,7 @@ const ManageLending = () => {
             <th>Description</th>
             <th>Status</th>
             <th>Current Time</th>
-            <th>Registered Date</th>
+            <th>Lending Registered Date</th>
             <th>Action</th>
           </tr>
         </thead>
