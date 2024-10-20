@@ -138,8 +138,8 @@ const ManageExpenses = () => {
             onChange={(e) => handleFilterChange('dateOrder', e.target.value)}
           >
             <option value="">Sort by Expense Date</option>
-            <option value="asc">Date (Oldest First)</option>
             <option value="desc">Date (Newest First)</option>
+            <option value="asc">Date (Oldest First)</option>
           </select>
 
           <select
@@ -147,8 +147,8 @@ const ManageExpenses = () => {
             onChange={(e) => handleFilterChange('registeredDateOrder', e.target.value)}
           >
             <option value="">Sort by Registered Date</option>
-            <option value="asc">Registered Date (Oldest First)</option>
             <option value="desc">Registered Date (Newest First)</option>
+            <option value="asc">Registered Date (Oldest First)</option>
           </select>
         </div>
 

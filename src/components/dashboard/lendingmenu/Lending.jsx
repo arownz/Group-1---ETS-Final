@@ -80,6 +80,17 @@ const Lending = () => {
         </div>
 
         <div className={styles.formGroup}>
+          <label>Date of Deadline</label>
+          <input
+            type="date"
+            name="dateOfDeadline"
+            value={lendingData.dateOfDeadline}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
           <label>Amount</label>
           <input
             type="number"

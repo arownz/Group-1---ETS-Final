@@ -1,168 +1,198 @@
+// src/components/dashboard/lendingmenu/ManageLending.jsx
+
 import { useState, useEffect } from 'react';
 import styles from './ManageLending.module.css';
 
 const ManageLending = () => {
-  const [lendings, setLendings] = useState([]);
-  const [filteredLendings, setFilteredLendings] = useState([]);
+  const [lendings, setLendings] = useState([
+    { id: 1, title: 'Personal Loan', name: 'John Doe', dateLending: '2024-05-01', dateDeadline: '2024-06-01', amount: 1000, description: 'Emergency fund', status: 'Pending', registeredDate: '2024-04-30' },
+    { id: 2, title: 'Business Loan', name: 'Jane Smith', dateLending: '2024-05-05', dateDeadline: '2024-07-05', amount: 5000, description: 'Startup capital', status: 'Received', registeredDate: '2024-05-04' },
+    // Add more dummy data as needed...
+  ]);
+
+  const [filteredLendings, setFilteredLendings] = useState(lendings);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editConfirmationMessage, setEditConfirmationMessage] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteConfirmationMessage, setDeleteConfirmationMessage] = useState('');
+  const [selectedLending, setSelectedLending] = useState(null);
   const [filters, setFilters] = useState({
     status: '',
-    dateFrom: '',
-    dateTo: '',
+    amountOrder: '',
+    dateLendingOrder: '',
+    dateDeadlineOrder: '',
+    registeredDateOrder: ''
   });
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editingLending, setEditingLending] = useState(null);
 
-  // Fetch lendings data (mock data for now)
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(filteredLendings.length / itemsPerPage);
+
+  // Apply filters
   useEffect(() => {
-    const mockLendings = [
-      {
-        id: 1,
-        title: 'Car Loan',
-        lenderName: 'John Doe',
-        date: '2023-05-15',
-        amount: 5000,
-        description: 'Loan for new car',
-        status: 'Pending',
-        currentTime: new Date().toLocaleString(),
-        registeredDate: '2023-05-14',
-      },
-      // Add more mock data as needed
-    ];
-    setLendings(mockLendings);
-    setFilteredLendings(mockLendings);
-  }, []);
+    let result = [...lendings];
 
-  // Sorting function
-  const requestSort = (key) => {
-    let direction = 'ascending';
-    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-      direction = 'descending';
-    }
-    setSortConfig({ key, direction });
-  };
-
-  // Filtering function
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters(prevFilters => ({ ...prevFilters, [name]: value }));
-  };
-
-  const applyFilters = () => {
-    let filtered = lendings;
     if (filters.status) {
-      filtered = filtered.filter(lending => lending.status === filters.status);
+      result = result.filter(lending => lending.status === filters.status);
     }
-    if (filters.dateFrom) {
-      filtered = filtered.filter(lending => new Date(lending.date) >= new Date(filters.dateFrom));
+
+    if (filters.amountOrder) {
+      result.sort((a, b) => filters.amountOrder === 'asc' ? a.amount - b.amount : b.amount - a.amount);
     }
-    if (filters.dateTo) {
-      filtered = filtered.filter(lending => new Date(lending.date) <= new Date(filters.dateTo));
+
+    if (filters.dateLendingOrder) {
+      result.sort((a, b) => filters.dateLendingOrder === 'asc' ? new Date(a.dateLending) - new Date(b.dateLending) : new Date(b.dateLending) - new Date(a.dateLending));
     }
-    setFilteredLendings(filtered);
+
+    if (filters.dateDeadlineOrder) {
+      result.sort((a, b) => filters.dateDeadlineOrder === 'asc' ? new Date(a.dateDeadline) - new Date(b.dateDeadline) : new Date(b.dateDeadline) - new Date(a.dateDeadline));
+    }
+
+    if (filters.registeredDateOrder) {
+      result.sort((a, b) => filters.registeredDateOrder === 'asc' ? new Date(a.registeredDate) - new Date(b.registeredDate) : new Date(b.registeredDate) - new Date(a.registeredDate));
+    }
+
+    setFilteredLendings(result);
     setCurrentPage(1);
+  }, [filters, lendings]);
+
+  const handleFilterChange = (filterName, value) => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [filterName]: value
+    }));
   };
 
   const resetFilters = () => {
-    setFilters({ status: '', dateFrom: '', dateTo: '' });
-    setFilteredLendings(lendings);
-    setCurrentPage(1);
+    setFilters({
+      status: '',
+      amountOrder: '',
+      dateLendingOrder: '',
+      dateDeadlineOrder: '',
+      registeredDateOrder: ''
+    });
   };
 
-  // Edit lending
   const handleEdit = (lending) => {
-    setEditingLending(lending);
+    setSelectedLending(lending);
     setShowEditModal(true);
   };
 
-  const handleEditSubmit = (e) => {
-    e.preventDefault();
-    // Update lending logic here
-    setShowEditModal(false);
+  const handleDelete = (lending) => {
+    setSelectedLending(lending);
+    setShowDeleteModal(true);
   };
 
-  // Delete lending
-  const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this lending record?')) {
-      setLendings(lendings.filter(lending => lending.id !== id));
-      setFilteredLendings(filteredLendings.filter(lending => lending.id !== id));
+  const getPaginatedData = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredLendings.slice(startIndex, endIndex);
+  };
+
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const startPage = Math.max(1, currentPage - 1);
+    const endPage = Math.min(totalPages, startPage + 2);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
     }
+
+    return pageNumbers;
   };
-
-  // Pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredLendings.slice(indexOfFirstItem, indexOfLastItem);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className={styles.manageLendingWrapper}>
       <h2>Manage Lending</h2>
 
-      {/* Filters */}
       <div className={styles.filterContainer}>
         <div className={styles.filterGroup}>
-          <select name="status" value={filters.status} onChange={handleFilterChange}>
+          <select
+            value={filters.status}
+            onChange={(e) => handleFilterChange('status', e.target.value)}
+          >
             <option value="">All Statuses</option>
             <option value="Pending">Pending</option>
             <option value="Received">Received</option>
           </select>
-          <input
-            type="date"
-            name="dateFrom"
-            value={filters.dateFrom}
-            onChange={handleFilterChange}
-            placeholder="From Date"
-          />
-          <input
-            type="date"
-            name="dateTo"
-            value={filters.dateTo}
-            onChange={handleFilterChange}
-            placeholder="To Date"
-          />
-          <button onClick={applyFilters}>Apply Filters</button>
+
+          <select
+            value={filters.amountOrder}
+            onChange={(e) => handleFilterChange('amountOrder', e.target.value)}
+          >
+            <option value="">Sort by Amount</option>
+            <option value="asc">Amount (Low to High)</option>
+            <option value="desc">Amount (High to Low)</option>
+          </select>
+
+          <select
+            value={filters.dateLendingOrder}
+            onChange={(e) => handleFilterChange('dateLendingOrder', e.target.value)}
+          >
+            <option value="">Sort by Lending Date</option>
+            <option value="desc">Date (Newest First)</option>
+            <option value="asc">Date (Oldest First)</option>
+          </select>
+
+          <select
+            value={filters.dateDeadlineOrder}
+            onChange={(e) => handleFilterChange('dateDeadlineOrder', e.target.value)}
+          >
+            <option value="">Sort by Deadline Date</option>
+            <option value="desc">Date (Newest First)</option>
+            <option value="asc">Date (Oldest First)</option>
+          </select>
+
+          <select
+            value={filters.registeredDateOrder}
+            onChange={(e) => handleFilterChange('registeredDateOrder', e.target.value)}
+          >
+            <option value="">Sort by Registered Date</option>
+            <option value="desc">Date (Newest First)</option>
+            <option value="asc">Date (Oldest First)</option>
+          </select>
         </div>
-        <button onClick={resetFilters} className={styles.resetBtn}>Reset</button>
+
+        <button onClick={resetFilters} className={styles.resetBtn}>Reset Filters</button>
       </div>
 
-      {/* Lending Table */}
       <table className={styles.lendingTable}>
         <thead>
           <tr>
-            <th onClick={() => requestSort('id')}>#</th>
-            <th onClick={() => requestSort('title')}>Title</th>
-            <th onClick={() => requestSort('lenderName')}>Lender Name</th>
-            <th onClick={() => requestSort('date')}>Date of Lending</th>
-            <th onClick={() => requestSort('amount')}>Amount</th>
-            <th onClick={() => requestSort('description')}>Description</th>
-            <th onClick={() => requestSort('status')}>Status</th>
+            <th>#</th>
+            <th>Title of Lending</th>
+            <th>Name of Lender</th>
+            <th>Date of Lending</th>
+            <th>Date of Deadline</th>
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Status</th>
             <th>Current Time</th>
-            <th onClick={() => requestSort('registeredDate')}>Registered Date</th>
-            <th>Actions</th>
+            <th>Registered Date</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((lending) => (
+          {getPaginatedData().map((lending) => (
             <tr key={lending.id}>
               <td>{lending.id}</td>
               <td>{lending.title}</td>
-              <td>{lending.lenderName}</td>
-              <td>{lending.date}</td>
-              <td>${lending.amount}</td>
+              <td>{lending.name}</td>
+              <td>{lending.dateLending}</td>
+              <td>{lending.dateDeadline}</td>
+              <td>{lending.amount}</td>
               <td>{lending.description}</td>
               <td>{lending.status}</td>
               <td>{new Date().toLocaleString()}</td>
               <td>{lending.registeredDate}</td>
               <td>
                 <div className={styles.dropdown}>
-                  <button className={styles.dropbtn}>Actions</button>
+                  <button className={styles.dropdownToggle}>
+                    Action
+                  </button>
                   <div className={styles.dropdownMenu}>
                     <button onClick={() => handleEdit(lending)}>Edit</button>
-                    <button onClick={() => handleDelete(lending.id)}>Delete</button>
+                    <button onClick={() => handleDelete(lending)}>Delete</button>
                   </div>
                 </div>
               </td>
@@ -173,30 +203,152 @@ const ManageLending = () => {
 
       {/* Pagination */}
       <div className={styles.pagination}>
-        {Array.from({ length: Math.ceil(filteredLendings.length / itemsPerPage) }, (_, i) => (
+        {currentPage > 1 && (
+          <button className={styles.pageBtn} onClick={() => setCurrentPage(currentPage - 1)}>
+            Previous
+          </button>
+        )}
+        {getPageNumbers().map(number => (
           <button
-            key={i}
-            onClick={() => paginate(i + 1)}
-            className={currentPage === i + 1 ? styles.active : ''}
+            key={number}
+            className={`${styles.pageBtn} ${currentPage === number ? styles.active : ''}`}
+            onClick={() => setCurrentPage(number)}
           >
-            {i + 1}
+            {number}
           </button>
         ))}
+        {currentPage < totalPages && (
+          <button className={styles.pageBtn} onClick={() => setCurrentPage(currentPage + 1)}>
+            Next
+          </button>
+        )}
       </div>
 
       {/* Edit Modal */}
       {showEditModal && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
-            <h3>Edit Lending</h3>
-            <form onSubmit={handleEditSubmit}>
-              {/* Add form fields for editing lending */}
-              <button type="submit">Save Changes</button>
-              <button onClick={() => setShowEditModal(false)}>Cancel</button>
+            <h4>Edit Lending</h4>
+            <form className={styles.lendingForm}>
+              <div className={styles.formGroup}>
+                <label>Title of Lending</label>
+                <input
+                  type="text"
+                  value={selectedLending.title}
+                  onChange={(e) => setSelectedLending({ ...selectedLending, title: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Name of Lender</label>
+                <input
+                  type="text"
+                  value={selectedLending.name}
+                  onChange={(e) => setSelectedLending({ ...selectedLending, name: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Date of Lending</label>
+                <input
+                  type="date"
+                  value={selectedLending.dateLending}
+                  onChange={(e) => setSelectedLending({ ...selectedLending, dateLending: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Date of Deadline</label>
+                <input
+                  type="date"
+                  value={selectedLending.dateDeadline}
+                  onChange={(e) => setSelectedLending({ ...selectedLending, dateDeadline: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Amount</label>
+                <input
+                  type="number"
+                  value={selectedLending.amount}
+                  onChange={(e) => setSelectedLending({ ...selectedLending, amount: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Description</label>
+                <textarea
+                  value={selectedLending.description}
+                  onChange={(e) => setSelectedLending({ ...selectedLending, description: e.target.value })}
+                  rows="4"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>Status</label>
+                <select
+                  value={selectedLending.status}
+                  onChange={(e) => setSelectedLending({ ...selectedLending, status: e.target.value })}
+                >
+                  <option value="Pending">Pending</option>
+                  <option value="Received">Received</option>
+                </select>
+              </div>
+
+              <div className={styles.modalButtons}>
+                <button type="button" className={styles.saveBtn} onClick={() => {
+                  setLendings(lendings.map(l => l.id === selectedLending.id ? selectedLending : l));
+                  setEditConfirmationMessage('Lending updated successfully!');
+
+                  setTimeout(() => {
+                    setEditConfirmationMessage('');
+                    setShowEditModal(false);
+                  }, 2000);
+                }}>Save</button>  
+                <button type="button" className={styles.closeModalBtn} onClick={() => setShowEditModal(false)}>Cancel</button>
+              </div>
+              {editConfirmationMessage && (
+                <div className={styles.confirmationMessage}>
+                  {editConfirmationMessage}
+                </div>
+              )}
             </form>
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h4>Are you sure you want to delete this lending?</h4>
+
+            <div className={styles.modalButtons}>
+              <button className={styles.deleteBtn} onClick={() => {
+                setLendings(lendings.filter(l => l.id !== selectedLending.id));
+                setDeleteConfirmationMessage('Lending deleted successfully!');
+
+                setTimeout(() => {
+                  setDeleteConfirmationMessage('');
+                  setShowDeleteModal(false);
+                }, 3000);
+              }}>Yes</button>
+              <button className={styles.closeBtn} onClick={() => setShowDeleteModal(false)}>No</button>
+            </div>
+            {deleteConfirmationMessage && (
+              <div className={styles.confirmationMessage}>
+                {deleteConfirmationMessage}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
