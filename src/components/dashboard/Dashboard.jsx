@@ -52,7 +52,7 @@ const Dashboard = () => {
 
   return (
     <div className="allmenu-container">
-
+<h2>User Dashboard</h2>
       <div className="allmenu-content-inner">
 
         <ExpenseSummary stats={expenseStats} />

@@ -1,65 +1,168 @@
+/* src/components/dashboard/reportmenu/Report.module.css */
+
+.reportContainer {
+    padding: 20px;
+}
+
+.formWrapper,
+.tableWrapper {
+    background-color: #f9f9f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.reportForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+}
+
+.formGroup label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.formGroup select,
+.formGroup input {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.generateBtn,
+.resetBtn,
 .printBtn {
-    float: right;
-    background-color: #4299e1;
-    color: white;
+    padding: 10px 20px;
     border: none;
-    padding: 8px 16px;
     border-radius: 4px;
     cursor: pointer;
+    font-weight: bold;
+}
+
+.generateBtn {
+    background-color: #2f855a;
+    color: white;
+}
+
+.resetBtn {
+    background-color: #e53e3e;
+    color: white;
+}
+
+.printBtn {
+    background-color: #4299e1;
+    color: white;
+}
+
+.printBtnWrapper {
+    display: flex;
+    justify-content: flex-end;
     margin-bottom: 10px;
-  }
-  
-  .reportTable {
+}
+
+.confirmationMessage {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.success {
+    color: #2f855a;
+    /* Dark green for text */
+    background-color: #c6f6d5;
+    /* Light green for background */
+    border: 1px solid #68d391;
+    /* Medium green for border */
+}
+
+.warning {
+    color: #c05621;
+    /* Dark orange for text */
+    background-color: #feebc8;
+    /* Light orange for background */
+    border: 1px solid #f6ad55;
+    /* Medium orange for border */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+.reportTitle {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.reportTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-  }
-  
-  .reportTable th,
-  .reportTable td {
+}
+
+.reportTable th,
+.reportTable td {
     border: 1px solid #ddd;
     padding: 12px;
-    text-align: left;
-  }
-  
-  .reportTable th {
+}
+
+.reportTable th {
     background-color: #f2f2f2;
     font-weight: bold;
-  }
-  
-  .reportTable tr:nth-child(even) {
+    text-align: center;
+}
+
+.reportTable tr:nth-child(even) {
     background-color: #f9f9f9;
-  }
-  
-  .grandTotal {
+}
+
+.justifyCell {
+    text-align: center;
+}
+
+.grandTotal {
     font-weight: bold;
-  }
-  
-  .grandTotal td:last-child {
+}
+
+.grandTotal td:last-child {
     border-left: 2px solid #2f855a;
-  }
-  
-  @media print {
-    .reportForm,
-    .printBtn {
-      display: none;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
     }
-  
-    .reportContainer {
-      padding: 0;
-      background-color: white;
+
+    #printableArea,
+    #printableArea * {
+        visibility: visible;
     }
-  
-    .printableReport {
-      margin-top: 0;
+
+    #printableArea {
+        position: absolute;
+        left: 0;
+        top: 0;
     }
-  
-    .reportTable {
-      border: 1px solid #000;
-    }
-  
-    .reportTable th,
-    .reportTable td {
-      border: 1px solid #000;
-    }
-  }
+}

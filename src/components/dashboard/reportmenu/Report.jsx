@@ -1,14 +1,15 @@
-// src/components/dashboard/reportmenu/Report.jsx
-
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styles from './Report.module.css';
 
 const Report = () => {
-  const [reportType, setReportType] = useState('expense');
+  const [reportType, setReportType] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [reportData, setReportData] = useState([]);
   const [showPrintableReport, setShowPrintableReport] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState('');
+  const [messageType, setMessageType] = useState('');
+
 
   // Dummy data for demonstration
   const expenseData = [
@@ -23,118 +24,167 @@ const Report = () => {
     // Add more dummy data as needed
   ];
 
-  useEffect(() => {
-    // In a real application, you would fetch data from your backend here
-    if (reportType === 'expense') {
-      setReportData(expenseData);
-    } else {
-      setReportData(lendingData);
-    }
-  }, [reportType]);
-
   const handleGenerateReport = () => {
-    // Filter data based on date range
-    const filteredData = reportData.filter(item => {
+    if (!reportType || !startDate || !endDate) {
+      setConfirmationMessage('Please select a report type and date range');
+      setMessageType('warning');
+      setTimeout(() => setConfirmationMessage(''), 3000);
+      return;
+    }
+
+    const data = reportType === 'expense' ? expenseData : lendingData;
+    const filteredData = data.filter(item => {
       const itemDate = new Date(reportType === 'expense' ? item.expenseDate : item.dateLending);
       return itemDate >= new Date(startDate) && itemDate <= new Date(endDate);
     });
 
     setReportData(filteredData);
     setShowPrintableReport(true);
+    setConfirmationMessage('Report generated successfully!');
+    setMessageType('success');
+    setTimeout(() => setConfirmationMessage(''), 3000);
   };
 
   const handlePrint = () => {
-    window.print();
+    const printContent = document.getElementById('printableArea');
+    const WinPrint = window.open('', '', 'width=900,height=650');
+    WinPrint.document.write('<html><head><title>Print Report</title>');
+    WinPrint.document.write('<style>');
+    WinPrint.document.write(`
+      table { width: 100%; border-collapse: collapse; }
+      th, td { border: 1px solid black; padding: 8px; text-align: left; }
+      th { background-color: #f2f2f2; }
+      .justifyCell { text-align: center; }
+      .grandTotal { font-weight: bold; }
+      .grandTotal td:last-child { border-left: 2px solid #2f855a; }
+    `);
+    WinPrint.document.write('</style></head><body>');
+    WinPrint.document.write(printContent.innerHTML);
+    WinPrint.document.write('</body></html>');
+    WinPrint.document.close();
+    WinPrint.focus();
+    setTimeout(() => {
+      WinPrint.print();
+      WinPrint.close();
+    }, 250);
+  };
+
+  const handleReset = () => {
+    setReportType('');
+    setStartDate('');
+    setEndDate('');
+    setReportData([]);
+    setShowPrintableReport(false);
+    setConfirmationMessage('Form and table reset successfully!');
+    setMessageType('success');
+    setTimeout(() => setConfirmationMessage(''), 3000);
   };
 
   return (
     <div className={styles.reportContainer}>
+      <div className={styles.formWrapper}>
       <h2>Generate Report</h2>
-      <div className={styles.reportForm}>
-        <div className={styles.formGroup}>
-          <label>Report Type:</label>
-          <select value={reportType} onChange={(e) => setReportType(e.target.value)}>
-            <option value="expense">Expense Report</option>
-            <option value="lending">Lending Report</option>
-          </select>
+        <div className={styles.reportForm}>
+          <div className={styles.formGroup}>
+            <label>Report Type:</label>
+            <select value={reportType} onChange={(e) => setReportType(e.target.value)}>
+              <option value="">Choose a Report Type</option>
+              <option value="expense">Expense Report</option>
+              <option value="lending">Lending Report</option>
+            </select>
+          </div>
+          <div className={styles.formGroup}>
+            <label>Start Date:</label>
+            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+          </div>
+          <div className={styles.formGroup}>
+            <label>End Date:</label>
+            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          </div>
+          <div className={styles.buttonGroup}>
+            <button className={styles.generateBtn} onClick={handleGenerateReport}>Generate Report</button>
+            <button className={styles.resetBtn} onClick={handleReset}>Reset</button>
+          </div>
         </div>
-        <div className={styles.formGroup}>
-          <label>Start Date:</label>
-          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-        </div>
-        <div className={styles.formGroup}>
-          <label>End Date:</label>
-          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-        </div>
-        <button className={styles.generateBtn} onClick={handleGenerateReport}>Generate Printable Report</button>
+        {confirmationMessage && (
+          <div className={`${styles.confirmationMessage} ${styles[messageType]}`}>
+            {confirmationMessage}
+          </div>
+        )}
       </div>
 
       {showPrintableReport && (
-        <div className={styles.printableReport}>
-          <h3>{reportType === 'expense' ? 'Expense' : 'Lending'}: Datewise Range Report from {startDate} to {endDate}</h3>
-          <button className={styles.printBtn} onClick={handlePrint}>Print</button>
-          <table className={styles.reportTable}>
-            <thead>
-              <tr>
-                {reportType === 'expense' ? (
-                  <>
-                    <th>Expense ID</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Expense Date</th>
-                    <th>Description</th>
-                    <th>Registered Date</th>
-                    <th>Amount</th>
-                  </>
-                ) : (
-                  <>
-                    <th>Lending ID</th>
-                    <th>Title</th>
-                    <th>Name</th>
-                    <th>Date of Lending</th>
-                    <th>Date of Pay Back</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Registered Date</th>
-                    <th>Amount</th>
-                  </>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {reportData.map((item) => (
-                <tr key={item.id}>
+        <div className={styles.tableWrapper}>
+          <div className={styles.printBtnWrapper}>
+            <button className={styles.printBtn} onClick={handlePrint}>Print</button>
+          </div>
+          <div id="printableArea">
+            <h3 className={styles.reportTitle}>
+              {reportType === 'expense' ? 'Expense' : 'Lending'}: Datewise Range Report from {startDate} to {endDate}
+            </h3>
+            <table className={styles.reportTable}>
+              <thead>
+                <tr>
                   {reportType === 'expense' ? (
                     <>
-                      <td>{item.id}</td>
-                      <td>{item.title}</td>
-                      <td>{item.category}</td>
-                      <td>{item.expenseDate}</td>
-                      <td>{item.description}</td>
-                      <td>{item.registeredDate}</td>
-                      <td>{item.amount}</td>
+                      <th>ID</th>
+                      <th>Title</th>
+                      <th>Category</th>
+                      <th>Expense Date</th>
+                      <th>Description</th>
+                      <th>Registered Date</th>
+                      <th>Amount</th>
                     </>
                   ) : (
                     <>
-                      <td>{item.id}</td>
-                      <td>{item.title}</td>
-                      <td>{item.name}</td>
-                      <td>{item.dateLending}</td>
-                      <td>{item.datePayBack}</td>
-                      <td>{item.description}</td>
-                      <td>{item.status}</td>
-                      <td>{item.registeredDate}</td>
-                      <td>{item.amount}</td>
+                      <th>ID</th>
+                      <th>Title</th>
+                      <th>Name</th>
+                      <th>Date of Lending</th>
+                      <th>Date of Pay Back</th>
+                      <th>Description</th>
+                      <th>Status</th>
+                      <th>Registered Date</th>
+                      <th>Amount</th>
                     </>
                   )}
                 </tr>
-              ))}
-              <tr className={styles.grandTotal}>
-                <td colSpan={reportType === 'expense' ? 6 : 8}>Grand Total</td>
-                <td>{reportData.reduce((sum, item) => sum + item.amount, 0)}</td>
-              </tr>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {reportData.map((item) => (
+                  <tr key={item.id}>
+                    {reportType === 'expense' ? (
+                      <>
+                        <td className={styles.justifyCell}>{item.id}</td>
+                        <td>{item.title}</td>
+                        <td className={styles.justifyCell}>{item.category}</td>
+                        <td className={styles.justifyCell}>{item.expenseDate}</td>
+                        <td>{item.description}</td>
+                        <td className={styles.justifyCell}>{item.registeredDate}</td>
+                        <td className={styles.justifyCell}>{item.amount}</td>
+                      </>
+                    ) : (
+                      <>
+                        <td className={styles.justifyCell}>{item.id}</td>
+                        <td>{item.title}</td>
+                        <td className={styles.justifyCell}>{item.name}</td>
+                        <td className={styles.justifyCell}>{item.dateLending}</td>
+                        <td className={styles.justifyCell}>{item.datePayBack}</td>
+                        <td>{item.description}</td>
+                        <td className={styles.justifyCell}>{item.status}</td>
+                        <td className={styles.justifyCell}>{item.registeredDate}</td>
+                        <td className={styles.justifyCell}>{item.amount}</td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+                <tr className={styles.grandTotal}>
+                  <td colSpan={reportType === 'expense' ? 6 : 8}>Grand Total</td>
+                  <td className={styles.justifyCell}>{reportData.reduce((sum, item) => sum + item.amount, 0)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
