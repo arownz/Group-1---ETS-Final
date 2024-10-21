@@ -1,14 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
 const lendingRoutes = require('./routes/lendingRoutes');
-
-app.use('/api/users', userRoutes);
-app.use('/api/expenses', expenseRoutes);
-app.use('/api/lendings', lendingRoutes);
 
 dotenv.config();
 
@@ -16,19 +11,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
+// Use routes
+app.use('/api/users', userRoutes);
+app.use('/api/expenses', expenseRoutes);
+app.use('/api/lendings', lendingRoutes);
 
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-    return;
-  }
-  console.log('Connected to the database');
+app.get('/api/test', (req, res) => {
+  res.json({ message: "API is working!" });
 });
 
 const PORT = process.env.PORT || 5000;
