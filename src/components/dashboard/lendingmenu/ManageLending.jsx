@@ -138,7 +138,7 @@ const ManageLending = () => {
             value={filters.datePayBackOrder}
             onChange={(e) => handleFilterChange('datePayBackOrder', e.target.value)}
           >
-            <option value="">Sort by Deadline Date</option>
+            <option value="">Sort by Pay Back Date</option>
             <option value="desc">Date (Newest First)</option>
             <option value="asc">Date (Oldest First)</option>
           </select>

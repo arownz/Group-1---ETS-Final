@@ -290,7 +290,7 @@ const ManageExpenses = () => {
                   setExpenses(expenses.map(e => e.id === selectedExpense.id ? selectedExpense : e));
                   setEditConfirmationMessage('Expense updated successfully!');
 
-                  // Remove confirmation message after 3 seconds
+                  // Remove confirmation message after 2 seconds
                   setTimeout(() => {
                     setEditConfirmationMessage('');
                     setShowEditModal(false);
@@ -333,7 +333,7 @@ const ManageExpenses = () => {
                     setConfirmationMessage('Category added successfully!');
 
                     // Remove confirmation message after 3 seconds
-                    setTimeout(() => setConfirmationMessage(''), 3000);
+                    setTimeout(() => setConfirmationMessage(''), 2000);
                   }
                 }}
               >
@@ -366,7 +366,7 @@ const ManageExpenses = () => {
                 setTimeout(() => {
                   setDeleteConfirmationMessage('');
                   setShowDeleteModal(false);
-                }, 3000);
+                }, 2000);
               }}>Yes</button>
               <button className={styles.closeBtn} onClick={() => setShowDeleteModal(false)}>No</button>
             </div>

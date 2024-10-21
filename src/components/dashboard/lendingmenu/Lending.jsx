@@ -6,6 +6,7 @@ const Lending = () => {
     title: '',
     name: '',
     date: '',
+    dateOfPayBack: '',
     amount: '',
     description: '',
     status: ''
@@ -32,6 +33,7 @@ const Lending = () => {
       title: '',
       name: '',
       date: '',
+      dateOfPayBack: '',
       amount: '',
       description: '',
       status: ''

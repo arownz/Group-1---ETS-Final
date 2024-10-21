@@ -1,128 +1,173 @@
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import styles from './SignIn.module.css';
+import signInImage from '../../assets/login.jpeg';
 
 function SignIn() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    rememberMe: false
+  });
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Temporarily navigate to Dashboard without authentication
-    navigate('/Dashboard');
+  useEffect(() => {
+    const rememberedUser = JSON.parse(localStorage.getItem('rememberedUser'));
+    if (rememberedUser) {
+      setFormData(prev => ({
+        ...prev,
+        email: rememberedUser.email,
+        password: rememberedUser.password,
+        rememberMe: true
+      }));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (location.state?.message) {
+      alert(location.state.message);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+    validateField(name, type === 'checkbox' ? checked : value);
+  };
+
+  const handleBlur = (e) => {
+    const { name } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    validateField(name, formData[name]);
+  };
+
+  const validateField = (name, value) => {
+    let error = '';
+    switch (name) {
+      case 'email':
+        if (!value.trim()) error = "Email cannot be blank";
+        else if (!/\S+@\S+\.\S+/.test(value)) error = "Email is invalid";
+        break;
+      case 'password':
+        if (!value.trim()) error = "Password cannot be blank";
+        else if (value.trim().length < 4) error = "Password should be at least 4 characters";
+        break;
+      default:
+        break;
+    }
+    setErrors(prev => ({ ...prev, [name]: error }));
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+    Object.keys(formData).forEach(key => {
+      if (key !== 'rememberMe') {
+        validateField(key, formData[key]);
+        if (errors[key]) isValid = false;
+      }
+    });
+    return isValid;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setTouched({
+      email: true,
+      password: true
+    });
+    if (validateForm()) {
+      console.log('Form is valid. Attempting to sign in...', formData);
+      if (formData.rememberMe) {
+        localStorage.setItem('rememberedUser', JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        }));
+      } else {
+        localStorage.removeItem('rememberedUser');
+      }
+      navigate('/Dashboard');
+    } else {
+      console.log('Form has errors. Please correct them.');
+    }
   };
 
   return (
-    <>
-        
-      <main>
-        <div
-          className="container shadow my-5 p-5 rounded"
-          style={{ backgroundColor: "white" }}
-        >
-          <div className="row text-center">
-            <h1 style={{ fontSize: 50, fontWeight: "bolder" }}>
-              Log in to your account
-            </h1>
+    <main className={styles.main}>
+      <div className={`${styles.container} shadow my-5 p-4 p-md-5 rounded`}>
+        <div className="row text-center">
+          <h1 className={styles.title}>Log in to your account</h1>
+        </div>
+        <div className={`row py-4 ${styles.contentRow}`}>
+          <div className={`col-md-6 ${styles.imageContainer}`}>
+            <img src={signInImage} alt="sign in" className={styles.image} />
           </div>
-          <div className="row py-5 ">
-            <div className="col px-4">
-              <img
-                src="Images/login.jpeg"
-                alt="sign up"
-                className="img-fluid rounded"
-              />
-            </div>
-            <div className="col py-5">
-              <h2 style={{ fontSize: 30, fontWeight: "bolder" }}>
-                Please enter your login information
-              </h2>
-              <form
-                className="py-4"
-                onSubmit={handleSubmit}
-              >
-                <div className="mb-3">
-                  <label htmlFor="exampleInputEmail1" className="form-label">
-                    Email address
-                  </label>
-                  <span
-                    id="emailError"
-                    style={{ color: "red", visibility: "hidden" }}
-                  >
-                    *Email cannot be blank
-                  </span>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    aria-describedby="emailHelp"
-                    placeholder="Email"
-                  />
-                  <div id="emailHelp" className="form-text">
-                    We&apos;ll never share your email with anyone else.
-                  </div>
+          <div className="col-md-6">
+            <h2 className={styles.subtitle}>Please enter your login information</h2>
+            <form className="py-3" onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">Email address</label>
+                <input
+                  type="email"
+                  className={`form-control ${touched.email && errors.email ? 'is-invalid' : ''}`}
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="Email"
+                />
+                {touched.email && errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                <div className="form-text">We&apos;ll never share your email with anyone else.</div>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">Password</label>
+                <input
+                  type="password"
+                  className={`form-control ${touched.password && errors.password ? 'is-invalid' : ''}`}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="Password"
+                />
+                {touched.password && errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                <div className="form-text">
+                  <a href="#" className={styles.forgotPassword}>Forgot Password?</a>
                 </div>
-                <div className="mb-3">
-                  <div className="form-group">
-                    <label htmlFor="exampleInputPassword1">Password</label>
-                    <span
-                      id="passError"
-                      style={{ color: "red", visibility: "hidden" }}
-                    >
-                      *Password cannot be blank
-                    </span>
-                    {/* <span id="passError1" style="color: red; visibility:hidden;">*Password length should be minimum 8 characters.</span> */}
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="pass"
-                      placeholder="Password"
-                    />
-                    <div id="password" className="form-text">
-                      Forget Password?{" "}
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-3 form-check">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    id="exampleCheck1"
-                  />
-                  <label className="form-check-label" htmlFor="exampleCheck1">
-                    Remember me
-                  </label>
-                </div>  
-                <div className="row">
-                  <button type="submit" className="btn btn-success btn-lg  my-4">
-                    Log In
-                  </button>
-                </div>
-                <div className="row text-center">
-                  <div className="col-md-6">
-                    <div className="row">
-                      <button
-                        type="button"
-                        className="btn btn-outline-success btn-flat"
-                      >
-                        <i className="bi bi-google" />
-                      </button>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="row m-0">
-                      <button type="button" className="btn btn-outline-success ">
-                        <i className="bi bi-facebook" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
+              </div>
+              <div className="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="rememberMe"
+                  name="rememberMe"
+                  checked={formData.rememberMe}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
+              </div>
+              <div className="mb-3">
+                <span>Don&apos;t have an account yet? </span>
+                <a href="./SignUp" className={styles.linkText}>Register here</a>
+              </div>
+              <div className="row">
+                <button type="submit" className={`btn btn-success btn-lg my-4 ${styles.submitButton}`}>
+                  Log In
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-      </main>
-
-      {/* hidden div script  */}
-    </>
-
+      </div>
+    </main>
   );
 }
 
