@@ -6,6 +6,7 @@ import signUpImage from '../../assets/logup.jpeg';
 function Signup() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    profileImage: 'https://via.placeholder.com/150',
     username: '',
     email: '',
     phone: '',
@@ -29,6 +30,21 @@ function Signup() {
     setTouched(prev => ({ ...prev, [name]: true }));
     validateField(name, formData[name]);
   };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prevState => ({
+          ...prevState,
+          profileImage: reader.result
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   const validateField = (name, value) => {
     switch (name) {
@@ -96,6 +112,15 @@ function Signup() {
           <div className="col-md-6">
             <h2 className={styles.subtitle}>Create New Account</h2>
             <form className="py-3" onSubmit={handleSubmit}>
+              <div className={styles.profileImageContainer}>
+                <img src={formData.profileImage} alt="Profile" className={styles.profileImage} />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className={styles.imageInput}
+                />
+              </div>
               <div className="mb-3">
                 <label htmlFor="username" className="form-label">Username</label>
                 <input

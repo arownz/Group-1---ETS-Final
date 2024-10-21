@@ -43,6 +43,30 @@
     max-width: 400px;
     object-fit: contain;
   }
+
+  .profileImageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .profileImage {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  
+  .imageInput {
+    width: 100%;
+    max-width: 300px;
+    padding: 7px;
+    border: 1px solid #cbd5e0;
+    border-radius: 7 px;
+    font-size: 15px;
+  }
   
   @media (max-width: 768px) {
     .title {

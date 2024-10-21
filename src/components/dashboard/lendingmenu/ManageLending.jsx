@@ -161,7 +161,7 @@ const ManageLending = () => {
           <tr>
             <th>#</th>
             <th>Title of Lending</th>
-            <th>Name of Lender</th>
+            <th>Name of Borrower</th>
             <th>Date of Lending</th>
             <th>Date of Pay Back</th>
             <th>Amount</th>
