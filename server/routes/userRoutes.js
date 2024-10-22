@@ -24,21 +24,23 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    console.log('Login route hit', req.body);
     try {
         const { user_email, user_password } = req.body;
-        
+        console.log('Login attempt for:', user_email);
+
         const [users] = await db.execute('SELECT * FROM users WHERE user_email = ?', [user_email]);
+        console.log('Users found:', users.length);
         if (users.length === 0) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        
+
         const user = users[0];
         const isPasswordValid = await bcrypt.compare(user_password, user.user_password);
+        console.log('Password valid:', isPasswordValid);
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        
+
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.json({ token, userId: user.id, username: user.user_name });
     } catch (error) {
@@ -48,6 +50,7 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/profile', auth, async (req, res) => {
+    console.log('Profile route hit, userId:', req.userId);
     try {
         const [users] = await db.execute('SELECT id, user_name, user_email, user_phone, user_registered_date FROM users WHERE id = ?', [req.userId]);
         if (users.length === 0) {
@@ -56,7 +59,7 @@ router.get('/profile', auth, async (req, res) => {
         res.json(users[0]);
     } catch (error) {
         console.error('Get profile error:', error);
-        res.status(500).json({ message: 'Error fetching user profile' });
+        res.status(500).json({ message: 'Error fetching user profile', error: error.message });
     }
 });
 
