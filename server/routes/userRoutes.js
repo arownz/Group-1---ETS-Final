@@ -68,18 +68,4 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get('/profile', auth, async (req, res) => {
-    console.log('Profile route hit, userId:', req.userId);
-    try {
-        const [users] = await db.execute('SELECT id, user_name, user_email, user_phone, user_registered_date FROM users WHERE id = ?', [req.userId]);
-        if (users.length === 0) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        res.json(users[0]);
-    } catch (error) {
-        console.error('Get profile error:', error);
-        res.status(500).json({ message: 'Error fetching user profile', error: error.message });
-    }
-});
-
 module.exports = router;

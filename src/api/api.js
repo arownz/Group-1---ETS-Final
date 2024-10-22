@@ -9,6 +9,7 @@ const api = axios.create({
   },
 });
 
+// Add a request interceptor Postman API
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
