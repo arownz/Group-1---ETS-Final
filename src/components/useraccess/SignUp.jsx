@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './SignUp.module.css';
 import signUpImage from '../../assets/logup.jpeg';
+import api from '../../api/api';
+import StatusMessage from '../../components/useraccess/statusmessage/StatusMessage'; 
 
 function Signup() {
   const navigate = useNavigate();
@@ -15,6 +17,8 @@ function Signup() {
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+
+  const [statusMessage, setStatusMessage] = useState({ type: '', message: '' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,15 +40,17 @@ function Signup() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
+        const fullResult = reader.result;
+        const truncatedResult = fullResult.substring(0, 100) + '...'; // Truncate to first 100 characters
         setFormData(prevState => ({
           ...prevState,
-          profileImage: reader.result
+          profileImage: fullResult,
+          truncatedProfileImage: truncatedResult
         }));
       };
       reader.readAsDataURL(file);
     }
   };
-
 
   const validateField = (name, value) => {
     switch (name) {
@@ -82,7 +88,7 @@ function Signup() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setTouched({
       username: true,
@@ -92,10 +98,61 @@ function Signup() {
       confirmPassword: true
     });
     if (validateForm()) {
-      console.log('Form is valid. Submitting...', formData);
-      navigate('/SignIn');
+      try {
+        setStatusMessage({ type: 'success', message: 'Processing...' });
+        const response = await api.post('/users/register', {
+          user_name: formData.username,
+          user_email: formData.email,
+          user_phone: formData.phone,
+          user_password: formData.password,
+          user_profile: formData.profileImage
+        });
+        console.log('Registration successful', response.data);
+        setStatusMessage({ type: 'success', message: 'Success! Redirecting...' });
+        setTimeout(() => {
+          navigate('/SignIn', { state: { message: 'Registration successful. Please log in.' } });
+        }, 2000);
+      } catch (error) {
+        console.error('Registration error:', error);
+        setStatusMessage({ type: 'error', message: 'An error occurred. Please try again.' });
+        
+        // Handle errors
+        if (error.response) {
+          console.error('Error data:', error.response.data);
+          console.error('Error status:', error.response.status);
+          console.error('Error headers:', error.response.headers);
+        } else if (error.request) {
+          console.error('No response received:', error.request);
+        } else {
+          console.error('Error message:', error.message);
+        }
+        
+        // Reset form fields
+        setFormData({
+          username: '',
+          email: '',
+          phone: '',
+          password: '',
+          confirmPassword: '',
+          profileImage: 'https://via.placeholder.com/150'
+        });
+        setErrors({
+          username: '',
+          email: '',
+          phone: '',
+          password: '',
+          confirmPassword: ''
+        });
+        setTouched({
+          username: false,
+          email: false,
+          phone: false,
+          password: false,
+          confirmPassword: false
+        });
+      }
     } else {
-      console.log('Form has errors. Please correct them.');
+      setStatusMessage({ type: 'error', message: 'Please correct the errors in the form.' });
     }
   };
 
@@ -112,6 +169,7 @@ function Signup() {
           <div className="col-md-6">
             <h2 className={styles.subtitle}>Create New Account</h2>
             <form className="py-3" onSubmit={handleSubmit}>
+            <StatusMessage type={statusMessage.type} message={statusMessage.message} />
               <div className={styles.profileImageContainer}>
                 <img src={formData.profileImage} alt="Profile" className={styles.profileImage} />
                 <input

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import api from '../../api/api';
 import styles from './SignIn.module.css';
 import signInImage from '../../assets/login.jpeg';
+import StatusMessage from '../../components/useraccess/statusmessage/StatusMessage';
 
 function SignIn() {
   const navigate = useNavigate();
@@ -13,6 +15,8 @@ function SignIn() {
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+
+  const [statusMessage, setStatusMessage] = useState({ type: '', message: '' });
 
   useEffect(() => {
     const rememberedUser = JSON.parse(localStorage.getItem('rememberedUser'));
@@ -76,28 +80,73 @@ function SignIn() {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setTouched({
       email: true,
       password: true
     });
     if (validateForm()) {
-      console.log('Form is valid. Attempting to sign in...', formData);
-      if (formData.rememberMe) {
-        localStorage.setItem('rememberedUser', JSON.stringify({
-          email: formData.email,
-          password: formData.password
-        }));
-      } else {
-        localStorage.removeItem('rememberedUser');
+      try {
+        setStatusMessage({ type: 'success', message: 'Processing...' });
+        const response = await api.post('/users/login', {
+          user_email: formData.email,
+          user_password: formData.password
+        });
+        console.log('Login successful', response.data);
+        const { token, userId, username } = response.data;
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', userId);
+        localStorage.setItem('username', username);
+        if (formData.rememberMe) {
+          localStorage.setItem('rememberedUser', JSON.stringify({
+            email: formData.email,
+            password: formData.password
+          }));
+        } else {
+          localStorage.removeItem('rememberedUser');
+        }
+        setStatusMessage({ type: 'success', message: 'Success! Redirecting...' });
+        setTimeout(() => {
+          navigate('/Dashboard');
+        }, 2000);
+      } catch (error) {
+        console.error('Login error:', error);
+        
+        // Handle specific error cases
+        if (error.response) {
+          if (error.response.status === 401) {
+            setStatusMessage({ type: 'error', message: 'Incorrect email or password. Please try again.' });
+          } else if (error.response.status === 404) {
+            setStatusMessage({ type: 'error', message: 'User not found. Please check your email.' });
+          } else {
+            setStatusMessage({ type: 'error', message: 'An error occurred. Please try again.' });
+          }
+        } else if (error.request) {
+          setStatusMessage({ type: 'error', message: 'No response from server. Please try again later.' });
+        } else {
+          setStatusMessage({ type: 'error', message: 'An unexpected error occurred. Please try again.' });
+        }
+  
+        // Reset form fields
+        setFormData({
+          email: '',
+          password: '',
+          rememberMe: false
+        });
+        setErrors({
+          email: '',
+          password: ''
+        });
+        setTouched({
+          email: false,
+          password: false
+        });
       }
-      navigate('/Dashboard');
     } else {
-      console.log('Form has errors. Please correct them.');
+      setStatusMessage({ type: 'error', message: 'Please correct the errors in the form.' });
     }
   };
-
   return (
     <main className={styles.main}>
       <div className={`${styles.container} shadow my-5 p-4 p-md-5 rounded`}>
@@ -111,6 +160,7 @@ function SignIn() {
           <div className="col-md-6">
             <h2 className={styles.subtitle}>Please enter your login information</h2>
             <form className="py-3" onSubmit={handleSubmit}>
+              <StatusMessage type={statusMessage.type} message={statusMessage.message} />
               <div className="mb-3">
                 <label htmlFor="email" className="form-label">Email address</label>
                 <input
@@ -139,6 +189,7 @@ function SignIn() {
                   placeholder="Password"
                 />
                 {touched.password && errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                <div className="form-text">Enter your login password</div>
                 <div className="form-text">
                   <a href="#" className={styles.forgotPassword}>Forgot Password?</a>
                 </div>

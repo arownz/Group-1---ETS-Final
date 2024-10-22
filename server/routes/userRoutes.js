@@ -10,11 +10,26 @@ const auth = require('../middleware/auth'); // Import the auth middleware
 router.post('/register', async (req, res) => {
     console.log('Register route hit', req.body);
     try {
-        const { username, email, password } = req.body;
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const { user_name, user_email, user_password, user_phone, user_profile } = req.body;
 
-        const query = 'INSERT INTO users (user_name, user_email, user_password) VALUES (?, ?, ?)';
-        const [result] = await db.execute(query, [username, email, hashedPassword]);
+        console.log('Inserting:', user_name, user_email, user_password, user_phone, user_profile);
+
+        // Basic server-side validation
+        if (!user_name || !user_email || !user_password) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
+        if (user_password.length < 4) {
+            return res.status(400).json({ message: 'Password must be at least 4 characters long' });
+        }
+
+        // TEMPORARY: Using plain text password for testing
+        // TODO: IMPORTANT - Re-enable password hashing before production!
+        // const hashedPassword = await bcrypt.hash(user_password, 10);
+        const hashedPassword = user_password; // TEMPORARY: stores password as plain text
+
+        const query = 'INSERT INTO users (user_name, user_email, user_password, user_phone, user_profile) VALUES (?, ?, ?, ?, ?)';
+        const [result] = await db.execute(query, [user_name, user_email, hashedPassword, user_phone, user_profile]);
 
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
@@ -35,7 +50,11 @@ router.post('/login', async (req, res) => {
         }
 
         const user = users[0];
-        const isPasswordValid = await bcrypt.compare(user_password, user.user_password);
+        // TEMPORARY: Comparing plain text passwords for testing
+        // TODO: IMPORTANT - Re-enable password hashing before production!
+        // const isPasswordValid = await bcrypt.compare(user_password, user.user_password);
+        const isPasswordValid = user_password === user.user_password; // TEMPORARY: plain text comparison
+
         console.log('Password valid:', isPasswordValid);
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid credentials' });
