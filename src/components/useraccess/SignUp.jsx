@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './SignUp.module.css';
 import signUpImage from '../../assets/logup.jpeg';
 import api from '../../api/api';
-import StatusMessage from '../../components/useraccess/statusmessage/StatusMessage'; 
+import StatusMessage from '../../components/useraccess/statusmessage/StatusMessage';
 
 function Signup() {
   const navigate = useNavigate();
@@ -17,8 +17,22 @@ function Signup() {
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
-
   const [statusMessage, setStatusMessage] = useState({ type: '', message: '' });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  useEffect(() => {
+    if (statusMessage.message) {
+      const timer = setTimeout(() => {
+        setStatusMessage({ type: '', message: '' });
+        if (statusMessage.type === 'success') {
+          navigate('/SignIn', { state: { message: 'Registration successful. Please log in.' } });
+        }
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [statusMessage, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,40 +67,41 @@ function Signup() {
   };
 
   const validateField = (name, value) => {
+    let error = '';
     switch (name) {
       case 'username':
-        if (!value.trim()) return "Username cannot be blank";
-        if (value.trim().length < 4) return "Username should be at least 4 characters";
+        if (!value.trim()) error = "Username cannot be blank";
+        else if (value.trim().length < 4) error = "Username should be at least 4 characters";
         break;
       case 'email':
-        if (!value.trim()) return "Email cannot be blank";
-        if (!/\S+@\S+\.\S+/.test(value)) return "Email is invalid";
+        if (!value.trim()) error = "Email cannot be blank";
+        else if (!/\S+@\S+\.\S+/.test(value)) error = "Email is invalid";
         break;
       case 'phone':
-        if (!value.trim()) return "Phone number cannot be blank";
-        if (!/^\d+$/.test(value)) return "Phone number should contain only digits";
+        if (!value.trim()) error = "Phone number cannot be blank";
+        else if (!/^\d+$/.test(value)) error = "Phone number should contain only digits";
         break;
       case 'password':
-        if (!value.trim()) return "Password cannot be blank";
-        if (value.trim().length < 4) return "Password should be at least 4 characters";
+        if (!value.trim()) error = "Password cannot be blank";
+        else if (value.trim().length < 4) error = "Password should be at least 4 characters";
         break;
       case 'confirmPassword':
-        if (!value.trim()) return "Confirm Password cannot be blank";
-        if (value !== formData.password) return "Passwords do not match";
+        if (!value.trim()) error = "Confirm Password cannot be blank";
+        else if (value !== formData.password) error = "Passwords do not match";
         break;
     }
-    return '';
+    setErrors(prev => ({ ...prev, [name]: error }));
   };
 
   const validateForm = () => {
-    let newErrors = {};
+    let isValid = true;
     Object.keys(formData).forEach(key => {
-      const error = validateField(key, formData[key]);
-      if (error) newErrors[key] = error;
+      validateField(key, formData[key]);
+      if (errors[key]) isValid = false;
     });
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return isValid;
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,56 +115,16 @@ function Signup() {
     if (validateForm()) {
       try {
         setStatusMessage({ type: 'success', message: 'Processing...' });
-        const response = await api.post('/users/register', {
+        await api.post('/users/register', {
           user_name: formData.username,
           user_email: formData.email,
           user_phone: formData.phone,
           user_password: formData.password,
           user_profile: formData.profileImage
         });
-        console.log('Registration successful', response.data);
-        setStatusMessage({ type: 'success', message: 'Success! Redirecting...' });
-        setTimeout(() => {
-          navigate('/SignIn', { state: { message: 'Registration successful. Please log in.' } });
-        }, 2000);
-      } catch (error) {
-        console.error('Registration error:', error);
+        setStatusMessage({ type: 'success', message: 'Registration successful! Redirecting...' });
+      } catch {
         setStatusMessage({ type: 'error', message: 'An error occurred. Please try again.' });
-        
-        // Handle errors
-        if (error.response) {
-          console.error('Error data:', error.response.data);
-          console.error('Error status:', error.response.status);
-          console.error('Error headers:', error.response.headers);
-        } else if (error.request) {
-          console.error('No response received:', error.request);
-        } else {
-          console.error('Error message:', error.message);
-        }
-        
-        // Reset form fields
-        setFormData({
-          username: '',
-          email: '',
-          phone: '',
-          password: '',
-          confirmPassword: '',
-          profileImage: 'https://via.placeholder.com/150'
-        });
-        setErrors({
-          username: '',
-          email: '',
-          phone: '',
-          password: '',
-          confirmPassword: ''
-        });
-        setTouched({
-          username: false,
-          email: false,
-          phone: false,
-          password: false,
-          confirmPassword: false
-        });
       }
     } else {
       setStatusMessage({ type: 'error', message: 'Please correct the errors in the form.' });
@@ -169,7 +144,6 @@ function Signup() {
           <div className="col-md-6">
             <h2 className={styles.subtitle}>Create New Account</h2>
             <form className="py-3" onSubmit={handleSubmit}>
-            <StatusMessage type={statusMessage.type} message={statusMessage.message} />
               <div className={styles.profileImageContainer}>
                 <img src={formData.profileImage} alt="Profile" className={styles.profileImage} />
                 <input
@@ -226,31 +200,49 @@ function Signup() {
               </div>
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">Password</label>
-                <input
-                  type="password"
-                  className={`form-control ${touched.password && errors.password ? 'is-invalid' : ''}`}
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Password"
-                  onBlur={handleBlur}
-                />
+                <div className="input-group">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className={`form-control ${touched.password && errors.password ? 'is-invalid' : ''}`}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Password"
+                    onBlur={handleBlur}
+                  />
+                  <button
+                    className="btn btn-outline-secondary"
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? 'Hide' : 'Show'}
+                  </button>
+                </div>
                 {touched.password && errors.password && <div className="invalid-feedback">{errors.password}</div>}
                 <div className="form-text">Enter a strong password</div>
               </div>
               <div className="mb-3">
                 <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
-                <input
-                  type="password"
-                  className={`form-control ${touched.confirmPassword && errors.confirmPassword ? 'is-invalid' : ''}`}
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Confirm Password"
-                  onBlur={handleBlur}
-                />
+                <div className="input-group">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    className={`form-control ${touched.confirmPassword && errors.confirmPassword ? 'is-invalid' : ''}`}
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder="Confirm Password"
+                    onBlur={handleBlur}
+                  />
+                  <button
+                    className="btn btn-outline-secondary"
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? 'Hide' : 'Show'}
+                  </button>
+                </div>
                 {touched.confirmPassword && errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
                 <div className="form-text">Confirm your password</div>
               </div>
@@ -258,6 +250,7 @@ function Signup() {
                 <span>Already have an account? </span>
                 <a href="./SignIn" className={styles.linkText}>Login here</a>
               </div>
+              <StatusMessage type={statusMessage.type} message={statusMessage.message} />
               <div className="row">
                 <button type="submit" className="btn btn-success btn-lg my-4">Register</button>
               </div>

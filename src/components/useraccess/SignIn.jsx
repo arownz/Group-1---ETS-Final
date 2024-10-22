@@ -15,8 +15,9 @@ function SignIn() {
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
-
   const [statusMessage, setStatusMessage] = useState({ type: '', message: '' });
+
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const rememberedUser = JSON.parse(localStorage.getItem('rememberedUser'));
@@ -32,10 +33,22 @@ function SignIn() {
 
   useEffect(() => {
     if (location.state?.message) {
-      alert(location.state.message);
+      setStatusMessage({ type: 'success', message: location.state.message });
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [location, navigate]);
+
+  useEffect(() => {
+    if (statusMessage.message) {
+      const timer = setTimeout(() => {
+        setStatusMessage({ type: '', message: '' });
+        if (statusMessage.type === 'success' && statusMessage.message.includes('Success')) {
+          navigate('/Dashboard');
+        }
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [statusMessage, navigate]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -93,7 +106,6 @@ function SignIn() {
           user_email: formData.email,
           user_password: formData.password
         });
-        console.log('Login successful', response.data);
         const { token, userId, username } = response.data;
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
@@ -107,46 +119,18 @@ function SignIn() {
           localStorage.removeItem('rememberedUser');
         }
         setStatusMessage({ type: 'success', message: 'Success! Redirecting...' });
-        setTimeout(() => {
-          navigate('/Dashboard');
-        }, 2000);
       } catch (error) {
-        console.error('Login error:', error);
-        
-        // Handle specific error cases
-        if (error.response) {
-          if (error.response.status === 401) {
-            setStatusMessage({ type: 'error', message: 'Incorrect email or password. Please try again.' });
-          } else if (error.response.status === 404) {
-            setStatusMessage({ type: 'error', message: 'User not found. Please check your email.' });
-          } else {
-            setStatusMessage({ type: 'error', message: 'An error occurred. Please try again.' });
-          }
-        } else if (error.request) {
-          setStatusMessage({ type: 'error', message: 'No response from server. Please try again later.' });
+        if (error.response && error.response.status === 401) {
+          setStatusMessage({ type: 'error', message: 'Incorrect email or password. Please try again.' });
         } else {
-          setStatusMessage({ type: 'error', message: 'An unexpected error occurred. Please try again.' });
+          setStatusMessage({ type: 'error', message: 'An error occurred. Please try again.' });
         }
-  
-        // Reset form fields
-        setFormData({
-          email: '',
-          password: '',
-          rememberMe: false
-        });
-        setErrors({
-          email: '',
-          password: ''
-        });
-        setTouched({
-          email: false,
-          password: false
-        });
       }
     } else {
       setStatusMessage({ type: 'error', message: 'Please correct the errors in the form.' });
     }
   };
+
   return (
     <main className={styles.main}>
       <div className={`${styles.container} shadow my-5 p-4 p-md-5 rounded`}>
@@ -160,7 +144,6 @@ function SignIn() {
           <div className="col-md-6">
             <h2 className={styles.subtitle}>Please enter your login information</h2>
             <form className="py-3" onSubmit={handleSubmit}>
-              <StatusMessage type={statusMessage.type} message={statusMessage.message} />
               <div className="mb-3">
                 <label htmlFor="email" className="form-label">Email address</label>
                 <input
@@ -178,21 +161,27 @@ function SignIn() {
               </div>
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">Password</label>
-                <input
-                  type="password"
-                  className={`form-control ${touched.password && errors.password ? 'is-invalid' : ''}`}
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  placeholder="Password"
-                />
+                <div className="input-group">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className={`form-control ${touched.password && errors.password ? 'is-invalid' : ''}`}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Password"
+                    onBlur={handleBlur}
+                  />
+                  <button
+                    className="btn btn-outline-secondary"
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? 'Hide' : 'Show'}
+                  </button>
+                </div>
                 {touched.password && errors.password && <div className="invalid-feedback">{errors.password}</div>}
                 <div className="form-text">Enter your login password</div>
-                <div className="form-text">
-                  <a href="#" className={styles.forgotPassword}>Forgot Password?</a>
-                </div>
               </div>
               <div className="mb-3 form-check">
                 <input
@@ -209,6 +198,7 @@ function SignIn() {
                 <span>Don&apos;t have an account yet? </span>
                 <a href="./SignUp" className={styles.linkText}>Register here</a>
               </div>
+              <StatusMessage type={statusMessage.type} message={statusMessage.message} />
               <div className="row">
                 <button type="submit" className={`btn btn-success btn-lg my-4 ${styles.submitButton}`}>
                   Log In
