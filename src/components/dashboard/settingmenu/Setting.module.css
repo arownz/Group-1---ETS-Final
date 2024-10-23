@@ -190,14 +190,33 @@ h2 {
 }
 
 .confirmationMessage {
-  background-color: #c6f6d5;
-  color: #2f855a;
-  border: 1px solid #68d391;
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 20px;
   text-align: center;
   font-weight: bold;
+}
+
+.successMessage {
+  background-color: #c6f6d5;
+  color: #2f855a;
+  border: 1px solid #68d391;
+}
+
+.errorMessage {
+  background-color: #fed7d7;
+  color: #e53e3e;
+  border: 1px solid #fc8181;
+}
+
+.error {
+  color: red;
+  background-color: #ffebee;
+}
+
+.success {
+  color: green;
+  background-color: #e8f5e9;
 }
 
 @media (max-width: 768px) {

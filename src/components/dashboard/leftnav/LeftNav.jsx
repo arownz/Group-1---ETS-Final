@@ -48,7 +48,7 @@ const LeftNav = ({ isVisible }) => {
       {/* Logout Section */}
       <div className="logout-section">
         <FaSignOutAlt className="nav-icon" />
-        <Link to="/">Logout</Link>
+        <Link to="/SignIn">Logout</Link>
       </div>
     </nav>
   );

@@ -17,7 +17,7 @@ const Header = ({ title, toggleNav, navVisible }) => {
           <div className="dropdown-content">
             {/* Updated navigation links */}
             <Link to="/settingmenu/Setting">Setting</Link>
-            <Link to="/">Logout</Link>
+            <Link to="/SignIn">Logout</Link>
           </div>
         </div>
       </div>

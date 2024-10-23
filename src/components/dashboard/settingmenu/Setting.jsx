@@ -9,15 +9,18 @@ const Setting = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const [userData, setUserData] = useState({
-    profileImage: 'https://via.placeholder.com/150',
+    profileImage: '',
     username: '',
     email: '',
     registeredDate: '',
     phoneNumber: '',
     password: ''
   });
+  const [actualPassword, setActualPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     fetchUserData();
@@ -27,13 +30,14 @@ const Setting = () => {
     try {
       const response = await api.get('/users/profile');
       setUserData({
-        profileImage: response.data.user_profile || 'https://via.placeholder.com/150',
+        profileImage: `data:image/jpeg/;base64,${response.data.user_profile}`,
         username: response.data.user_name,
         email: response.data.user_email,
         registeredDate: new Date(response.data.user_registered_date).toLocaleDateString(),
         phoneNumber: response.data.user_phone,
         password: '********' // Masked password
       });
+      setActualPassword(response.data.user_password); // Store actual password
     } catch (error) {
       console.error('Error fetching user data:', error);
       setConfirmationMessage('Error fetching user data');
@@ -65,10 +69,11 @@ const Setting = () => {
       } else if (activeTab === "password") {
         if (newPassword !== confirmPassword) {
           setConfirmationMessage('New passwords do not match');
+          setTimeout(() => setConfirmationMessage(''), 3000);
           return;
         }
         await api.put('/users/password', {
-          currentPassword: userData.password,
+          currentPassword: actualPassword,
           newPassword: newPassword,
         });
       }
@@ -79,8 +84,10 @@ const Setting = () => {
     } catch (error) {
       console.error('Error updating profile:', error);
       setConfirmationMessage('Error updating profile');
+      setTimeout(() => setConfirmationMessage(''), 3000);
     }
   };
+
 
   const handleCancelClick = () => {
     setIsEditing(false);
@@ -115,6 +122,14 @@ const Setting = () => {
     setShowPassword(!showPassword);
   };
 
+  const toggleNewPasswordVisibility = () => {
+    setShowNewPassword(!showNewPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
     <div className={styles.settingsContainer}>
       <div className={styles.miniNav}>
@@ -133,7 +148,11 @@ const Setting = () => {
       </div>
       <div className={styles.mainContent}>
         <h2>Settings</h2>
-        {confirmationMessage && <div className={styles.confirmationMessage}>{confirmationMessage}</div>}
+        {confirmationMessage && (
+          <div className={`${styles.confirmationMessage} ${confirmationMessage.includes('Error') ? styles.errorMessage : styles.successMessage}`}>
+            {confirmationMessage}
+          </div>
+        )}
         <div className={styles.settingsForm}>
           {activeTab === "account" && (
             <form className={styles.accountForm}>
@@ -201,9 +220,9 @@ const Setting = () => {
                 <label>Current Password</label>
                 <div className={styles.passwordInputGroup}>
                   <input
-                    type={showPassword ? "password" : "text"}
-                    value={userData.password}
-                    disabled={true} // Always disabled
+                    type={showPassword ? "text" : "password"}
+                    value={showPassword ? actualPassword : '********'}
+                    disabled={true}
                     className={styles.currentPassword}
                   />
                   <button
@@ -219,23 +238,41 @@ const Setting = () => {
                 <>
                   <div className={styles.formGroup}>
                     <label>New Password</label>
-                    <input
-                      type="password"
-                      name="newPassword"
-                      value={newPassword}
-                      onChange={handlePasswordChange}
-                      className={styles.newPassword}
-                    />
+                    <div className={styles.passwordInputGroup}>
+                      <input
+                        type={showNewPassword ? "text" : "password"}
+                        name="newPassword"
+                        value={newPassword}
+                        onChange={handlePasswordChange}
+                        className={styles.newPassword}
+                      />
+                      <button
+                        type="button"
+                        onClick={toggleNewPasswordVisibility}
+                        className={styles.viewPasswordButton}
+                      >
+                        {showNewPassword ? "Hide" : "View"}
+                      </button>
+                    </div>
                   </div>
                   <div className={styles.formGroup}>
                     <label>Confirm New Password</label>
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={confirmPassword}
-                      onChange={handlePasswordChange}
-                      className={styles.confirmPassword}
-                    />
+                    <div className={styles.passwordInputGroup}>
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        name="confirmPassword"
+                        value={confirmPassword}
+                        onChange={handlePasswordChange}
+                        className={styles.confirmPassword}
+                      />
+                      <button
+                        type="button"
+                        onClick={toggleConfirmPasswordVisibility}
+                        className={styles.viewPasswordButton}
+                      >
+                        {showConfirmPassword ? "Hide" : "View"}
+                      </button>
+                    </div>
                   </div>
                 </>
               )}
