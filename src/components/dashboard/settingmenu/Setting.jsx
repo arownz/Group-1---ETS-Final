@@ -1,6 +1,7 @@
 // Setting.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Setting.module.css';
+import api from '../../../api/api'; // Make sure this path is correct
 
 const Setting = () => {
   const [activeTab, setActiveTab] = useState("account");
@@ -9,37 +10,94 @@ const Setting = () => {
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const [userData, setUserData] = useState({
     profileImage: 'https://via.placeholder.com/150',
-    username: 'User',
-    email: 'user@gmail.com',
-    registeredDate: '04/12/2023',
-    phoneNumber: '9245657856',
-    password: 'expensewize'
+    username: '',
+    email: '',
+    registeredDate: '',
+    phoneNumber: '',
+    password: ''
   });
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await api.get('/users/profile');
+      setUserData({
+        profileImage: response.data.user_profile || 'https://via.placeholder.com/150',
+        username: response.data.user_name,
+        email: response.data.user_email,
+        registeredDate: new Date(response.data.user_registered_date).toLocaleDateString(),
+        phoneNumber: response.data.user_phone,
+        password: '********' // Masked password
+      });
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      setConfirmationMessage('Error fetching user data');
+    }
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     setIsEditing(false);
     setShowPassword(false);
     setConfirmationMessage('');
+    setNewPassword('');
+    setConfirmPassword('');
   };
 
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
-  const handleUpdateClick = () => {
-    setIsEditing(false);
-    setConfirmationMessage('Profile updated successfully!');
-    setTimeout(() => setConfirmationMessage(''), 3000);
+  const handleUpdateClick = async () => {
+    try {
+      if (activeTab === "account") {
+        await api.put('/users/profile', {
+          user_name: userData.username,
+          user_email: userData.email,
+          user_phone: userData.phoneNumber,
+          user_profile: userData.profileImage,
+        });
+      } else if (activeTab === "password") {
+        if (newPassword !== confirmPassword) {
+          setConfirmationMessage('New passwords do not match');
+          return;
+        }
+        await api.put('/users/password', {
+          currentPassword: userData.password,
+          newPassword: newPassword,
+        });
+      }
+      setIsEditing(false);
+      setConfirmationMessage('Profile updated successfully!');
+      setTimeout(() => setConfirmationMessage(''), 3000);
+      fetchUserData(); // Refresh user data
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      setConfirmationMessage('Error updating profile');
+    }
   };
 
   const handleCancelClick = () => {
     setIsEditing(false);
     setConfirmationMessage('');
+    fetchUserData(); // Reset to original data
   };
 
   const handleInputChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
+
+  const handlePasswordChange = (e) => {
+    if (e.target.name === 'newPassword') {
+      setNewPassword(e.target.value);
+    } else if (e.target.name === 'confirmPassword') {
+      setConfirmPassword(e.target.value);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -143,7 +201,7 @@ const Setting = () => {
                 <label>Current Password</label>
                 <div className={styles.passwordInputGroup}>
                   <input
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? "password" : "text"}
                     value={userData.password}
                     disabled={true} // Always disabled
                     className={styles.currentPassword}
@@ -164,7 +222,8 @@ const Setting = () => {
                     <input
                       type="password"
                       name="newPassword"
-                      onChange={handleInputChange}
+                      value={newPassword}
+                      onChange={handlePasswordChange}
                       className={styles.newPassword}
                     />
                   </div>
@@ -173,7 +232,8 @@ const Setting = () => {
                     <input
                       type="password"
                       name="confirmPassword"
-                      onChange={handleInputChange}
+                      value={confirmPassword}
+                      onChange={handlePasswordChange}
                       className={styles.confirmPassword}
                     />
                   </div>
