@@ -1,5 +1,5 @@
-const express = require('express');
 //const bcrypt = require('bcrypt');
+const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const db = require('../db');
@@ -22,10 +22,10 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ message: 'Password must be at least 4 characters long' });
         }
 
-        // TEMPORARY: Using plain text password for testing
+        // TEMPORARY: Using plain characters password for testing
         // TODO: IMPORTANT - Re-enable password hashing before production!
         // const hashedPassword = await bcrypt.hash(user_password, 10);
-        const Password = user_password; // TEMPORARY: stores password as plain text
+        const Password = user_password; // TEMPORARY: stores password as plain characters
 
         const query = 'INSERT INTO users (user_name, user_email, user_password, user_phone, user_profile) VALUES (?, ?, ?, ?, ?)';
         const [result] = await db.execute(query, [user_name, user_email, Password, user_phone, user_profile]);
@@ -49,10 +49,10 @@ router.post('/login', async (req, res) => {
         }
 
         const user = users[0];
-        // TEMPORARY: Comparing plain text passwords for testing
+        // TEMPORARY: Comparing plain characters passwords for testing
         // TODO: IMPORTANT - Re-enable password hashing before production!
         // const isPasswordValid = await bcrypt.compare(user_password, user.user_password);
-        const isPasswordValid = user_password === user.user_password; // TEMPORARY: plain text comparison
+        const isPasswordValid = user_password === user.user_password; // TEMPORARY: plain characters comparison
 
         console.log('Password valid:', isPasswordValid);
         if (!isPasswordValid) {
@@ -104,17 +104,17 @@ router.put('/password', auth, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         const user = users[0];
-        // TEMPORARY: Comparing plain text passwords for testing
+        // TEMPORARY: Comparing plain characters passwords for testing
         // TODO: IMPORTANT - Re-enable password hashing before production!
         // const isPasswordValid = await bcrypt.compare(currentPassword, user.user_password);        
-        const isPasswordValid = currentPassword === user.user_password; // TEMPORARY: plain text comparison
+        const isPasswordValid = currentPassword === user.user_password; // TEMPORARY: plain characters comparison
         if (!isPasswordValid) {
             return res.status(400).json({ message: 'Current password is incorrect' });
         }
-        // TEMPORARY: Comparing plain text passwords for testing
+        // TEMPORARY: Comparing plain characters passwords for testing
         // TODO: IMPORTANT - Re-enable password hashing before production!
         // const hashedPassword = await bcrypt.hash(newPassword, 10);
-        const Password = newPassword; // TEMPORARY: stores password as plain text
+        const Password = newPassword; // TEMPORARY: stores password as plain characters
         await db.execute('UPDATE users SET user_password = ? WHERE id = ?', [Password, req.userId]);
         res.json({ message: 'Password updated successfully' });
     } catch (error) {

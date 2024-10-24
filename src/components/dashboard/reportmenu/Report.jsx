@@ -10,7 +10,6 @@ const Report = () => {
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const [messageType, setMessageType] = useState('');
 
-
   // Dummy data for demonstration
   const expenseData = [
     { id: 1, title: 'Groceries', category: 'Food', expenseDate: '2024-10-25', description: 'Weekly groceries', registeredDate: '2024-10-24', amount: 150 },
