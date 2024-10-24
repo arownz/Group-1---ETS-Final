@@ -1,4 +1,3 @@
-// Setting.jsx
 import { useState, useEffect } from 'react';
 import styles from './Setting.module.css';
 import api from '../../../api/api'; // Make sure this path is correct
@@ -61,10 +60,10 @@ const Setting = () => {
     try {
       if (activeTab === "account") {
         await api.put('/users/profile', {
+          user_profile: userData.profileImage,
           user_name: userData.username,
           user_email: userData.email,
           user_phone: userData.phoneNumber,
-          user_profile: userData.profileImage,
         });
       } else if (activeTab === "password") {
         if (newPassword !== confirmPassword) {

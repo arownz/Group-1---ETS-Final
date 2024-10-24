@@ -1,4 +1,3 @@
-    // server/routes/userRoutes.js
     const express = require('express');
     //const bcrypt = require('bcrypt');
     const jwt = require('jsonwebtoken');
@@ -10,9 +9,9 @@
     router.post('/register', async (req, res) => {
         console.log('Register route hit', req.body);
         try {
-            const { user_name, user_email, user_password, user_phone, user_profile } = req.body;
+            const { user_profile, user_name, user_email, user_phone, user_password } = req.body;
 
-            console.log('Inserting:', user_name, user_email, user_password, user_phone, user_profile);
+            console.log('Inserting:', user_profile, user_name, user_email, user_phone, user_password  );
 
             // Basic server-side validation
             if (!user_name || !user_email || !user_password) {
@@ -26,10 +25,10 @@
             // TEMPORARY: Using plain text password for testing
             // TODO: IMPORTANT - Re-enable password hashing before production!
             // const hashedPassword = await bcrypt.hash(user_password, 10);
-            const hashedPassword = user_password; // TEMPORARY: stores password as plain text
+            const Password = user_password; // TEMPORARY: stores password as plain text
 
             const query = 'INSERT INTO users (user_name, user_email, user_password, user_phone, user_profile) VALUES (?, ?, ?, ?, ?)';
-            const [result] = await db.execute(query, [user_name, user_email, hashedPassword, user_phone, user_profile]);
+            const [result] = await db.execute(query, [user_name, user_email, Password, user_phone, user_profile]);
 
             res.status(201).json({ message: 'User registered successfully' });
         } catch (error) {
@@ -115,8 +114,8 @@
             // TEMPORARY: Comparing plain text passwords for testing
             // TODO: IMPORTANT - Re-enable password hashing before production!
             // const hashedPassword = await bcrypt.hash(newPassword, 10);
-            const hashedPassword = newPassword; // TEMPORARY: stores password as plain text
-            await db.execute('UPDATE users SET user_password = ? WHERE id = ?', [hashedPassword, req.userId]);
+            const Password = newPassword; // TEMPORARY: stores password as plain text
+            await db.execute('UPDATE users SET user_password = ? WHERE id = ?', [Password, req.userId]);
             res.json({ message: 'Password updated successfully' });
         } catch (error) {
             console.error('Error updating password:', error);
