@@ -20,7 +20,7 @@ const Dashboard = () => {
   // Bar chart data (for monthly expenses)
   const barChartData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    datasets: [
+    datasets: [ 
       {
         label: 'Monthly Expenses',
         data: [500, 400, 600, 700, 300, 200, 400, 500, 450, 650, 500, 300], // Sample data

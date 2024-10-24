@@ -27,9 +27,9 @@ function ContactUs() {
                             </div>
                             <div className="col-md-4">
                                 <h3 style={{ fontWeight: "bolder" }}>
-                                    +6566778139
+                                    +639494781634
                                     <br />
-                                    +6566778140
+                                    +656677814012
                                 </h3>
                                 <p>Outside the Philippines</p>
                             </div>

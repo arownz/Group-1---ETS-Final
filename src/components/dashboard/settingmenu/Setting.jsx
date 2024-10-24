@@ -7,19 +7,19 @@ const Setting = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
+  const [actualPassword, setActualPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [userData, setUserData] = useState({
-    profileImage: '',
+    profileImage: 'https://via.placeholder.com/150',
     username: '',
     email: '',
     registeredDate: '',
     phoneNumber: '',
     password: ''
   });
-  const [actualPassword, setActualPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     fetchUserData();
@@ -63,7 +63,7 @@ const Setting = () => {
           user_profile: userData.profileImage,
           user_name: userData.username,
           user_email: userData.email,
-          user_phone: userData.phoneNumber,
+          user_phone: userData.phoneNumber
         });
       } else if (activeTab === "password") {
         if (newPassword !== confirmPassword) {
@@ -86,7 +86,6 @@ const Setting = () => {
       setTimeout(() => setConfirmationMessage(''), 3000);
     }
   };
-
 
   const handleCancelClick = () => {
     setIsEditing(false);

@@ -5,8 +5,8 @@ import styles from './ManageLending.module.css';
 
 const ManageLending = () => {
   const [lendings, setLendings] = useState([
-    { id: 1, title: 'Personal Loan', name: 'John Doe', dateLending: '2024-05-01', datePayBack: '2024-06-01', amount: 1000, description: 'Emergency fund', status: 'Pending', registeredDate: '2024-04-30' },
-    { id: 2, title: 'Business Loan', name: 'Jane Smith', dateLending: '2024-05-05', datePayBack: '2024-07-05', amount: 5000, description: 'Startup capital', status: 'Received', registeredDate: '2024-05-04' },
+    { id: 1, title: 'Personal Loan', name: 'John Doe', dateLending: '2024-05-01', datePayBack: '2024-06-01', amount: 1000, description: 'Emergency fund', status: 'Pending', registeredDate: '2024-05-02' },
+    { id: 2, title: 'Business Loan', name: 'Jane Smith', dateLending: '2024-05-05', datePayBack: '2024-07-05', amount: 5000, description: 'Startup capital', status: 'Received', registeredDate: '2024-05-07' },
     // Add more dummy data as needed...
   ]);
 

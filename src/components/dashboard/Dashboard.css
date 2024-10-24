@@ -18,7 +18,10 @@
 
 .allmenu-content {
   flex-grow: 1;
-  padding: 50px;
+  padding-left: 100px;
+  padding-right: 100px;
+  padding-top: 50px;
+  padding-bottom: 50px;
   margin-left: 200px; /* Set margin to accommodate left nav */
   transition: margin-left 0.3s ease; /* Smooth transition when toggling nav */
 }
@@ -31,7 +34,7 @@
   margin-left: 0; /* Adjust when nav is hidden */
 }
 
-.header {
+/*.header {
   width: 100%;
   padding: 15px;
   background-color: #fff;
@@ -39,7 +42,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-}
+}*/
 
 .header.nav-visible {
   margin-left: 200px; /* Adjust when nav is visible */
