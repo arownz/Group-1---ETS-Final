@@ -159,7 +159,7 @@ const ManageLending = () => {
       <table className={styles.lendingTable}>
         <thead>
           <tr>
-            <th>#</th>
+            <th>Lending ID</th>
             <th>Title of Lending</th>
             <th>Name of Borrower</th>
             <th>Date of Lending</th>

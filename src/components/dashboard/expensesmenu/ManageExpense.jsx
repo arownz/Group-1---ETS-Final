@@ -158,7 +158,7 @@ const ManageExpenses = () => {
       <table className={styles.expenseTable}>
         <thead>
           <tr>
-            <th>#</th>
+            <th>Expense ID</th>
             <th>Expense Title</th>
             <th>Category</th>
             <th>Cost</th>

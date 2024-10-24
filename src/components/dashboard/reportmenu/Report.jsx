@@ -127,7 +127,7 @@ const Report = () => {
                 <tr>
                   {reportType === 'expense' ? (
                     <>
-                      <th>ID</th>
+                      <th>Expense ID</th>
                       <th>Title</th>
                       <th>Category</th>
                       <th>Expense Date</th>
@@ -137,7 +137,7 @@ const Report = () => {
                     </>
                   ) : (
                     <>
-                      <th>ID</th>
+                      <th>Lending ID</th>
                       <th>Title</th>
                       <th>Name</th>
                       <th>Date of Lending</th>

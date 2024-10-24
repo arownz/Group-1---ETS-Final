@@ -144,6 +144,7 @@
 
 .grandTotal {
     font-weight: bold;
+    text-align: center;
 }
 
 .grandTotal td:last-child {
