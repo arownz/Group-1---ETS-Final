@@ -240,9 +240,10 @@ const Setting = () => {
                       <input
                         type={showNewPassword ? "text" : "password"}
                         name="newPassword"
-                        value={newPassword}
+                        value={newPassword || ''}
                         onChange={handlePasswordChange}
                         className={styles.newPassword}
+                        placeholder="Enter your new password"
                       />
                       <button
                         type="button"
@@ -262,6 +263,7 @@ const Setting = () => {
                         value={confirmPassword}
                         onChange={handlePasswordChange}
                         className={styles.confirmPassword}
+                        placeholder="Confirm your new password"
                       />
                       <button
                         type="button"

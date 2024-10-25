@@ -21,7 +21,6 @@ const Expense = () => {
       setNewCategory('');
       setShowAddCategory(false);
       setCategoryConfirmation('Category added successfully!');
-      
       setTimeout(() => setCategoryConfirmation(''), 2000);
     }
   };
