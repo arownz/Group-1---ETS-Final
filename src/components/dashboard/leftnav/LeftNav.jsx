@@ -21,11 +21,11 @@ const LeftNav = ({ isVisible }) => {
         </li>
         <li>
           <FaMoneyBillAlt className="nav-icon" /> 
-          <Link to="/expensesmenu/Expense">Expenses</Link>
+          <Link to="/expensesmenu/Expense">Expense</Link>
         </li>
         <li>
           <FaMoneyCheck className="nav-icon" /> 
-          <Link to="/expensesmenu/ManageExpense">Manage Expenses</Link>
+          <Link to="/expensesmenu/ManageExpense">Manage Expense</Link>
         </li>
         <li>
           <FaHandHoldingDollar className="nav-icon" /> 
