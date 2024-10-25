@@ -62,7 +62,7 @@ const Dashboard = () => {
         <CategoryExpenseChart data={pieChartData} />
 
         <button className="floating-add-btn">
-          <Link to="/expensemenu/Expense">+</Link>
+          <Link to="/expensewize/ExpenseWizeAI">+</Link>
         </button>
       </div>
     </div>
