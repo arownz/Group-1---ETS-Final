@@ -5,13 +5,12 @@ const router = express.Router();
 const db = require('../db');
 const auth = require('../middleware/auth'); // Import the auth middleware
 
+
 // In your route handlers, use it like this:
 router.post('/register', async (req, res) => {
-    console.log('Register route hit', req.body);
+    console.log('Register route hit');
     try {
         const { user_profile, user_name, user_email, user_phone, user_password } = req.body;
-
-        console.log('Inserting:', user_profile, user_name, user_email, user_phone, user_password);
 
         // Basic server-side validation
         if (!user_name || !user_email || !user_password) {
@@ -22,18 +21,30 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ message: 'Password must be at least 4 characters long' });
         }
 
-        // TEMPORARY: Using plain characters password for testing
-        // TODO: IMPORTANT - Re-enable password hashing before production!
-        // const hashedPassword = await bcrypt.hash(user_password, 10);
+        // Handle the image data
+        let imageBuffer = null;
+        if (user_profile) {
+            try {
+                // Remove data URI prefix if it exists
+                const base64Data = user_profile.includes('base64,') 
+                    ? user_profile.split('base64,')[1] 
+                    : user_profile;
+                imageBuffer = Buffer.from(base64Data, 'base64');
+            } catch (error) {
+                console.error('Error processing image:', error);
+                // Continue without image if there's an error
+            }
+        }
+
         const Password = user_password; // TEMPORARY: stores password as plain characters
 
         const query = 'INSERT INTO users (user_name, user_email, user_password, user_phone, user_profile) VALUES (?, ?, ?, ?, ?)';
-        const [result] = await db.execute(query, [user_name, user_email, Password, user_phone, user_profile]);
+        const [result] = await db.execute(query, [user_name, user_email, Password, user_phone, imageBuffer]);
 
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
         console.error('Registration error:', error);
-        res.status(500).json({ message: 'Error registering user' });
+        res.status(500).json({ message: 'Error registering user', error: error.message });
     }
 });
 
@@ -75,10 +86,34 @@ router.get('/profile', auth, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         const user = users[0];
+
+        // Convert blob to base64 if it exists
+        if (user.user_profile) {
+            try {
+                // Check if it's already a Buffer
+                const buffer = Buffer.isBuffer(user.user_profile)
+                    ? user.user_profile
+                    : Buffer.from(user.user_profile);
+
+                // Convert to base64 and add data URI prefix
+                user.user_profile = `data:image/jpeg;base64,${buffer.toString('base64')}`;
+            } catch (error) {
+                console.error('Error converting profile image:', error);
+                user.user_profile = 'https://via.placeholder.com/150'; // Fallback image
+            }
+        } else {
+            user.user_profile = 'https://via.placeholder.com/150'; // Default image if no profile exists
+        }
+
+        console.log('Sending user data:', {
+            ...user,
+            user_profile: user.user_profile ? 'image_data_exists' : 'no_image'
+        });
+
         res.json(user);
     } catch (error) {
         console.error('Error fetching user profile:', error);
-        res.status(500).json({ message: 'Error fetching user profile' });
+        res.status(500).json({ message: 'Error fetching user profile', error: error.message });
     }
 });
 
@@ -86,8 +121,19 @@ router.get('/profile', auth, async (req, res) => {
 router.put('/profile', auth, async (req, res) => {
     try {
         const { user_name, user_email, user_phone, user_profile } = req.body;
-        await db.execute('UPDATE users SET user_name = ?, user_email = ?, user_phone = ?, user_profile = ? WHERE id = ?',
-            [user_name, user_email, user_phone, user_profile, req.userId]);
+
+        // Handle the image data
+        let imageData = user_profile;
+        if (user_profile && user_profile.startsWith('data:image')) {
+            // Extract the base64 data after the comma
+            imageData = user_profile.split(',')[1];
+        }
+
+        await db.execute(
+            'UPDATE users SET user_name = ?, user_email = ?, user_phone = ?, user_profile = ? WHERE id = ?',
+            [user_name, user_email, user_phone, Buffer.from(imageData, 'base64'), req.userId]
+        );
+
         res.json({ message: 'Profile updated successfully' });
     } catch (error) {
         console.error('Error updating user profile:', error);
@@ -123,4 +169,4 @@ router.put('/password', auth, async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = router; 

@@ -13,7 +13,7 @@ const Setting = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [userData, setUserData] = useState({
-    profileImage: 'https://via.placeholder.com/150',
+    profileImage: '',
     username: '',
     email: '',
     registeredDate: '',
@@ -25,23 +25,27 @@ const Setting = () => {
     fetchUserData();
   }, []);
 
-  const fetchUserData = async () => {
+const fetchUserData = async () => {
     try {
-      const response = await api.get('/users/profile');
-      setUserData({
-        profileImage: `data:image/jpeg/;base64,${response.data.user_profile}`,
-        username: response.data.user_name,
-        email: response.data.user_email,
-        registeredDate: new Date(response.data.user_registered_date).toLocaleDateString(),
-        phoneNumber: response.data.user_phone,
-        password: '********' // Masked password
-      });
-      setActualPassword(response.data.user_password); // Store actual password
+        const response = await api.get('/users/profile');
+        setUserData({
+            profileImage: response.data.user_profile 
+                ? (response.data.user_profile.startsWith('data:image') 
+                    ? response.data.user_profile 
+                    : `data:image/jpeg;base64,${response.data.user_profile}`)
+                : 'https://via.placeholder.com/150',
+            username: response.data.user_name,
+            email: response.data.user_email,
+            registeredDate: new Date(response.data.user_registered_date).toLocaleDateString(),
+            phoneNumber: response.data.user_phone,
+            password: '********'
+        });
+        setActualPassword(response.data.user_password);
     } catch (error) {
-      console.error('Error fetching user data:', error);
-      setConfirmationMessage('Error fetching user data');
+        console.error('Error fetching user data:', error);
+        setConfirmationMessage('Error fetching user data');
     }
-  };
+};
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -240,10 +244,9 @@ const Setting = () => {
                       <input
                         type={showNewPassword ? "text" : "password"}
                         name="newPassword"
-                        value={newPassword || ''}
+                        value={newPassword}
                         onChange={handlePasswordChange}
                         className={styles.newPassword}
-                        placeholder="Enter your new password"
                       />
                       <button
                         type="button"
@@ -263,7 +266,6 @@ const Setting = () => {
                         value={confirmPassword}
                         onChange={handlePasswordChange}
                         className={styles.confirmPassword}
-                        placeholder="Confirm your new password"
                       />
                       <button
                         type="button"
