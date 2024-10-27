@@ -41,7 +41,7 @@ const LeftNav = ({ isVisible }) => {
         </li>
         <li>
           <FaCog className="nav-icon" /> 
-          <Link to="/settingmenu/Setting">Settings</Link>
+          <Link to="/settingmenu/Setting">Setting</Link>
         </li>
       </ul>
 

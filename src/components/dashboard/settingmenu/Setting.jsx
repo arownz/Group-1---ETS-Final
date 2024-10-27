@@ -12,6 +12,7 @@ const Setting = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [userData, setUserData] = useState({
     profileImage: '',
     username: '',
@@ -25,33 +26,34 @@ const Setting = () => {
     fetchUserData();
   }, []);
 
-const fetchUserData = async () => {
+  const fetchUserData = async () => {
     try {
-        const response = await api.get('/users/profile');
-        setUserData({
-            profileImage: response.data.user_profile 
-                ? (response.data.user_profile.startsWith('data:image') 
-                    ? response.data.user_profile 
-                    : `data:image/jpeg;base64,${response.data.user_profile}`)
-                : 'https://via.placeholder.com/150',
-            username: response.data.user_name,
-            email: response.data.user_email,
-            registeredDate: new Date(response.data.user_registered_date).toLocaleDateString(),
-            phoneNumber: response.data.user_phone,
-            password: '********'
-        });
-        setActualPassword(response.data.user_password);
+      const response = await api.get('/users/profile');
+      setUserData({
+        profileImage: response.data.user_profile
+          ? (response.data.user_profile.startsWith('data:image')
+            ? response.data.user_profile
+            : `data:image/jpeg;base64,${response.data.user_profile}`)
+          : 'https://via.placeholder.com/150',
+        username: response.data.user_name,
+        email: response.data.user_email,
+        registeredDate: new Date(response.data.user_registered_date).toLocaleDateString(),
+        phoneNumber: response.data.user_phone,
+        password: response.data.user_password // Set the actual password
+      });
+      setActualPassword(response.data.user_password);
     } catch (error) {
-        console.error('Error fetching user data:', error);
-        setConfirmationMessage('Error fetching user data');
+      console.error('Error fetching user data:', error);
+      setConfirmationMessage('Error fetching user data');
     }
-};
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     setIsEditing(false);
     setShowPassword(false);
     setConfirmationMessage('');
+    setErrorMessage('');
     setNewPassword('');
     setConfirmPassword('');
   };
@@ -69,31 +71,33 @@ const fetchUserData = async () => {
           user_email: userData.email,
           user_phone: userData.phoneNumber
         });
+        setConfirmationMessage('Profile updated successfully!');
       } else if (activeTab === "password") {
         if (newPassword !== confirmPassword) {
-          setConfirmationMessage('New passwords do not match');
-          setTimeout(() => setConfirmationMessage(''), 3000);
+          setErrorMessage('New passwords do not match');
+          setTimeout(() => setErrorMessage(''), 3000);
           return;
         }
         await api.put('/users/password', {
           currentPassword: actualPassword,
           newPassword: newPassword,
         });
+        setConfirmationMessage('Password updated successfully!');
       }
       setIsEditing(false);
-      setConfirmationMessage('Profile updated successfully!');
       setTimeout(() => setConfirmationMessage(''), 3000);
       fetchUserData(); // Refresh user data
     } catch (error) {
       console.error('Error updating profile:', error);
-      setConfirmationMessage('Error updating profile');
-      setTimeout(() => setConfirmationMessage(''), 3000);
+      setErrorMessage('Error updating profile');
+      setTimeout(() => setErrorMessage(''), 3000);
     }
   };
 
   const handleCancelClick = () => {
     setIsEditing(false);
     setConfirmationMessage('');
+    setErrorMessage('');
     fetchUserData(); // Reset to original data
   };
 
@@ -151,8 +155,13 @@ const fetchUserData = async () => {
       <div className={styles.mainContent}>
         <h2>Settings</h2>
         {confirmationMessage && (
-          <div className={`${styles.confirmationMessage} ${confirmationMessage.includes('Error') ? styles.errorMessage : styles.successMessage}`}>
+          <div className={`${styles.confirmationMessage} ${styles.successMessage}`}>
             {confirmationMessage}
+          </div>
+        )}
+        {errorMessage && (
+          <div className={`${styles.confirmationMessage} ${styles.errorMessage}`}>
+            {errorMessage}
           </div>
         )}
         <div className={styles.settingsForm}>
@@ -185,10 +194,6 @@ const fetchUserData = async () => {
                 />
               </div>
               <div className={styles.formGroup}>
-                <label>Registered Date</label>
-                <input type="text" value={userData.registeredDate} disabled />
-              </div>
-              <div className={styles.formGroup}>
                 <label>Phone Number</label>
                 <input
                   type="text"
@@ -197,6 +202,10 @@ const fetchUserData = async () => {
                   onChange={handleInputChange}
                   disabled={!isEditing}
                 />
+              </div>
+              <div className={styles.formGroup}>
+                <label>Registered Date</label>
+                <input type="text" value={userData.registeredDate} disabled />
               </div>
               <div className={styles.buttonGroup}>
                 {!isEditing ? (
