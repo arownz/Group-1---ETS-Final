@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import styles from './ManageExpense.module.css';
+import api from '../../../api/api'; // Make sure this path is correct
 
 const ManageExpenses = () => {
   const [expenses, setExpenses] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [filteredExpenses, setFilteredExpenses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [deleteExpenseId, setDeleteExpenseId] = useState(null);
+  const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState('');
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
@@ -15,7 +15,6 @@ const ManageExpenses = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirmationMessage, setDeleteConfirmationMessage] = useState('');
   const [selectedExpense, setSelectedExpense] = useState(null);
-
   const [filters, setFilters] = useState({
     category: '',
     costOrder: '',
@@ -24,30 +23,18 @@ const ManageExpenses = () => {
   });
 
   const itemsPerPage = 10;
+  const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
 
   useEffect(() => {
     fetchExpenses();
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    applyFilters();
-  }, [expenses, filters]);
-
   const fetchExpenses = async () => {
     try {
-      const response = await fetch('/api/expenses', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setExpenses(data);
-        setFilteredExpenses(data);
-      } else {
-        console.error('Failed to fetch expenses');
-      }
+      const response = await api.get('/expenses');
+      setExpenses(response.data);
+      setFilteredExpenses(response.data);
     } catch (error) {
       console.error('Error fetching expenses:', error);
     }
@@ -55,23 +42,15 @@ const ManageExpenses = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/expenses/categories', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setCategories(data);
-      } else {
-        console.error('Failed to fetch categories');
-      }
+      const response = await api.get('/expenses/categories');
+      setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
   };
 
-  const applyFilters = () => {
+  // Apply filters
+  useEffect(() => {
     let result = [...expenses];
 
     if (filters.category) {
@@ -92,7 +71,7 @@ const ManageExpenses = () => {
 
     setFilteredExpenses(result);
     setCurrentPage(1);
-  };
+  }, [filters, expenses]);
 
   const handleFilterChange = (filterName, value) => {
     setFilters(prevFilters => ({
@@ -110,72 +89,34 @@ const ManageExpenses = () => {
     });
   };
 
-  const handleEdit = (expense) => {
-    setSelectedExpense(expense);
-    setShowEditModal(true);
-  };
-
-  const handleDelete = (expense) => {
-    setSelectedExpense(expense);
-    setShowDeleteModal(true);
-  };
-
-  //connected to delete modal
-  const confirmDelete = async () => {
+  const handleEdit = async (expense) => {
     try {
-      const response = await fetch(`/api/expenses/${selectedExpense.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      if (response.ok) {
-        setExpenses(expenses.filter(expense => expense.id !== selectedExpense.id));
-        setDeleteConfirmationMessage('Expense deleted successfully!');
-        setTimeout(() => {
-          setDeleteConfirmationMessage('');
-          setShowDeleteModal(false);
-        }, 2000);
-      } else {
-        console.error('Failed to delete expense');
-      }
-    } catch (error) {
-      console.error('Error deleting expense:', error);
-    }
-  };
-
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch(`/api/expenses/${selectedExpense.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(selectedExpense)
-      });
-      if (response.ok) {
-        setExpenses(expenses.map(expense =>
-          expense.id === selectedExpense.id ? selectedExpense : expense
-        ));
-        setEditConfirmationMessage('Expense updated successfully!');
-        setTimeout(() => {
-          setEditConfirmationMessage('');
-          setShowEditModal(false);
-        }, 2000);
-      } else {
-        console.error('Failed to update expense');
-      }
+      const response = await api.put(`/expenses/${expense.id}`, expense);
+      setExpenses(expenses.map(e => e.id === expense.id ? response.data : e));
+      setEditConfirmationMessage('Expense updated successfully!');
+      setTimeout(() => {
+        setEditConfirmationMessage('');
+        setShowEditModal(false);
+      }, 2000);
     } catch (error) {
       console.error('Error updating expense:', error);
+      setEditConfirmationMessage('Failed to update expense. Please try again.');
     }
   };
 
-  //connected to edit modal
-  const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setSelectedExpense({ ...selectedExpense, [name]: value });
+  const handleDelete = async (expense) => {
+    try {
+      await api.delete(`/expenses/${expense.id}`);
+      setExpenses(expenses.filter(e => e.id !== expense.id));
+      setDeleteConfirmationMessage('Expense deleted successfully!');
+      setTimeout(() => {
+        setDeleteConfirmationMessage('');
+        setShowDeleteModal(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Error deleting expense:', error);
+      setDeleteConfirmationMessage('Failed to delete expense. Please try again.');
+    }
   };
 
   const getPaginatedData = () => {
@@ -183,8 +124,6 @@ const ManageExpenses = () => {
     const endIndex = startIndex + itemsPerPage;
     return filteredExpenses.slice(startIndex, endIndex);
   };
-
-  const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
 
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -252,7 +191,7 @@ const ManageExpenses = () => {
       <table className={styles.expenseTable}>
         <thead>
           <tr>
-            <th>Expense ID</th>
+            <th>#</th>
             <th>Expense Title</th>
             <th>Category</th>
             <th>Cost</th>
@@ -316,7 +255,7 @@ const ManageExpenses = () => {
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <h4>Edit Expense</h4>
-            <form className={styles.expenseForm} onSubmit={handleEditSubmit}>
+            <form className={styles.expenseForm}>
               <div className={styles.formGroup}>
                 <label>Title of Expense</label>
                 <input
@@ -379,7 +318,7 @@ const ManageExpenses = () => {
               </div>
 
               <div className={styles.modalButtons}>
-                <button type="submit" className={styles.addCategoryModalBtn} onClick={() => {
+                <button type="button" className={styles.addCategoryModalBtn} onClick={() => {
                   // Update the expense in the expenses array
                   setExpenses(expenses.map(e => e.id === selectedExpense.id ? selectedExpense : e));
                   setEditConfirmationMessage('Expense updated successfully!');
@@ -418,29 +357,16 @@ const ManageExpenses = () => {
             <div className={styles.modalButtons}>
               <button
                 className={styles.addCategoryModalBtn}
-                onClick={async () => {
+                onClick={() => {
                   if (newCategory) {
-                    try {
-                      const response = await fetch('/api/expenses/categories', {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'Authorization': `Bearer ${localStorage.getItem('token')}`
-                        },
-                        body: JSON.stringify({ category: newCategory })
-                      });
-                      if (response.ok) {
-                        setCategories([...categories, newCategory]);
-                        setNewCategory('');
-                        setShowAddCategory(false);
-                        setConfirmationMessage('Category added successfully!');
-                        setTimeout(() => setConfirmationMessage(''), 2000);
-                      } else {
-                        console.error('Failed to add category');
-                      }
-                    } catch (error) {
-                      console.error('Error adding category:', error);
-                    }
+                    // TODO: Add backend logic to save new category
+                    setCategories([...categories, newCategory]);
+                    setNewCategory('');
+                    setShowAddCategory(false);
+                    setConfirmationMessage('Category added successfully!');
+
+                    // Remove confirmation message after 3 seconds
+                    setTimeout(() => setConfirmationMessage(''), 2000);
                   }
                 }}
               >
@@ -483,13 +409,6 @@ const ManageExpenses = () => {
               </div>
             )}
           </div>
-        </div>
-      )}
-
-      {/* Global confirmation message */}
-      {confirmationMessage && (
-        <div className={styles.globalConfirmation}>
-          {confirmationMessage}
         </div>
       )}
 

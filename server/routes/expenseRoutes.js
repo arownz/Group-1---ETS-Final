@@ -3,10 +3,13 @@ const router = express.Router();
 const db = require('../db');
 const auth = require('../middleware/auth');
 
-// Get all categories for a user
+// Get all categories for a user (including default categories)
 router.get('/categories', auth, async (req, res) => {
     try {
-        const [categories] = await db.execute('SELECT * FROM categories WHERE user_id = ?', [req.userId]);
+        const [categories] = await db.execute(
+            'SELECT * FROM categories WHERE user_id = 0 OR user_id = ?', 
+            [req.userId]
+        );
         res.json(categories);
     } catch (error) {
         console.error('Get categories error:', error);
@@ -29,7 +32,7 @@ router.post('/categories', auth, async (req, res) => {
     }
 });
 
-// Create a new expense (updated to include category_id)
+// Create a new expense
 router.post('/', auth, async (req, res) => {
     try {
         const { expense_title, category_id, expense_cost, expense_date, expense_description } = req.body;
@@ -47,7 +50,12 @@ router.post('/', auth, async (req, res) => {
 // Get all expenses for a user (with optional filters)
 router.get('/', auth, async (req, res) => {
     try {
-        let query = 'SELECT e.*, c.category_name FROM expenses e JOIN categories c ON e.category_id = c.id WHERE e.user_id = ?';
+        let query = `
+            SELECT e.*, c.category_name 
+            FROM expenses e 
+            JOIN categories c ON e.category_id = c.id 
+            WHERE e.user_id = ?
+        `;
         const queryParams = [req.userId];
 
         if (req.query.category) {

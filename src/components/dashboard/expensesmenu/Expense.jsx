@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from './Expense.module.css';
-
+import api from '../../../api/api'; // Make sure this path is correct
 
 const Expense = () => {
   const [categories, setCategories] = useState([]);
@@ -22,43 +22,25 @@ const Expense = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/expenses/categories', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setCategories(data);
-      } else {
-        console.error('Failed to fetch categories');
-      }
+      const response = await api.get('/expenses/categories');
+      setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
   };
+
   const addCategory = async () => {
     if (newCategory) {
       try {
-        const response = await fetch('/api/expenses/categories', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({ category_name: newCategory })
-        });
-        if (response.ok) {
-          await fetchCategories();
-          setNewCategory('');
-          setShowAddCategory(false);
-          setCategoryConfirmation('Category added successfully!');
-          setTimeout(() => setCategoryConfirmation(''), 2000);
-        } else {
-          console.error('Failed to add category');
-        }
+        const response = await api.post('/expenses/categories', { category_name: newCategory });
+        setCategories([...categories, response.data]);
+        setNewCategory('');
+        setShowAddCategory(false);
+        setCategoryConfirmation('Category added successfully!');
+        setTimeout(() => setCategoryConfirmation(''), 2000);
       } catch (error) {
         console.error('Error adding category:', error);
+        setCategoryConfirmation('Failed to add category. Please try again.');
       }
     }
   };
@@ -74,35 +56,25 @@ const Expense = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/expenses', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(expenseData)
+      await api.post('/expenses', expenseData);
+      setExpenseConfirmation('Expense added successfully!');
+      setExpenseData({
+        title: '',
+        date: '',
+        category_id: '',
+        cost: '',
+        description: ''
       });
-      if (response.ok) {
-        setExpenseConfirmation('Expense added successfully!');
-        setExpenseData({
-          title: '',
-          date: '',
-          category_id: '',
-          cost: '',
-          description: ''
-        });
-        setTimeout(() => setExpenseConfirmation(''), 3000);
-      } else {
-        console.error('Failed to add expense');
-      }
+      setTimeout(() => setExpenseConfirmation(''), 3000);
     } catch (error) {
       console.error('Error adding expense:', error);
+      setExpenseConfirmation('Failed to add expense. Please try again.');
     }
   };
 
   return (
     <div className={styles.expenseContainer}>
-      <h2>Add Expense Record</h2>
+      <h2>Add Expense</h2>
 
       <form onSubmit={handleSubmit} className={styles.expenseForm}>
         <div className={styles.formGroup}>
@@ -197,6 +169,8 @@ const Expense = () => {
           </div>
         </div>
       )}
+
+
     </div>
   );
 };
