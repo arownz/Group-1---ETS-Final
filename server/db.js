@@ -14,8 +14,7 @@ const pool = mysql.createPool({
   idleTimeout: 60000,
   queueLimit: 0,
   enableKeepAlive: true,
-  keepAliveInitialDelay: 0,
-  maxPacketSize: 16777216 // 16MB packet size
+  keepAliveInitialDelay: 0
 });
 
 pool.getConnection((err, connection) => {

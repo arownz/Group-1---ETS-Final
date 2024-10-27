@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Expense.module.css';
 
+
 const Expense = () => {
-  const [categories, setCategories] = useState(['Grocery', 'Entertainment', 'Bills', 'Games', 'Rent']);
+  const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState('');
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [categoryConfirmation, setCategoryConfirmation] = useState('');
@@ -10,20 +11,58 @@ const Expense = () => {
   const [expenseData, setExpenseData] = useState({
     title: '',
     date: '',
-    category: '',
+    category_id: '',
     cost: '',
     description: ''
   });
 
-  const addCategory = () => {
-    if (newCategory) {
-      setCategories([...categories, newCategory]);
-      setNewCategory('');
-      setShowAddCategory(false);
-      setCategoryConfirmation('Category added successfully!');
-      setTimeout(() => setCategoryConfirmation(''), 2000);
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/expenses/categories', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setCategories(data);
+      } else {
+        console.error('Failed to fetch categories');
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
     }
   };
+  const addCategory = async () => {
+    if (newCategory) {
+      try {
+        const response = await fetch('/api/expenses/categories', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({ category_name: newCategory })
+        });
+        if (response.ok) {
+          await fetchCategories();
+          setNewCategory('');
+          setShowAddCategory(false);
+          setCategoryConfirmation('Category added successfully!');
+          setTimeout(() => setCategoryConfirmation(''), 2000);
+        } else {
+          console.error('Failed to add category');
+        }
+      } catch (error) {
+        console.error('Error adding category:', error);
+      }
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setExpenseData(prevData => ({
@@ -32,71 +71,81 @@ const Expense = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Add logic to save expense data
-    console.log('Expense data submitted:', expenseData);
-    setExpenseConfirmation('Expense added successfully!');
-    
-    // Clear the form
-    setExpenseData({
-      title: '',
-      date: '',
-      category: '',
-      cost: '',
-      description: ''
-    });
-
-    // Clear confirmation message after 3 seconds
-    setTimeout(() => setExpenseConfirmation(''), 3000);
+    try {
+      const response = await fetch('/api/expenses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(expenseData)
+      });
+      if (response.ok) {
+        setExpenseConfirmation('Expense added successfully!');
+        setExpenseData({
+          title: '',
+          date: '',
+          category_id: '',
+          cost: '',
+          description: ''
+        });
+        setTimeout(() => setExpenseConfirmation(''), 3000);
+      } else {
+        console.error('Failed to add expense');
+      }
+    } catch (error) {
+      console.error('Error adding expense:', error);
+    }
   };
 
   return (
     <div className={styles.expenseContainer}>
-      <h2>Add Expense</h2>
+      <h2>Add Expense Record</h2>
 
       <form onSubmit={handleSubmit} className={styles.expenseForm}>
         <div className={styles.formGroup}>
           <label>Title of Expense</label>
-          <input 
-            type="text" 
-            name="title" 
+          <input
+            type="text"
+            name="title"
             value={expenseData.title}
             onChange={handleInputChange}
-            required 
+            required
           />
         </div>
 
         <div className={styles.formGroup}>
           <label>Date of Expense</label>
-          <input 
-            type="date" 
-            name="date" 
+          <input
+            type="date"
+            name="date"
             value={expenseData.date}
             onChange={handleInputChange}
-            required 
+            required
           />
         </div>
 
         <div className={styles.formGroup}>
           <label>Category</label>
-          <select 
-            name="category"
-            value={expenseData.category}
+          <select
+            name="category_id"
+            value={expenseData.category_id}
             onChange={handleInputChange}
             required
           >
             <option value="">Choose Category</option>
-            {categories.map((category, index) => (
-              <option key={index} value={category}>{category}</option>
-            ))}  
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>{category.category_name}</option>
+            ))}
           </select>
-          
-         {categoryConfirmation && (
+
+          {categoryConfirmation && (
             <div className={styles.categoryConfirmation}>
               {categoryConfirmation}
             </div>
-      )}
+          )}
           <button type="button" onClick={() => setShowAddCategory(true)} className={styles.addCategoryBtn}>
             + Add Category
           </button>
@@ -104,25 +153,25 @@ const Expense = () => {
 
         <div className={styles.formGroup}>
           <label>Cost of Item</label>
-          <input 
-            type="number" 
-            name="cost" 
+          <input
+            type="number"
+            name="cost"
             value={expenseData.cost}
             onChange={handleInputChange}
-            required 
+            required
           />
         </div>
 
         <div className={styles.formGroup}>
           <label>Description</label>
-          <textarea 
-            name="description" 
+          <textarea
+            name="description"
             rows="4"
             value={expenseData.description}
             onChange={handleInputChange}
           />
         </div>
-        
+
         {expenseConfirmation && (
           <div className={styles.expenseConfirmation}>
             {expenseConfirmation}
@@ -148,8 +197,6 @@ const Expense = () => {
           </div>
         </div>
       )}
-
-
     </div>
   );
 };

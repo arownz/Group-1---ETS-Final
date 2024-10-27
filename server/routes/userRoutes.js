@@ -81,7 +81,7 @@ router.post('/login', async (req, res) => {
 // Get user data
 router.get('/profile', auth, async (req, res) => {
     try {
-        const [users] = await db.execute('SELECT id, user_name, user_email, user_phone, user_profile, user_registered_date FROM users WHERE id = ?', [req.userId]);
+        const [users] = await db.execute('SELECT id, user_name, user_email, user_phone, user_profile, user_registered_date, user_password FROM users WHERE id = ?', [req.userId]);
         if (users.length === 0) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -110,7 +110,7 @@ router.get('/profile', auth, async (req, res) => {
             user_profile: user.user_profile ? 'image_data_exists' : 'no_image'
         });
 
-        res.json(user);
+        res.json({...user, user_password: user.user_password}); // Include user_password in the response
     } catch (error) {
         console.error('Error fetching user profile:', error);
         res.status(500).json({ message: 'Error fetching user profile', error: error.message });
