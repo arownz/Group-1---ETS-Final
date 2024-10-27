@@ -2,23 +2,12 @@ import { useState, useEffect } from 'react';
 import styles from './ManageExpense.module.css';
 
 const ManageExpenses = () => {
-  const [expenses, setExpenses] = useState([
-    { id: 1, title: 'food', category: 'Grocery', cost: 5, date: '2024-04-18', description: 'ice water', registeredDate: '2024-04-19' },
-
-    { id: 2, title: 'netflix', category: 'Entertainment', cost: 1000, date: '2024-04-20', description: 'premium subscription', registeredDate: '2024-04-21' },
-
-    { id: 3, title: 'tubig', category: 'Bills', cost: 1500, date: '2024-04-22', description: 'walang tubig', registeredDate: '2024-04-23' },
-
-    { id: 4, title: 'assassin creed', category: 'Games', cost: 1399, date: '2024-04-24', description: 'steam', registeredDate: '2024-04-25' },
-
-    { id: 5, title: 'hotel sogo', category: 'Rent', cost: 69, date: '2023-04-26', description: 'pancit cantonan', registeredDate: '2023-04-27' }
-    // Add more dummy data as needed...
-  ]);
-
-  const [filteredExpenses, setFilteredExpenses] = useState(expenses);
+  const [expenses, setExpenses] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [filteredExpenses, setFilteredExpenses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [categories, setCategories] = useState(['Grocery', 'Entertainment', 'Bills', 'Games', 'Rent']);
+  const [deleteExpenseId, setDeleteExpenseId] = useState(null);
   const [newCategory, setNewCategory] = useState('');
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
@@ -26,6 +15,7 @@ const ManageExpenses = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirmationMessage, setDeleteConfirmationMessage] = useState('');
   const [selectedExpense, setSelectedExpense] = useState(null);
+
   const [filters, setFilters] = useState({
     category: '',
     costOrder: '',
@@ -34,10 +24,54 @@ const ManageExpenses = () => {
   });
 
   const itemsPerPage = 10;
-  const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
 
-  // Apply filters
   useEffect(() => {
+    fetchExpenses();
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [expenses, filters]);
+
+  const fetchExpenses = async () => {
+    try {
+      const response = await fetch('/api/expenses', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setExpenses(data);
+        setFilteredExpenses(data);
+      } else {
+        console.error('Failed to fetch expenses');
+      }
+    } catch (error) {
+      console.error('Error fetching expenses:', error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('/api/expenses/categories', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setCategories(data);
+      } else {
+        console.error('Failed to fetch categories');
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const applyFilters = () => {
     let result = [...expenses];
 
     if (filters.category) {
@@ -58,7 +92,7 @@ const ManageExpenses = () => {
 
     setFilteredExpenses(result);
     setCurrentPage(1);
-  }, [filters, expenses]);
+  };
 
   const handleFilterChange = (filterName, value) => {
     setFilters(prevFilters => ({
@@ -86,11 +120,71 @@ const ManageExpenses = () => {
     setShowDeleteModal(true);
   };
 
+  //connected to delete modal
+  const confirmDelete = async () => {
+    try {
+      const response = await fetch(`/api/expenses/${selectedExpense.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.ok) {
+        setExpenses(expenses.filter(expense => expense.id !== selectedExpense.id));
+        setDeleteConfirmationMessage('Expense deleted successfully!');
+        setTimeout(() => {
+          setDeleteConfirmationMessage('');
+          setShowDeleteModal(false);
+        }, 2000);
+      } else {
+        console.error('Failed to delete expense');
+      }
+    } catch (error) {
+      console.error('Error deleting expense:', error);
+    }
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`/api/expenses/${selectedExpense.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(selectedExpense)
+      });
+      if (response.ok) {
+        setExpenses(expenses.map(expense =>
+          expense.id === selectedExpense.id ? selectedExpense : expense
+        ));
+        setEditConfirmationMessage('Expense updated successfully!');
+        setTimeout(() => {
+          setEditConfirmationMessage('');
+          setShowEditModal(false);
+        }, 2000);
+      } else {
+        console.error('Failed to update expense');
+      }
+    } catch (error) {
+      console.error('Error updating expense:', error);
+    }
+  };
+
+  //connected to edit modal
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedExpense({ ...selectedExpense, [name]: value });
+  };
+
   const getPaginatedData = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return filteredExpenses.slice(startIndex, endIndex);
   };
+
+  const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
 
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -222,7 +316,7 @@ const ManageExpenses = () => {
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <h4>Edit Expense</h4>
-            <form className={styles.expenseForm}>
+            <form className={styles.expenseForm} onSubmit={handleEditSubmit}>
               <div className={styles.formGroup}>
                 <label>Title of Expense</label>
                 <input
@@ -285,7 +379,7 @@ const ManageExpenses = () => {
               </div>
 
               <div className={styles.modalButtons}>
-                <button type="button" className={styles.addCategoryModalBtn} onClick={() => {
+                <button type="submit" className={styles.addCategoryModalBtn} onClick={() => {
                   // Update the expense in the expenses array
                   setExpenses(expenses.map(e => e.id === selectedExpense.id ? selectedExpense : e));
                   setEditConfirmationMessage('Expense updated successfully!');
@@ -295,7 +389,7 @@ const ManageExpenses = () => {
                     setEditConfirmationMessage('');
                     setShowEditModal(false);
                   }, 2000);
-                }}>Save</button>  
+                }}>Save</button>
                 <button type="button" className={styles.closeModalBtn} onClick={() => setShowEditModal(false)}>Cancel</button>
               </div>
               {editConfirmationMessage && (
@@ -324,16 +418,29 @@ const ManageExpenses = () => {
             <div className={styles.modalButtons}>
               <button
                 className={styles.addCategoryModalBtn}
-                onClick={() => {
+                onClick={async () => {
                   if (newCategory) {
-                    // TODO: Add backend logic to save new category
-                    setCategories([...categories, newCategory]);
-                    setNewCategory('');
-                    setShowAddCategory(false);
-                    setConfirmationMessage('Category added successfully!');
-
-                    // Remove confirmation message after 3 seconds
-                    setTimeout(() => setConfirmationMessage(''), 2000);
+                    try {
+                      const response = await fetch('/api/expenses/categories', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ category: newCategory })
+                      });
+                      if (response.ok) {
+                        setCategories([...categories, newCategory]);
+                        setNewCategory('');
+                        setShowAddCategory(false);
+                        setConfirmationMessage('Category added successfully!');
+                        setTimeout(() => setConfirmationMessage(''), 2000);
+                      } else {
+                        console.error('Failed to add category');
+                      }
+                    } catch (error) {
+                      console.error('Error adding category:', error);
+                    }
                   }
                 }}
               >
@@ -376,6 +483,13 @@ const ManageExpenses = () => {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Global confirmation message */}
+      {confirmationMessage && (
+        <div className={styles.globalConfirmation}>
+          {confirmationMessage}
         </div>
       )}
 
