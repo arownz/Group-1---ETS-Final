@@ -33,7 +33,7 @@ const Expense = () => {
     if (newCategory) {
       try {
         const response = await api.post('/expenses/categories', { category_name: newCategory });
-        setCategories([...categories, response.data]);
+        setCategories([...categories, { id: response.data.categoryId, category_name: newCategory }]);
         setNewCategory('');
         setShowAddCategory(false);
         setCategoryConfirmation('Category added successfully!');
@@ -49,14 +49,25 @@ const Expense = () => {
     const { name, value } = e.target;
     setExpenseData(prevData => ({
       ...prevData,
-      [name]: value
+      [name]: name === 'category_id' ? parseInt(value, 10) : value
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/expenses', expenseData);
+      const { title, date, category_id, cost, description } = expenseData;
+      if (!title || !date || !category_id || !cost) {
+        setExpenseConfirmation('Please fill all required fields.');
+        return;
+      }
+      await api.post('/expenses', {
+        expense_title: title,
+        category_id: parseInt(category_id, 10),
+        expense_cost: parseFloat(cost),
+        expense_date: date,
+        expense_description: description
+      });
       setExpenseConfirmation('Expense added successfully!');
       setExpenseData({
         title: '',
@@ -109,7 +120,9 @@ const Expense = () => {
           >
             <option value="">Choose Category</option>
             {categories.map((category) => (
-              <option key={category.id} value={category.id}>{category.category_name}</option>
+              <option key={category.id} value={category.id}>
+                {category.category_name}
+              </option>
             ))}
           </select>
 

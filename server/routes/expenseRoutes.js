@@ -6,10 +6,15 @@ const auth = require('../middleware/auth');
 // Get all categories for a user (including default categories)
 router.get('/categories', auth, async (req, res) => {
     try {
-        const [categories] = await db.execute(
-            'SELECT * FROM categories WHERE user_id = 0 OR user_id = ?', 
-            [req.userId]
-        );
+        const [categories] = await db.execute(`
+            SELECT id, category_name, 0 as is_custom
+            FROM default_categories
+            UNION ALL
+            SELECT id, category_name, 1 as is_custom
+            FROM categories
+            WHERE user_id = ?
+            ORDER BY is_custom, category_name
+        `, [req.userId]);
         res.json(categories);
     } catch (error) {
         console.error('Get categories error:', error);
@@ -36,9 +41,12 @@ router.post('/categories', auth, async (req, res) => {
 router.post('/', auth, async (req, res) => {
     try {
         const { expense_title, category_id, expense_cost, expense_date, expense_description } = req.body;
+        if (!expense_title || !category_id || !expense_cost || !expense_date) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
         const [result] = await db.execute(
             'INSERT INTO expenses (user_id, expense_title, category_id, expense_cost, expense_date, expense_description) VALUES (?, ?, ?, ?, ?, ?)',
-            [req.userId, expense_title, category_id, expense_cost, expense_date, expense_description]
+            [req.userId, expense_title, category_id, expense_cost, expense_date, expense_description || null]
         );
         res.status(201).json({ message: 'Expense created successfully', expenseId: result.insertId });
     } catch (error) {
@@ -51,12 +59,15 @@ router.post('/', auth, async (req, res) => {
 router.get('/', auth, async (req, res) => {
     try {
         let query = `
-            SELECT e.*, c.category_name 
+            SELECT e.*, 
+                   COALESCE(c.category_name, dc.category_name) as category_name,
+                   CASE WHEN c.id IS NOT NULL THEN 1 ELSE 0 END as is_custom
             FROM expenses e 
-            JOIN categories c ON e.category_id = c.id 
+            LEFT JOIN categories c ON e.category_id = c.id AND c.user_id = ?
+            LEFT JOIN default_categories dc ON e.category_id = dc.id
             WHERE e.user_id = ?
         `;
-        const queryParams = [req.userId];
+        const queryParams = [req.userId, req.userId];
 
         if (req.query.category) {
             query += ' AND c.category_name = ?';

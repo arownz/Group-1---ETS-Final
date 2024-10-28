@@ -30,6 +30,8 @@ const ManageExpenses = () => {
     fetchCategories();
   }, []);
 
+
+
   const fetchExpenses = async () => {
     try {
       const response = await api.get('/expenses');
@@ -89,10 +91,20 @@ const ManageExpenses = () => {
     });
   };
 
-  const handleEdit = async (expense) => {
+  const handleEditClick = (expense) => {
+    setSelectedExpense(expense);
+    setShowEditModal(true);
+  };
+
+  const handleDeleteClick = (expense) => {
+    setSelectedExpense(expense);
+    setShowDeleteModal(true);
+  };
+
+  const handleEdit = async (updatedExpense) => {
     try {
-      const response = await api.put(`/expenses/${expense.id}`, expense);
-      setExpenses(expenses.map(e => e.id === expense.id ? response.data : e));
+      const response = await api.put(`/expenses/${updatedExpense.id}`, updatedExpense);
+      setExpenses(expenses.map(e => e.id === updatedExpense.id ? response.data : e));
       setEditConfirmationMessage('Expense updated successfully!');
       setTimeout(() => {
         setEditConfirmationMessage('');
@@ -104,10 +116,10 @@ const ManageExpenses = () => {
     }
   };
 
-  const handleDelete = async (expense) => {
+  const handleDelete = async (expenseId) => {
     try {
-      await api.delete(`/expenses/${expense.id}`);
-      setExpenses(expenses.filter(e => e.id !== expense.id));
+      await api.delete(`/expenses/${expenseId}`);
+      setExpenses(expenses.filter(e => e.id !== expenseId));
       setDeleteConfirmationMessage('Expense deleted successfully!');
       setTimeout(() => {
         setDeleteConfirmationMessage('');
@@ -148,13 +160,11 @@ const ManageExpenses = () => {
             onChange={(e) => handleFilterChange('category', e.target.value)}
           >
             <option value="">All Categories</option>
-            {/* Add default categories and fetch new categories from backend */}
-            {/* Backend TODO: Fetch categories from database */}
-            <option value="Grocery">Grocery</option>
-            <option value="Entertainment">Entertainment</option>
-            <option value="Bills">Bills</option>
-            <option value="Games">Games</option>
-            <option value="Rent">Rent</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.category_name}
+              </option>
+            ))}
           </select>
 
           <select
@@ -191,7 +201,7 @@ const ManageExpenses = () => {
       <table className={styles.expenseTable}>
         <thead>
           <tr>
-            <th>#</th>
+            <th>Expense ID</th>
             <th>Expense Title</th>
             <th>Category</th>
             <th>Cost</th>
@@ -205,20 +215,20 @@ const ManageExpenses = () => {
           {getPaginatedData().map((expense) => (
             <tr key={expense.id}>
               <td>{expense.id}</td>
-              <td>{expense.title}</td>
-              <td>{expense.category}</td>
-              <td>{expense.cost}</td>
-              <td>{expense.date}</td>
-              <td>{expense.description}</td>
-              <td>{expense.registeredDate}</td>
+              <td>{expense.expense_title}</td>
+              <td>{expense.category_name}</td>
+              <td>{expense.expense_cost}</td>
+              <td>{new Date(expense.expense_date).toLocaleDateString()}</td>
+              <td>{expense.expense_description}</td>
+              <td>{new Date(expense.expense_registered_date).toLocaleString()}</td>
               <td>
                 <div className={styles.dropdown}>
                   <button className={styles.dropdownToggle}>
                     Action
                   </button>
                   <div className={styles.dropdownMenu}>
-                    <button onClick={() => handleEdit(expense)}>Edit</button>
-                    <button onClick={() => handleDelete(expense)}>Delete</button>
+                    <button onClick={() => handleEditClick(expense)}>Edit</button>
+                    <button onClick={() => handleDeleteClick(expense)}>Delete</button>
                   </div>
                 </div>
               </td>
@@ -251,7 +261,7 @@ const ManageExpenses = () => {
       </div>
 
       {/* Edit Modal */}
-      {showEditModal && (
+      {showEditModal && selectedExpense && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <h4>Edit Expense</h4>
@@ -279,12 +289,14 @@ const ManageExpenses = () => {
               <div className={styles.formGroup}>
                 <label>Category</label>
                 <select
-                  value={selectedExpense.category}
-                  onChange={(e) => setSelectedExpense({ ...selectedExpense, category: e.target.value })}
+                  value={selectedExpense.category_id}
+                  onChange={(e) => setSelectedExpense({ ...selectedExpense, category_id: e.target.value })}
                 >
                   <option value="">Choose Category</option>
-                  {categories.map((category, index) => (
-                    <option key={index} value={category}>{category}</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.category_name}
+                    </option>
                   ))}
                 </select>
                 <button type="button" onClick={() => setShowAddCategory(true)} className={styles.addCategoryBtn}>
@@ -357,16 +369,19 @@ const ManageExpenses = () => {
             <div className={styles.modalButtons}>
               <button
                 className={styles.addCategoryModalBtn}
-                onClick={() => {
+                onClick={async () => {
                   if (newCategory) {
-                    // TODO: Add backend logic to save new category
-                    setCategories([...categories, newCategory]);
-                    setNewCategory('');
-                    setShowAddCategory(false);
-                    setConfirmationMessage('Category added successfully!');
-
-                    // Remove confirmation message after 3 seconds
-                    setTimeout(() => setConfirmationMessage(''), 2000);
+                    try {
+                      const response = await api.post('/expenses/categories', { category_name: newCategory });
+                      setCategories([...categories, { id: response.data.categoryId, category_name: newCategory }]);
+                      setNewCategory('');
+                      setShowAddCategory(false);
+                      setConfirmationMessage('Category added successfully!');
+                      setTimeout(() => setConfirmationMessage(''), 2000);
+                    } catch (error) {
+                      console.error('Error adding category:', error);
+                      setConfirmationMessage('Failed to add category. Please try again.');
+                    }
                   }
                 }}
               >
@@ -384,7 +399,7 @@ const ManageExpenses = () => {
       )}
 
       {/* Delete Confirmation Modal */}
-      {showDeleteModal && (
+      {showDeleteModal && selectedExpense && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <h4>Are you sure you want to delete this expense?</h4>
