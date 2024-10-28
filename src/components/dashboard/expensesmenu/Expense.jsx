@@ -23,7 +23,10 @@ const Expense = () => {
   const fetchCategories = async () => {
     try {
       const response = await api.get('/expenses/categories');
-      setCategories(response.data);
+      const categories = response.data;
+      const defaultCategories = await api.get('/expenses/default-categories');
+      const allCategories = [...categories, ...defaultCategories.data];
+      setCategories(allCategories); // Update the categories state
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -61,6 +64,14 @@ const Expense = () => {
         setExpenseConfirmation('Please fill all required fields.');
         return;
       }
+
+      // Validate category_id
+      const validCategories = await fetchCategories();
+      if (!validCategories.includes(category_id)) {
+        setExpenseConfirmation('Invalid category selected.');
+        return;
+      }
+
       await api.post('/expenses', {
         expense_title: title,
         category_id: parseInt(category_id, 10),

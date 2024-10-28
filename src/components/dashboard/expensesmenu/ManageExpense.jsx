@@ -105,6 +105,7 @@ const ManageExpenses = () => {
     try {
       const response = await api.put(`/expenses/${updatedExpense.id}`, updatedExpense);
       setExpenses(expenses.map(e => e.id === updatedExpense.id ? response.data : e));
+      setFilteredExpenses(filteredExpenses.map(e => e.id === updatedExpense.id ? response.data : e));
       setEditConfirmationMessage('Expense updated successfully!');
       setTimeout(() => {
         setEditConfirmationMessage('');
@@ -120,6 +121,7 @@ const ManageExpenses = () => {
     try {
       await api.delete(`/expenses/${expenseId}`);
       setExpenses(expenses.filter(e => e.id !== expenseId));
+      setFilteredExpenses(filteredExpenses.filter(e => e.id !== expenseId));
       setDeleteConfirmationMessage('Expense deleted successfully!');
       setTimeout(() => {
         setDeleteConfirmationMessage('');
@@ -331,7 +333,7 @@ const ManageExpenses = () => {
 
               <div className={styles.modalButtons}>
                 <button type="button" className={styles.addCategoryModalBtn} onClick={() => {
-                  // Update the expense in the expenses array
+                  handleEdit(selectedExpense);
                   setExpenses(expenses.map(e => e.id === selectedExpense.id ? selectedExpense : e));
                   setEditConfirmationMessage('Expense updated successfully!');
 
@@ -407,6 +409,9 @@ const ManageExpenses = () => {
             {/* In the Delete Confirmation Modal */}
             <div className={styles.modalButtons}>
               <button className={styles.addBtn} onClick={() => {
+                handleDelete(selectedExpense.id);
+
+                // Remove the deleted expense from the expenses array
                 setExpenses(expenses.filter(e => e.id !== selectedExpense.id));
                 setDeleteConfirmationMessage('Expense deleted successfully!');
 

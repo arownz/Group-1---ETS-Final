@@ -44,10 +44,21 @@ router.post('/', auth, async (req, res) => {
         if (!expense_title || !category_id || !expense_cost || !expense_date) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
+
+        // Check if the category exists
+        const [category] = await db.execute('SELECT * FROM categories WHERE id = ?', [category_id]);
+        if (!category.length) {
+            const [defaultCategory] = await db.execute('SELECT * FROM default_categories WHERE id = ?', [category_id]);
+            if (!defaultCategory.length) {
+                return res.status(400).json({ message: 'Category does not exist' });
+            }
+        }
+        console.log('Adding expense...');
         const [result] = await db.execute(
             'INSERT INTO expenses (user_id, expense_title, category_id, expense_cost, expense_date, expense_description) VALUES (?, ?, ?, ?, ?, ?)',
             [req.userId, expense_title, category_id, expense_cost, expense_date, expense_description || null]
         );
+        console.log('Expense added successfully:', result);
         res.status(201).json({ message: 'Expense created successfully', expenseId: result.insertId });
     } catch (error) {
         console.error('Create expense error:', error);
