@@ -105,7 +105,7 @@ const ManageExpenses = () => {
     try {
       const response = await api.put(`/expenses/${updatedExpense.id}`, updatedExpense);
       setExpenses(expenses.map(e => e.id === updatedExpense.id ? response.data : e));
-      setFilteredExpenses(filteredExpenses.map(e => e.id === updatedExpense.id ? response.data : e));
+      setFilteredExpenses(filteredExpenses.map(e => e.id === updatedExpense.id ? response.data : e)); 
       setEditConfirmationMessage('Expense updated successfully!');
       setTimeout(() => {
         setEditConfirmationMessage('');
