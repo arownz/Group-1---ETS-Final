@@ -24,9 +24,7 @@ const Expense = () => {
     try {
       const response = await api.get('/expenses/categories');
       const categories = response.data;
-      const defaultCategories = await api.get('/expenses/default-categories');
-      const allCategories = [...categories, ...defaultCategories.data];
-      setCategories(allCategories); // Update the categories state
+      setCategories(categories);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -65,16 +63,26 @@ const Expense = () => {
         return;
       }
 
+      // Fetch latest categories
+      await fetchCategories();
+
       // Validate category_id
-      const validCategories = await fetchCategories();
-      if (!validCategories.includes(category_id)) {
+      const validCategories = categories.map((category) => category.id);
+      if (!validCategories.includes(parseInt(category_id, 10))) {
         setExpenseConfirmation('Invalid category selected.');
+        return;
+      }
+
+      // Ensure category_id is a valid number
+      const categoryId = parseInt(category_id, 10);
+      if (isNaN(categoryId)) {
+        setExpenseConfirmation('Invalid category ID.');
         return;
       }
 
       await api.post('/expenses', {
         expense_title: title,
-        category_id: parseInt(category_id, 10),
+        category_id: categoryId,
         expense_cost: parseFloat(cost),
         expense_date: date,
         expense_description: description

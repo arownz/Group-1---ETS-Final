@@ -203,7 +203,7 @@ const ManageExpenses = () => {
       <table className={styles.expenseTable}>
         <thead>
           <tr>
-            <th>Expense ID</th>
+            {/* <th>Expense ID</th> */}
             <th>Expense Title</th>
             <th>Category</th>
             <th>Cost</th>
@@ -216,7 +216,7 @@ const ManageExpenses = () => {
         <tbody>
           {getPaginatedData().map((expense) => (
             <tr key={expense.id}>
-              <td>{expense.id}</td>
+              {/* <td>{expense.id}</td> */}
               <td>{expense.expense_title}</td>
               <td>{expense.category_name}</td>
               <td>{expense.expense_cost}</td>

@@ -6,21 +6,22 @@ const auth = require('../middleware/auth');
 // Get all categories for a user (including default categories)
 router.get('/categories', auth, async (req, res) => {
     try {
-        const [categories] = await db.execute(`
-            SELECT id, category_name, 0 as is_custom
-            FROM default_categories
-            UNION ALL
-            SELECT id, category_name, 1 as is_custom
-            FROM categories
-            WHERE user_id = ?
-            ORDER BY is_custom, category_name
-        `, [req.userId]);
-        res.json(categories);
+      const [categories] = await db.execute(`
+        SELECT id, category_name, 0 as is_custom
+        FROM default_categories
+        UNION ALL
+        SELECT id, category_name, 1 as is_custom
+        FROM categories
+        WHERE user_id = ?
+        ORDER BY is_custom, category_name
+      `, [req.userId]);
+      res.json(categories);
     } catch (error) {
-        console.error('Get categories error:', error);
-        res.status(500).json({ message: 'Error fetching categories' });
+      console.error('Get categories error:', error);
+      res.status(500).json({ message: 'Error fetching categories' });
     }
-});
+  });
+  
 
 // Add a new category
 router.post('/categories', auth, async (req, res) => {
@@ -39,31 +40,28 @@ router.post('/categories', auth, async (req, res) => {
 
 // Create a new expense
 router.post('/', auth, async (req, res) => {
-    try {
-        const { expense_title, category_id, expense_cost, expense_date, expense_description } = req.body;
-        if (!expense_title || !category_id || !expense_cost || !expense_date) {
-            return res.status(400).json({ message: 'Missing required fields' });
-        }
-
-        // Check if the category exists
-        const [category] = await db.execute('SELECT * FROM categories WHERE id = ?', [category_id]);
-        if (!category.length) {
-            const [defaultCategory] = await db.execute('SELECT * FROM default_categories WHERE id = ?', [category_id]);
-            if (!defaultCategory.length) {
-                return res.status(400).json({ message: 'Category does not exist' });
-            }
-        }
-        console.log('Adding expense...');
-        const [result] = await db.execute(
-            'INSERT INTO expenses (user_id, expense_title, category_id, expense_cost, expense_date, expense_description) VALUES (?, ?, ?, ?, ?, ?)',
-            [req.userId, expense_title, category_id, expense_cost, expense_date, expense_description || null]
-        );
-        console.log('Expense added successfully:', result);
-        res.status(201).json({ message: 'Expense created successfully', expenseId: result.insertId });
-    } catch (error) {
-        console.error('Create expense error:', error);
-        res.status(500).json({ message: 'Error creating expense', error: error.message });
+  try {
+    const { expense_title, category_id, expense_cost, expense_date, expense_description } = req.body;
+    if (!expense_title || !category_id || !expense_cost || !expense_date) {
+      return res.status(400).json({ message: 'Missing required fields' });
     }
+
+    // Check if the category exists
+    const [category] = await db.execute('SELECT * FROM categories WHERE id = ?', [category_id]);
+    if (!category.length) {
+      return res.status(400).json({ message: 'Category does not exist' });
+    }
+
+    // Create a new expense
+    const [result] = await db.execute(
+      'INSERT INTO expenses (user_id, expense_title, category_id, expense_cost, expense_date, expense_description) VALUES (?, ?, ?, ?, ?, ?)',
+      [req.userId, expense_title, category_id, expense_cost, expense_date, expense_description || null]
+    );
+    res.status(201).json({ message: 'Expense created successfully', expenseId: result.insertId });
+  } catch (error) {
+    console.error('Create expense error:', error);
+    res.status(500).json({ message: 'Error creating expense', error: error.message });
+  }
 });
 
 // Get all expenses for a user (with optional filters)
