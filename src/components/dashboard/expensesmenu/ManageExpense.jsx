@@ -78,7 +78,7 @@ const ManageExpenses = () => {
   const handleFilterChange = (filterName, value) => {
     setFilters(prevFilters => ({
       ...prevFilters,
-      [filterName]: value
+      [filterName]: value === '' ? '' : value,
     }));
   };
 
@@ -87,12 +87,19 @@ const ManageExpenses = () => {
       category: '',
       costOrder: '',
       dateOrder: '',
-      registeredDateOrder: ''
+      registeredDateOrder: '',
     });
   };
 
   const handleEditClick = (expense) => {
-    setSelectedExpense(expense);
+    setSelectedExpense({
+      id: expense.id,
+      title: expense.expense_title,
+      date: expense.expense_date,
+      category_id: expense.category_id,
+      cost: expense.expense_cost,
+      description: expense.expense_description,
+    });
     setShowEditModal(true);
   };
 
@@ -102,20 +109,21 @@ const ManageExpenses = () => {
   };
 
   const handleEdit = async (updatedExpense) => {
-    try {
-      const response = await api.put(`/expenses/${updatedExpense.id}`, updatedExpense);
-      setExpenses(expenses.map(e => e.id === updatedExpense.id ? response.data : e));
-      setFilteredExpenses(filteredExpenses.map(e => e.id === updatedExpense.id ? response.data : e)); 
-      setEditConfirmationMessage('Expense updated successfully!');
-      setTimeout(() => {
-        setEditConfirmationMessage('');
-        setShowEditModal(false);
-      }, 2000);
-    } catch (error) {
-      console.error('Error updating expense:', error);
-      setEditConfirmationMessage('Failed to update expense. Please try again.');
-    }
-  };
+  try {
+    const response = await api.put(`/expenses/${updatedExpense.id}`, updatedExpense);
+    setExpenses(expenses.map(e => e.id === updatedExpense.id ? response.data : e));
+    setFilteredExpenses(filteredExpenses.map(e => e.id === updatedExpense.id ? response.data : e)); 
+    setSelectedExpense({ ...selectedExpense, category_id: updatedExpense.category_id });
+    setEditConfirmationMessage('Expense updated successfully!');
+    setTimeout(() => {
+      setEditConfirmationMessage('');
+      setShowEditModal(false);
+    }, 2000);
+  } catch (error) {
+    console.error('Error updating expense:', error);
+    setEditConfirmationMessage('Failed to update expense. Please try again.');
+  }
+};
 
   const handleDelete = async (expenseId) => {
     try {
