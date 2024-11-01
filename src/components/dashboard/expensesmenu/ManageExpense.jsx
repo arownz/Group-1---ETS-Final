@@ -60,7 +60,7 @@ const ManageExpenses = () => {
     let result = [...expenses];
 
     if (filters.category !== '') {
-      result = result.filter(expense => expense.category_id.id === parseInt(filters.category));
+      result = result.filter(expense => expense.category_id === parseInt(filters.category));
     }
 
     if (filters.costOrder) {
