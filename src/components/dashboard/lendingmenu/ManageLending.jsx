@@ -159,7 +159,7 @@ const ManageLending = () => {
       <table className={styles.lendingTable}>
         <thead>
           <tr>
-            <th>Lending ID</th>
+            {/* <th>Lending ID</th> */}
             <th>Title of Lending</th>
             <th>Name of Borrower</th>
             <th>Date of Lending</th>
@@ -175,7 +175,7 @@ const ManageLending = () => {
         <tbody>
           {getPaginatedData().map((lending) => (
             <tr key={lending.id}>
-              <td>{lending.id}</td>
+              {/* <td>{lending.id}</td> */}
               <td>{lending.title}</td>
               <td>{lending.name}</td>
               <td>{lending.dateLending}</td>

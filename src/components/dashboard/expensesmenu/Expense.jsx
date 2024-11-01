@@ -54,7 +54,6 @@ const Expense = () => {
     }));
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -121,7 +120,6 @@ const Expense = () => {
     <div className={styles.expenseContainer}>
       <h2>Add Expense</h2>
 
-
       <form onSubmit={handleSubmit} className={styles.expenseForm}>
         <div className={styles.formGroup}>
           <label>Title of Expense</label>
@@ -134,7 +132,6 @@ const Expense = () => {
           />
         </div>
 
-
         <div className={styles.formGroup}>
           <label>Date of Expense</label>
           <input
@@ -145,7 +142,6 @@ const Expense = () => {
             required
           />
         </div>
-
 
         <div className={styles.formGroup}>
           <label>Category</label>
@@ -184,7 +180,6 @@ const Expense = () => {
           />
         </div>
 
-
         <div className={styles.formGroup}>
           <label>Description</label>
           <textarea
@@ -194,7 +189,6 @@ const Expense = () => {
             onChange={handleInputChange}
           />
         </div>
-
 
         {expenseConfirmation && (
           <div className={styles.expenseConfirmation}>
