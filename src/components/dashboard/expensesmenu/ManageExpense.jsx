@@ -56,19 +56,19 @@ const ManageExpenses = () => {
     let result = [...expenses];
 
     if (filters.category) {
-      result = result.filter(expense => expense.category === filters.category);
+      result = result.filter(expense => expense.category_id === filters.category);
     }
 
     if (filters.costOrder) {
-      result.sort((a, b) => filters.costOrder === 'asc' ? a.cost - b.cost : b.cost - a.cost);
+      result.sort((a, b) => filters.costOrder === 'asc' ? a.expense_cost - b.expense_cost : b.expense_cost - a.expense_cost);
     }
 
     if (filters.dateOrder) {
-      result.sort((a, b) => filters.dateOrder === 'asc' ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date));
+      result.sort((a, b) => filters.dateOrder === 'asc' ? new Date(a.expense_date) - new Date(b.expense_date) : new Date(b.expense_date) - new Date(a.expense_date));
     }
 
     if (filters.registeredDateOrder) {
-      result.sort((a, b) => filters.registeredDateOrder === 'asc' ? new Date(a.registeredDate) - new Date(b.registeredDate) : new Date(b.registeredDate) - new Date(a.registeredDate));
+      result.sort((a, b) => filters.registeredDateOrder === 'asc' ? new Date(a.expense_registered_date) - new Date(b.expense_registered_date) : new Date(b.expense_registered_date) - new Date(a.expense_registered_date));
     }
 
     setFilteredExpenses(result);
@@ -109,21 +109,28 @@ const ManageExpenses = () => {
   };
 
   const handleEdit = async (updatedExpense) => {
-  try {
-    const response = await api.put(`/expenses/${updatedExpense.id}`, updatedExpense);
-    setExpenses(expenses.map(e => e.id === updatedExpense.id ? response.data : e));
-    setFilteredExpenses(filteredExpenses.map(e => e.id === updatedExpense.id ? response.data : e)); 
-    setSelectedExpense({ ...selectedExpense, category_id: updatedExpense.category_id });
-    setEditConfirmationMessage('Expense updated successfully!');
-    setTimeout(() => {
-      setEditConfirmationMessage('');
-      setShowEditModal(false);
-    }, 2000);
-  } catch (error) {
-    console.error('Error updating expense:', error);
-    setEditConfirmationMessage('Failed to update expense. Please try again.');
-  }
-};
+    try {
+      const response = await api.put(`/expenses/${updatedExpense.id}`, {
+        expense_title: updatedExpense.title,
+        expense_date: updatedExpense.date,
+        category_id: updatedExpense.category_id,
+        expense_cost: updatedExpense.cost,
+        expense_description: updatedExpense.description,
+      });
+      setExpenses(expenses.map(e => e.id === updatedExpense.id ? response.data : e));
+      setFilteredExpenses(filteredExpenses.map(e => e.id === updatedExpense.id ? response.data : e));
+      // Add this line to update the filteredExpenses state
+      setFilteredExpenses(expenses);
+      setEditConfirmationMessage('Expense updated successfully!');
+      setTimeout(() => {
+        setEditConfirmationMessage('');
+        setShowEditModal(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Error updating expense:', error);
+      setEditConfirmationMessage('Failed to update expense. Please try again.');
+    }
+  };
 
   const handleDelete = async (expenseId) => {
     try {
@@ -228,9 +235,9 @@ const ManageExpenses = () => {
               <td>{expense.expense_title}</td>
               <td>{expense.category_name}</td>
               <td>{expense.expense_cost}</td>
-              <td>{new Date(expense.expense_date).toLocaleDateString()}</td>
+              <td>{new Date(expense.expense_date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' })}</td>
               <td>{expense.expense_description}</td>
-              <td>{new Date(expense.expense_registered_date).toLocaleString()}</td>
+              <td>{new Date(expense.expense_registered_date).toLocaleString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</td>
               <td>
                 <div className={styles.dropdown}>
                   <button className={styles.dropdownToggle}>
@@ -342,7 +349,6 @@ const ManageExpenses = () => {
               <div className={styles.modalButtons}>
                 <button type="button" className={styles.addCategoryModalBtn} onClick={() => {
                   handleEdit(selectedExpense);
-                  setExpenses(expenses.map(e => e.id === selectedExpense.id ? selectedExpense : e));
                   setEditConfirmationMessage('Expense updated successfully!');
 
                   // Remove confirmation message after 2 seconds

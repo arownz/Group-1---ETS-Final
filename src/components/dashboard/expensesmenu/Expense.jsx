@@ -54,6 +54,7 @@ const Expense = () => {
     }));
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -72,6 +73,7 @@ const Expense = () => {
         setExpenseConfirmation('Invalid category selected.');
         return;
       }
+
 
       // Ensure category_id is a valid number
       const categoryId = parseInt(category_id, 10);
@@ -102,9 +104,11 @@ const Expense = () => {
     }
   };
 
+
   return (
     <div className={styles.expenseContainer}>
       <h2>Add Expense</h2>
+
 
       <form onSubmit={handleSubmit} className={styles.expenseForm}>
         <div className={styles.formGroup}>
@@ -118,6 +122,7 @@ const Expense = () => {
           />
         </div>
 
+
         <div className={styles.formGroup}>
           <label>Date of Expense</label>
           <input
@@ -128,6 +133,7 @@ const Expense = () => {
             required
           />
         </div>
+
 
         <div className={styles.formGroup}>
           <label>Category</label>
@@ -166,6 +172,7 @@ const Expense = () => {
           />
         </div>
 
+
         <div className={styles.formGroup}>
           <label>Description</label>
           <textarea
@@ -176,6 +183,7 @@ const Expense = () => {
           />
         </div>
 
+
         {expenseConfirmation && (
           <div className={styles.expenseConfirmation}>
             {expenseConfirmation}
@@ -183,6 +191,7 @@ const Expense = () => {
         )}
         <button type="submit" className={styles.addExpenseBtn}>Add Expense Record</button>
       </form>
+
 
       {showAddCategory && (
         <div className={styles.modal}>
@@ -206,5 +215,6 @@ const Expense = () => {
     </div>
   );
 };
+
 
 export default Expense;
