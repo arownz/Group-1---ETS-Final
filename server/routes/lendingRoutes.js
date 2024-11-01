@@ -1,15 +1,14 @@
 // server/routes/lendingRoutes.js
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql');
 const db = require('../db');
 const auth = require('../middleware/auth');
 
 // Create a lending
 router.post('/create', (req, res) => {
-  const { title, name, date, dateOfPayBack, amount, description, status } = req.body;
+  const { lending_title, lending_borrower_name, lending_date, lending_payback_date, lending_amount, lending_description, lending_status } = req.body;
   const query = 'INSERT INTO lendings SET ?';
-  db.query(query, { title, name, date, dateOfPayBack, amount, description, status }, (err, results) => {
+  db.query(query, { lending_title, lending_borrower_name, lending_date, lending_payback_date, lending_amount, lending_description, lending_status }, (err, results) => {
     if (err) {
       console.error('error creating lending:', err);
       res.status(500).send({ message: 'Error creating lending' });
@@ -49,9 +48,9 @@ router.get('/:id', (req, res) => {
 // Update a lending
 router.put('/:id', (req, res) => {
   const id = req.params.id;
-  const { title, name, date, dateOfPayBack, amount, description, status } = req.body;
+  const { lending_title, lending_borrower_name, lending_date, lending_payback_date, lending_amount, lending_description, lending_status } = req.body;
   const query = 'UPDATE lendings SET ? WHERE id = ?';
-  db.query(query, [{ title, name, date, dateOfPayBack, amount, description, status }, id], (err, results) => {
+  db.query(query, [{ lending_title, lending_borrower_name, lending_date, lending_payback_date, lending_amount, lending_description, lending_status }, id], (err, results) => {
     if (err) {
       console.error('error updating lending:', err);
       res.status(500).send({ message: 'Error updating lending' });

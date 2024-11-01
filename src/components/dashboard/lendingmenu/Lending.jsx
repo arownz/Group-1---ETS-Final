@@ -1,15 +1,17 @@
+// src/components/dashboard/lendingmenu/Lending.jsx
 import { useState } from 'react';
 import styles from './Lending.module.css';
+import axios from 'axios';
 
 const Lending = () => {
   const [lendingData, setLendingData] = useState({
-    title: '',
-    name: '',
-    date: '',
-    dateOfPayBack: '',
-    amount: '',
-    description: '',
-    status: ''
+    lending_title: '',
+    lending_borrower_name: '',
+    lending_date: '',
+    lending_payback_date: '',
+    lending_amount: '',
+    lending_description: '',
+    lending_status: ''
   });
 
   const [confirmationMessage, setConfirmationMessage] = useState('');
@@ -24,22 +26,24 @@ const Lending = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Add logic to save lending data
-    console.log('Lending data submitted:', lendingData);
-    setConfirmationMessage('Lending record added successfully!');
+    axios.post('/api/lending/create', lendingData)
+      .then(response => {
+        console.log(response.data);
+        setConfirmationMessage('Lending record added successfully!');
+        setLendingData({
+          lending_title: '',
+          lending_borrower_name: '',
+          lending_date: '',
+          lending_payback_date: '',
+          lending_amount: '',
+          lending_description: '',
+          lending_status: ''
+        });
+      })
+      .catch(error => {
+        console.error(error);
+      });
 
-    // Clear the form
-    setLendingData({
-      title: '',
-      name: '',
-      date: '',
-      dateOfPayBack: '',
-      amount: '',
-      description: '',
-      status: ''
-    });
-
-    // Clear confirmation message after 3 seconds
     setTimeout(() => setConfirmationMessage(''), 3000);
   };
 
@@ -52,19 +56,19 @@ const Lending = () => {
           <label>Title of Lending</label>
           <input
             type="text"
-            name="title"
-            value={lendingData.title}
+            name="lending_title"
+            value={lendingData.lending_title}
             onChange={handleInputChange}
             required
           />
         </div>
 
         <div className={styles.formGroup}>
-          <label>Name of Lender</label>
+          <label>Name of Borrower</label>
           <input
             type="text"
-            name="name"
-            value={lendingData.name}
+            name="lending_borrower_name"
+            value={lendingData.lending_borrower_name}
             onChange={handleInputChange}
             required
           />
@@ -74,8 +78,8 @@ const Lending = () => {
           <label>Date of Lending</label>
           <input
             type="date"
-            name="date"
-            value={lendingData.date}
+            name="lending_date"
+            value={lendingData.lending_date}
             onChange={handleInputChange}
             required
           />
@@ -85,8 +89,8 @@ const Lending = () => {
           <label>Date of Pay Back</label>
           <input
             type="date"
-            name="dateOfPayBack"
-            value={lendingData.dateOfPayBack}
+            name="lending_payback_date"
+            value={lendingData.lending_payback_date}
             onChange={handleInputChange}
             required
           />
@@ -96,8 +100,8 @@ const Lending = () => {
           <label>Amount</label>
           <input
             type="number"
-            name="amount"
-            value={lendingData.amount}
+            name="lending_amount"
+            value={lendingData.lending_amount}
             onChange={handleInputChange}
             required
           />
@@ -106,8 +110,8 @@ const Lending = () => {
         <div className={styles.formGroup}>
           <label>Description</label>
           <textarea
-            name="description"
-            value={lendingData.description}
+            name="lending_description"
+            value={lendingData.lending_description}
             onChange={handleInputChange}
             rows="4"
           />
@@ -116,14 +120,14 @@ const Lending = () => {
         <div className={styles.formGroup}>
           <label>Status</label>
           <select
-            name="status"
-            value={lendingData.status}
+            name="lending_status"
+            value={lendingData.lending_status}
             onChange={handleInputChange}
             required
           >
             <option value="">Choose Status</option>
-            <option value="pending">Pending</option>
-            <option value="received">Received</option>
+            <option value="Pending">Pending</option>
+            <option value="Received">Received</option>
           </select>
         </div>
 

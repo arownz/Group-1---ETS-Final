@@ -1,16 +1,11 @@
 // src/components/dashboard/lendingmenu/ManageLending.jsx
-
 import { useState, useEffect } from 'react';
 import styles from './ManageLending.module.css';
+import axios from 'axios';
 
 const ManageLending = () => {
-  const [lendings, setLendings] = useState([
-    { id: 1, title: 'Personal Loan', name: 'John Doe', dateLending: '2024-05-01', datePayBack: '2024-06-01', amount: 1000, description: 'Emergency fund', status: 'Pending', registeredDate: '2024-05-02' },
-    { id: 2, title: 'Business Loan', name: 'Jane Smith', dateLending: '2024-05-05', datePayBack: '2024-07-05', amount: 5000, description: 'Startup capital', status: 'Received', registeredDate: '2024-05-07' },
-    // Add more dummy data as needed...
-  ]);
-
-  const [filteredLendings, setFilteredLendings] = useState(lendings);
+  const [lendings, setLendings] = useState([]);
+  const [filteredLendings, setFilteredLendings] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editConfirmationMessage, setEditConfirmationMessage] = useState('');
@@ -25,10 +20,21 @@ const ManageLending = () => {
     registeredDateOrder: ''
   });
 
+
   const itemsPerPage = 10;
   const totalPages = Math.ceil(filteredLendings.length / itemsPerPage);
 
-  // Apply filters
+  useEffect(() => {
+    axios.get('/api/lending/all')
+      .then(response => {
+        setLendings(response.data);
+        setFilteredLendings(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
   useEffect(() => {
     let result = [...lendings];
 
@@ -83,6 +89,52 @@ const ManageLending = () => {
     setShowDeleteModal(true);
   };
 
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    axios.put(`/api/lending/update/${selectedLending.id}`, selectedLending)
+      .then(response => {
+        console.log(response.data);
+        setEditConfirmationMessage('Lending record updated successfully!');
+        axios.get('/api/lending/all')
+          .then(response => {
+            setLendings(response.data);
+            setFilteredLendings(response.data);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+    setTimeout(() => setEditConfirmationMessage(''), 3000);
+    setShowEditModal(false);
+  };
+
+  const handleDeleteSubmit = (e) => {
+    e.preventDefault();
+    axios.delete(`/api/lending/delete/${selectedLending.id}`)
+      .then(response => {
+        console.log(response.data);
+        setDeleteConfirmationMessage('Lending record deleted successfully!');
+        axios.get('/api/lending/all')
+          .then(response => {
+            setLendings(response.data);
+            setFilteredLendings(response.data);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
+    setTimeout(() => setDeleteConfirmationMessage(''), 3000);
+    setShowDeleteModal(false);
+  };
+
   const getPaginatedData = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -108,52 +160,67 @@ const ManageLending = () => {
       <div className={styles.filterContainer}>
         <div className={styles.filterGroup}>
           <select
+            name="status"
             value={filters.status}
             onChange={(e) => handleFilterChange('status', e.target.value)}
           >
-            <option value="">All Statuses</option>
+            <option value="">All Status</option>
             <option value="Pending">Pending</option>
             <option value="Received">Received</option>
           </select>
+        </div>
 
+        <div className={styles.filterGroup}>
           <select
+            name="amountOrder"
             value={filters.amountOrder}
             onChange={(e) => handleFilterChange('amountOrder', e.target.value)}
           >
             <option value="">Sort by Amount</option>
-            <option value="asc">Amount (Low to High)</option>
-            <option value="desc">Amount (High to Low)</option>
+            <option value="asc">Low to High</option>
+            <option value="desc">High to Low</option>
           </select>
+        </div>
 
+        <div className={styles.filterGroup}>
           <select
+            name="dateLendingOrder"
             value={filters.dateLendingOrder}
             onChange={(e) => handleFilterChange('dateLendingOrder', e.target.value)}
           >
             <option value="">Sort by Lending Date</option>
-            <option value="desc">Date (Newest First)</option>
-            <option value="asc">Date (Oldest First)</option>
+            <option value="desc">Newest First</option>
+            <option value="asc">Oldest First</option>
           </select>
+        </div>
 
+        <div className={styles.filterGroup}>
           <select
+            name="datePayBackOrder"
             value={filters.datePayBackOrder}
             onChange={(e) => handleFilterChange('datePayBackOrder', e.target.value)}
           >
-            <option value="">Sort by Pay Back Date</option>
-            <option value="desc">Date (Newest First)</option>
-            <option value="asc">Date (Oldest First)</option>
+            <option value="">Sort by Date Pay Back</option>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
           </select>
+        </div>
 
+        <div className={styles.filterGroup}>
           <select
+            name="registeredDateOrder"
             value={filters.registeredDateOrder}
             onChange={(e) => handleFilterChange('registeredDateOrder', e.target.value)}
           >
             <option value="">Sort by Registered Date</option>
-            <option value="desc">Date (Newest First)</option>
-            <option value="asc">Date (Oldest First)</option>
+            <option value="desc">Newest First</option>
+            <option value="asc">Oldest First</option>
           </select>
         </div>
 
-        <button onClick={resetFilters} className={styles.resetBtn}>Reset Filters</button>
+        <button className={styles.resetBtn} onClick={resetFilters}>
+          Reset Filters
+        </button>
       </div>
 
       <table className={styles.lendingTable}>
@@ -177,7 +244,7 @@ const ManageLending = () => {
             <tr key={lending.id}>
               {/* <td>{lending.id}</td> */}
               <td>{lending.title}</td>
-              <td>{lending.name}</td>
+              <td>{lending.borrowerName}</td>
               <td>{lending.dateLending}</td>
               <td>{lending.datePayBack}</td>
               <td>{lending.amount}</td>
@@ -238,6 +305,7 @@ const ManageLending = () => {
                 <label>Title of Lending</label>
                 <input
                   type="text"
+                  name="title"
                   value={selectedLending.title}
                   onChange={(e) => setSelectedLending({ ...selectedLending, title: e.target.value })}
                   required
@@ -248,8 +316,9 @@ const ManageLending = () => {
                 <label>Name of Lender</label>
                 <input
                   type="text"
-                  value={selectedLending.name}
-                  onChange={(e) => setSelectedLending({ ...selectedLending, name: e.target.value })}
+                  name="borrowerName"
+                  value={selectedLending.borrowerName}
+                  onChange={(e) => setSelectedLending({ ...selectedLending, borrowerName: e.target.value })}
                   required
                 />
               </div>
@@ -258,6 +327,7 @@ const ManageLending = () => {
                 <label>Date of Lending</label>
                 <input
                   type="date"
+                  name="dateLending"
                   value={selectedLending.dateLending}
                   onChange={(e) => setSelectedLending({ ...selectedLending, dateLending: e.target.value })}
                   required
@@ -268,6 +338,7 @@ const ManageLending = () => {
                 <label>Date of Pay Back</label>
                 <input
                   type="date"
+                  name="datePayBack"
                   value={selectedLending.datePayBack}
                   onChange={(e) => setSelectedLending({ ...selectedLending, datePayBack: e.target.value })}
                   required
@@ -278,6 +349,7 @@ const ManageLending = () => {
                 <label>Amount</label>
                 <input
                   type="number"
+                  name="amount"
                   value={selectedLending.amount}
                   onChange={(e) => setSelectedLending({ ...selectedLending, amount: e.target.value })}
                   required
@@ -296,9 +368,10 @@ const ManageLending = () => {
               <div className={styles.formGroup}>
                 <label>Status</label>
                 <select
+                  name="status"
                   value={selectedLending.status}
                   onChange={(e) => setSelectedLending({ ...selectedLending, status: e.target.value })}
-                >
+                  >
                   <option value="Pending">Pending</option>
                   <option value="Received">Received</option>
                 </select>
