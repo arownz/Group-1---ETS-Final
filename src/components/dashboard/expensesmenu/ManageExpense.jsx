@@ -30,8 +30,11 @@ const ManageExpenses = () => {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    setFilteredExpenses(expenses);
+  }, [expenses]);
 
-
+  // Fetch expenses
   const fetchExpenses = async () => {
     try {
       const response = await api.get('/expenses');
@@ -42,6 +45,7 @@ const ManageExpenses = () => {
     }
   };
 
+  // Fetch categories
   const fetchCategories = async () => {
     try {
       const response = await api.get('/expenses/categories');
@@ -55,8 +59,8 @@ const ManageExpenses = () => {
   useEffect(() => {
     let result = [...expenses];
 
-    if (filters.category) {
-      result = result.filter(expense => expense.category_id === filters.category);
+    if (filters.category !== '') {
+      result = result.filter(expense => expense.category_id.id === parseInt(filters.category));
     }
 
     if (filters.costOrder) {
@@ -92,10 +96,10 @@ const ManageExpenses = () => {
   };
 
   const handleEditClick = (expense) => {
-    setSelectedExpense({
+    const date = new Date(expense.expense_date).toISOString().split('T')[0]; setSelectedExpense({
       id: expense.id,
       title: expense.expense_title,
-      date: expense.expense_date,
+      date,
       category_id: expense.category_id,
       cost: expense.expense_cost,
       description: expense.expense_description,
@@ -137,6 +141,7 @@ const ManageExpenses = () => {
       await api.delete(`/expenses/${expenseId}`);
       setExpenses(expenses.filter(e => e.id !== expenseId));
       setFilteredExpenses(filteredExpenses.filter(e => e.id !== expenseId));
+      setFilteredExpenses(expenses);
       setDeleteConfirmationMessage('Expense deleted successfully!');
       setTimeout(() => {
         setDeleteConfirmationMessage('');
@@ -282,6 +287,7 @@ const ManageExpenses = () => {
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <h4>Edit Expense</h4>
+
             <form className={styles.expenseForm}>
               <div className={styles.formGroup}>
                 <label>Title of Expense</label>

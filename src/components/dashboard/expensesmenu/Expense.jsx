@@ -74,6 +74,18 @@ const Expense = () => {
         return;
       }
 
+      /* Validate expense date
+      const expenseDate = new Date(date);
+      if (expenseDate > new Date()) {
+        setExpenseConfirmation('Expense date cannot be in the future.');
+        return;
+      }*/
+
+      // Validate expense cost
+      if (cost <= 0) {
+        setExpenseConfirmation('Expense cost must be a positive number.');
+        return;
+      }
 
       // Ensure category_id is a valid number
       const categoryId = parseInt(category_id, 10);
@@ -82,6 +94,7 @@ const Expense = () => {
         return;
       }
 
+      // Add expense
       await api.post('/expenses', {
         expense_title: title,
         category_id: categoryId,
@@ -103,7 +116,6 @@ const Expense = () => {
       setExpenseConfirmation('Failed to add expense. Please try again.');
     }
   };
-
 
   return (
     <div className={styles.expenseContainer}>
