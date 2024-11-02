@@ -4,6 +4,7 @@ import styles from './Lending.module.css';
 import axios from 'axios';
 
 const Lending = () => {
+  const [lendingConfirmation, setlendingConfirmation] = useState('');
   const [lendingData, setLendingData] = useState({
     lending_title: '',
     lending_borrower_name: '',
@@ -13,8 +14,6 @@ const Lending = () => {
     lending_description: '',
     lending_status: ''
   });
-
-  const [confirmationMessage, setConfirmationMessage] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -26,25 +25,33 @@ const Lending = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('/api/lending/create', lendingData)
-      .then(response => {
-        console.log(response.data);
-        setConfirmationMessage('Lending record added successfully!');
-        setLendingData({
-          lending_title: '',
-          lending_borrower_name: '',
-          lending_date: '',
-          lending_payback_date: '',
-          lending_amount: '',
-          lending_description: '',
-          lending_status: ''
-        });
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    try {
+      const { lending_title, lending_borrower_name, lending_date, lending_payback_date, lending_amount, lending_description, lending_status } = lendingData;
+      if (!lending_title || !lending_borrower_name || !lending_date || !lending_payback_date || !lending_amount || !lending_description || !lending_status) {
+        setlendingConfirmation('Please fill all required fields.');
+        return;
+      }
 
-    setTimeout(() => setConfirmationMessage(''), 3000);
+      // Add lending
+      axios.post('/api/lending/create', lendingData)
+        .then(response => {
+          console.log(response.data);
+          setlendingConfirmation('Lending record added successfully!');
+          setLendingData({
+            lending_title: '',
+            lending_borrower_name: '',
+            lending_date: '',
+            lending_payback_date: '',
+            lending_amount: '',
+            lending_description: '',
+            lending_status: ''
+          });
+        })
+      setTimeout(() => setlendingConfirmation(''), 3000);
+    } catch (error) {
+      console.error('Error adding lending:', error);
+      setlendingConfirmation('Failed to add lending. Please try again.');
+    }
   };
 
   return (
@@ -131,12 +138,11 @@ const Lending = () => {
           </select>
         </div>
 
-        {confirmationMessage && (
+        {lendingConfirmation && (
           <div className={styles.confirmationMessage}>
-            {confirmationMessage}
+            {lendingConfirmation}
           </div>
         )}
-
         <button type="submit" className={styles.addLendingBtn}>Add Lending Record</button>
       </form>
     </div>

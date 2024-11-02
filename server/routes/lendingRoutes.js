@@ -4,8 +4,8 @@ const router = express.Router();
 const db = require('../db');
 const auth = require('../middleware/auth');
 
-// Create a lending
-router.post('/create', (req, res) => {
+// Create a new lending
+router.post('/', auth, async (req, res) => {
   const { lending_title, lending_borrower_name, lending_date, lending_payback_date, lending_amount, lending_description, lending_status } = req.body;
   const query = 'INSERT INTO lendings SET ?';
   db.query(query, { lending_title, lending_borrower_name, lending_date, lending_payback_date, lending_amount, lending_description, lending_status }, (err, results) => {
