@@ -123,8 +123,7 @@ const ManageExpenses = () => {
       });
       setExpenses(expenses.map(e => e.id === updatedExpense.id ? response.data : e));
       setFilteredExpenses(filteredExpenses.map(e => e.id === updatedExpense.id ? response.data : e));
-      // Add this line to update the filteredExpenses state
-      setFilteredExpenses(expenses);
+      //setFilteredExpenses([...expenses]); // Add this line to update the filteredExpenses state
       setEditConfirmationMessage('Expense updated successfully!');
       setTimeout(() => {
         setEditConfirmationMessage('');
@@ -141,7 +140,7 @@ const ManageExpenses = () => {
       await api.delete(`/expenses/${expenseId}`);
       setExpenses(expenses.filter(e => e.id !== expenseId));
       setFilteredExpenses(filteredExpenses.filter(e => e.id !== expenseId));
-      setFilteredExpenses(expenses);
+      //setFilteredExpenses([...expenses]); // Add this line to update the filteredExpenses state
       setDeleteConfirmationMessage('Expense deleted successfully!');
       setTimeout(() => {
         setDeleteConfirmationMessage('');

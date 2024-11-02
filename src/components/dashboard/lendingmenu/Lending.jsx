@@ -1,18 +1,18 @@
-// src/components/dashboard/lendingmenu/Lending.jsx
+// src/components/Lending/Lending.jsx
 import { useState } from 'react';
 import styles from './Lending.module.css';
-import axios from 'axios';
+import api from '../../../api/api';
 
 const Lending = () => {
-  const [lendingConfirmation, setlendingConfirmation] = useState('');
+  const [confirmationMessage, setConfirmationMessage] = useState('');
   const [lendingData, setLendingData] = useState({
-    lending_title: '',
-    lending_borrower_name: '',
-    lending_date: '',
-    lending_payback_date: '',
-    lending_amount: '',
-    lending_description: '',
-    lending_status: ''
+    title: '',
+    name: '',
+    date: '',
+    dateOfPayBack: '',
+    amount: '',
+    description: '',
+    status: ''
   });
 
   const handleInputChange = (e) => {
@@ -23,35 +23,34 @@ const Lending = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { lending_title, lending_borrower_name, lending_date, lending_payback_date, lending_amount, lending_description, lending_status } = lendingData;
-      if (!lending_title || !lending_borrower_name || !lending_date || !lending_payback_date || !lending_amount || !lending_description || !lending_status) {
-        setlendingConfirmation('Please fill all required fields.');
-        return;
-      }
-
-      // Add lending
-      axios.post('/api/lending/create', lendingData)
-        .then(response => {
-          console.log(response.data);
-          setlendingConfirmation('Lending record added successfully!');
-          setLendingData({
-            lending_title: '',
-            lending_borrower_name: '',
-            lending_date: '',
-            lending_payback_date: '',
-            lending_amount: '',
-            lending_description: '',
-            lending_status: ''
-          });
-        })
-      setTimeout(() => setlendingConfirmation(''), 3000);
+      const response = await api.post('/api/lending', {
+        user_id: req.userId, // Assuming req.userId is available
+        lending_title: lendingData.title,
+        lending_borrower_name: lendingData.name,
+        lending_date: lendingData.date,
+        lending_payback_date: lendingData.dateOfPayBack,
+        lending_amount: lendingData.amount,
+        lending_description: lendingData.description,
+        lending_status: lendingData.status
+      });
+      setConfirmationMessage(response.data.message);
+      setLendingData({
+        title: '',
+        name: '',
+        date: '',
+        dateOfPayBack: '',
+        amount: '',
+        description: '',
+        status: ''
+      });
     } catch (error) {
-      console.error('Error adding lending:', error);
-      setlendingConfirmation('Failed to add lending. Please try again.');
+      console.error('Failed to add lending record:', error.response?.data || error.message);
+      setConfirmationMessage(error.response?.data?.error || 'Failed to add lending record');
     }
+    setTimeout(() => setConfirmationMessage(''), 3000);
   };
 
   return (
@@ -63,19 +62,19 @@ const Lending = () => {
           <label>Title of Lending</label>
           <input
             type="text"
-            name="lending_title"
-            value={lendingData.lending_title}
+            name="title"
+            value={lendingData.title}
             onChange={handleInputChange}
             required
           />
         </div>
 
         <div className={styles.formGroup}>
-          <label>Name of Borrower</label>
+          <label>Borrower&apos;s Name</label>
           <input
             type="text"
-            name="lending_borrower_name"
-            value={lendingData.lending_borrower_name}
+            name="name"
+            value={lendingData.name}
             onChange={handleInputChange}
             required
           />
@@ -85,19 +84,19 @@ const Lending = () => {
           <label>Date of Lending</label>
           <input
             type="date"
-            name="lending_date"
-            value={lendingData.lending_date}
+            name="date"
+            value={lendingData.date}
             onChange={handleInputChange}
             required
           />
         </div>
 
         <div className={styles.formGroup}>
-          <label>Date of Pay Back</label>
+          <label>Payback Date</label>
           <input
             type="date"
-            name="lending_payback_date"
-            value={lendingData.lending_payback_date}
+            name="dateOfPayBack"
+            value={lendingData.dateOfPayBack}
             onChange={handleInputChange}
             required
           />
@@ -107,8 +106,8 @@ const Lending = () => {
           <label>Amount</label>
           <input
             type="number"
-            name="lending_amount"
-            value={lendingData.lending_amount}
+            name="amount"
+            value={lendingData.amount}
             onChange={handleInputChange}
             required
           />
@@ -117,8 +116,8 @@ const Lending = () => {
         <div className={styles.formGroup}>
           <label>Description</label>
           <textarea
-            name="lending_description"
-            value={lendingData.lending_description}
+            name="description"
+            value={lendingData.description}
             onChange={handleInputChange}
             rows="4"
           />
@@ -127,22 +126,23 @@ const Lending = () => {
         <div className={styles.formGroup}>
           <label>Status</label>
           <select
-            name="lending_status"
-            value={lendingData.lending_status}
+            name="status"
+            value={lendingData.status}
             onChange={handleInputChange}
             required
           >
             <option value="">Choose Status</option>
-            <option value="Pending">Pending</option>
-            <option value="Received">Received</option>
+            <option value="pending">Pending</option>
+            <option value="received">Received</option>
           </select>
         </div>
 
-        {lendingConfirmation && (
+        {confirmationMessage && (
           <div className={styles.confirmationMessage}>
-            {lendingConfirmation}
+            {confirmationMessage}
           </div>
         )}
+
         <button type="submit" className={styles.addLendingBtn}>Add Lending Record</button>
       </form>
     </div>

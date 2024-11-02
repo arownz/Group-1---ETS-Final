@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from './Expense.module.css';
-import api from '../../../api/api'; // Make sure this path is correct
+import api from '../../../api/api'; // filepath -/src/api/api.js
 
 const Expense = () => {
   const [categories, setCategories] = useState([]);
@@ -58,10 +58,6 @@ const Expense = () => {
     e.preventDefault();
     try {
       const { title, date, category_id, cost, description } = expenseData;
-      if (!title || !date || !category_id || !cost) {
-        setExpenseConfirmation('Please fill all required fields.');
-        return;
-      }
 
       // Fetch latest categories
       await fetchCategories();

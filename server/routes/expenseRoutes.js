@@ -33,9 +33,6 @@ router.get('/categories', auth, async (req, res) => {
 router.post('/', auth, async (req, res) => {
   try {
     const { expense_title, category_id, expense_cost, expense_date, expense_description } = req.body;
-    if (!expense_title || !category_id || !expense_cost || !expense_date) {
-      return res.status(400).json({ message: 'Missing required fields' });
-    }
 
     // Check if the category exists
     const [category] = await db.execute('SELECT * FROM categories WHERE id = ?', [category_id]);

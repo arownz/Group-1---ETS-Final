@@ -7,7 +7,7 @@ const auth = require('../middleware/auth'); // Import the auth middleware
 
 
 // In your route handlers, use it like this:
-router.post('/register', async (req, res) => {
+router.post('/register', auth, async (req, res) => {
     console.log('Register route hit');
     try {
         const { user_profile, user_name, user_email, user_phone, user_password } = req.body;
@@ -48,7 +48,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', auth, async (req, res) => {
     try {
         const { user_email, user_password } = req.body;
         console.log('Login attempt for:', user_email);
