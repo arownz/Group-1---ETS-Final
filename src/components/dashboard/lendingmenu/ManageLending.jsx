@@ -125,9 +125,8 @@ const ManageLending = () => {
         lending_description: updatedLending.description,
         lending_status: updatedLending.status
       });
-      setLendings(lendings.map(e => e.id === updatedLending.id ? response.data : e));
-      setFilteredLendings(filteredLendings.map(e => e.id === updatedLending.id ? response.data : e));
-      //setFilteredLendings([...lendings]); // Add this line to update the filteredLendings state
+      setLendings(lendings.map(l => l.id === updatedLending.id ? response.data : l));
+      setFilteredLendings(filteredLendings.map(l => l.id === updatedLending.id ? response.data : l));
       setEditConfirmationMessage('Lending updated successfully!');
       setTimeout(() => {
         setEditConfirmationMessage('');
@@ -142,9 +141,8 @@ const ManageLending = () => {
   const handleDelete = async (lendingId) => {
     try {
       await api.delete(`/lendings/${lendingId}`);
-      setLendings(lendings.filter(e => e.id !== lendingId));
-      setFilteredLendings(filteredLendings.filter(e => e.id !== lendingId));
-      //setFilteredLendings([...lendings]); // Add this line to update the filteredLendings state
+      setLendings(lendings.filter(l => l.id !== lendingId));
+      setFilteredLendings(filteredLendings.filter(l => l.id !== lendingId));
       setDeleteConfirmationMessage('Lending deleted successfully!');
       setTimeout(() => {
         setDeleteConfirmationMessage('');
@@ -384,15 +382,7 @@ const ManageLending = () => {
 
               <div className={styles.modalButtons}>
                 <button type="button" className={styles.saveBtn} onClick={() => {
-                  handleEdit(selectedLending.id);
-
-                  setLendings(lendings.map(l => l.id === selectedLending.id ? selectedLending : l));
-                  setEditConfirmationMessage('Lending updated successfully!');
-
-                  setTimeout(() => {
-                    setEditConfirmationMessage('');
-                    setShowEditModal(false);
-                  }, 2000);
+                  handleEdit(selectedLending);
                 }}>Save</button>
                 <button type="button" className={styles.closeModalBtn} onClick={() => setShowEditModal(false)}>Cancel</button>
               </div>
@@ -415,14 +405,6 @@ const ManageLending = () => {
             <div className={styles.modalButtons}>
               <button className={styles.deleteBtn} onClick={() => {
                 handleDelete(selectedLending.id);
-
-                setLendings(lendings.filter(l => l.id !== selectedLending.id));
-                setDeleteConfirmationMessage('Lending deleted successfully!');
-
-                setTimeout(() => {
-                  setDeleteConfirmationMessage('');
-                  setShowDeleteModal(false);
-                }, 3000);
               }}>Yes</button>
               <button className={styles.closeBtn} onClick={() => setShowDeleteModal(false)}>No</button>
             </div>

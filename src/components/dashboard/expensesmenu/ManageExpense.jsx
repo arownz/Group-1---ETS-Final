@@ -40,9 +40,13 @@ const ManageExpenses = () => {
     try {
       const response = await api.get('/expenses');
       console.log('API response:', response);
-      setExpenses(response.data);
-      console.log('Expenses data:', response.data);
-      setFilteredExpenses(response.data);
+      if (response.data) {
+        console.log('Expenses data:', response.data); // Add this line to see the data structure
+        setExpenses(response.data);
+        setFilteredExpenses(response.data);
+      } else {
+        console.error('No data received from API');
+      }
     } catch (error) {
       console.error('Error fetching expenses:', error);
       setError('Failed to fetch expenses. Please try again later.');
@@ -127,7 +131,6 @@ const ManageExpenses = () => {
       });
       setExpenses(expenses.map(e => e.id === updatedExpense.id ? response.data : e));
       setFilteredExpenses(filteredExpenses.map(e => e.id === updatedExpense.id ? response.data : e));
-      //setFilteredExpenses([...expenses]); // Add this line to update the filteredExpenses state
       setEditConfirmationMessage('Expense updated successfully!');
       setTimeout(() => {
         setEditConfirmationMessage('');
@@ -144,7 +147,6 @@ const ManageExpenses = () => {
       await api.delete(`/expenses/${expenseId}`);
       setExpenses(expenses.filter(e => e.id !== expenseId));
       setFilteredExpenses(filteredExpenses.filter(e => e.id !== expenseId));
-      //setFilteredExpenses([...expenses]); // Add this line to update the filteredExpenses state
       setDeleteConfirmationMessage('Expense deleted successfully!');
       setTimeout(() => {
         setDeleteConfirmationMessage('');
@@ -362,13 +364,6 @@ const ManageExpenses = () => {
               <div className={styles.modalButtons}>
                 <button type="button" className={styles.addCategoryModalBtn} onClick={() => {
                   handleEdit(selectedExpense);
-                  setEditConfirmationMessage('Expense updated successfully!');
-
-                  // Remove confirmation message after 2 seconds
-                  setTimeout(() => {
-                    setEditConfirmationMessage('');
-                    setShowEditModal(false);
-                  }, 2000);
                 }}>Save</button>
                 <button type="button" className={styles.closeModalBtn} onClick={() => setShowEditModal(false)}>Cancel</button>
               </div>
@@ -437,16 +432,6 @@ const ManageExpenses = () => {
             <div className={styles.modalButtons}>
               <button className={styles.addBtn} onClick={() => {
                 handleDelete(selectedExpense.id);
-
-                // Remove the deleted expense from the expenses array
-                setExpenses(expenses.filter(e => e.id !== selectedExpense.id));
-                setDeleteConfirmationMessage('Expense deleted successfully!');
-
-                // Remove confirmation message after 3 seconds
-                setTimeout(() => {
-                  setDeleteConfirmationMessage('');
-                  setShowDeleteModal(false);
-                }, 2000);
               }}>Yes</button>
               <button className={styles.closeBtn} onClick={() => setShowDeleteModal(false)}>No</button>
             </div>
