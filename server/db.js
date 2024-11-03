@@ -17,13 +17,13 @@ const pool = mysql.createPool({
   keepAliveInitialDelay: 0
 });
 
-pool.getConnection((err, connection) => {
-  if (err) {
-    console.error('Database connection failed:', err);
-  } else {
+pool.getConnection()
+  .then(connection => {
     console.log('Database connected successfully');
     connection.release();
-  }
-});
+  })
+  .catch(err => {
+    console.error('Database connection failed:', err.message);
+  });
 
 module.exports = pool;

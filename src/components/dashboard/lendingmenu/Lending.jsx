@@ -7,9 +7,9 @@ const Lending = () => {
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const [lendingData, setLendingData] = useState({
     title: '',
-    name: '',
-    date: '',
-    dateOfPayBack: '',
+    borrowername: '',
+    lendingdate: '',
+    paybackdate: '',
     amount: '',
     description: '',
     status: ''
@@ -26,31 +26,39 @@ const Lending = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/api/lending', {
-        user_id: req.userId, // Assuming req.userId is available
-        lending_title: lendingData.title,
-        lending_borrower_name: lendingData.name,
-        lending_date: lendingData.date,
-        lending_payback_date: lendingData.dateOfPayBack,
-        lending_amount: lendingData.amount,
-        lending_description: lendingData.description,
-        lending_status: lendingData.status
+      const { title, borrowername, lendingdate, paybackdate, amount, description, status } = lendingData;
+
+      // Validate expense cost
+      if (amount <= 0) {
+        setConfirmationMessage('Lending amount must be a positive number.');
+        return;
+      }
+
+      // Add lending
+      await api.post('/lendings', {
+        lending_title: title,
+        lending_borrower_name: borrowername,
+        lending_date: lendingdate,
+        lending_payback_date: paybackdate,
+        lending_amount: parseFloat(amount),
+        lending_description: description,
+        lending_status: status
       });
-      setConfirmationMessage(response.data.message);
+      setConfirmationMessage('Lending added successfully!');
       setLendingData({
         title: '',
-        name: '',
-        date: '',
-        dateOfPayBack: '',
+        borrowername: '',
+        lendingdate: '',
+        paybackdate: '',
         amount: '',
         description: '',
-        status: ''
+        status: 'Pending'
       });
+      setTimeout(() => setConfirmationMessage(''), 3000);
     } catch (error) {
-      console.error('Failed to add lending record:', error.response?.data || error.message);
-      setConfirmationMessage(error.response?.data?.error || 'Failed to add lending record');
+      console.error('Error adding lending:', error);
+      setConfirmationMessage('Failed to add lending. Please try again.');
     }
-    setTimeout(() => setConfirmationMessage(''), 3000);
   };
 
   return (
@@ -73,8 +81,8 @@ const Lending = () => {
           <label>Borrower&apos;s Name</label>
           <input
             type="text"
-            name="name"
-            value={lendingData.name}
+            name="borrowername"
+            value={lendingData.borrowername}
             onChange={handleInputChange}
             required
           />
@@ -84,8 +92,8 @@ const Lending = () => {
           <label>Date of Lending</label>
           <input
             type="date"
-            name="date"
-            value={lendingData.date}
+            name="lendingdate"
+            value={lendingData.lendingdate}
             onChange={handleInputChange}
             required
           />
@@ -95,8 +103,8 @@ const Lending = () => {
           <label>Payback Date</label>
           <input
             type="date"
-            name="dateOfPayBack"
-            value={lendingData.dateOfPayBack}
+            name="paybackdate"
+            value={lendingData.paybackdate}
             onChange={handleInputChange}
             required
           />

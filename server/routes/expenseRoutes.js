@@ -3,6 +3,30 @@ const router = express.Router();
 const db = require('../db');
 const auth = require('../middleware/auth');
 
+// Create expense
+router.post('/', auth, async (req, res) => {
+  try {
+    const { expense_title, category_id, expense_cost, expense_date, expense_description } = req.body;
+
+    // Check if the category exists
+    const [category] = await db.execute('SELECT * FROM categories WHERE id = ?', [category_id]);
+    if (!category.length) {
+      return res.status(400).json({ message: 'Category does not exist' });
+    }
+
+    // Create a expense entry
+    console.log('Request body:', req.body);
+    const [result] = await db.execute(
+      'INSERT INTO expenses (user_id, expense_title, category_id, expense_cost, expense_date, expense_description) VALUES (?, ?, ?, ?, ?, ?)',
+      [req.userId, expense_title, category_id || null, expense_cost, expense_date, expense_description]
+    );
+    res.status(201).json({ message: 'Expense created successfully', expenseId: result.insertId });
+  } catch (error) {
+    console.error('Add expense error:', error);
+    res.status(500).json({ message: 'Error adding expense', error: error.message });
+  }
+});
+
 // Add a new category
 router.post('/categories', auth, async (req, res) => {
   try {
@@ -26,29 +50,6 @@ router.get('/categories', auth, async (req, res) => {
   } catch (error) {
     console.error('Get categories error:', error);
     res.status(500).json({ message: 'Error fetching categories' });
-  }
-});
-
-// Create a new expense
-router.post('/', auth, async (req, res) => {
-  try {
-    const { expense_title, category_id, expense_cost, expense_date, expense_description } = req.body;
-
-    // Check if the category exists
-    const [category] = await db.execute('SELECT * FROM categories WHERE id = ?', [category_id]);
-    if (!category.length) {
-      return res.status(400).json({ message: 'Category does not exist' });
-    }
-
-    // Create a new expense
-    const [result] = await db.execute(
-      'INSERT INTO expenses (user_id, expense_title, category_id, expense_cost, expense_date, expense_description) VALUES (?, ?, ?, ?, ?, ?)',
-      [req.userId, expense_title, category_id, expense_cost, expense_date, expense_description || null]
-    );
-    res.status(201).json({ message: 'Expense created successfully', expenseId: result.insertId });
-  } catch (error) {
-    console.error('Create expense error:', error);
-    res.status(500).json({ message: 'Error creating expense', error: error.message });
   }
 });
 

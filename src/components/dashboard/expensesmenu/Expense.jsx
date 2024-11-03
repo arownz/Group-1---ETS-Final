@@ -114,7 +114,7 @@ const Expense = () => {
 
   return (
     <div className={styles.expenseContainer}>
-      <h2>Add Expense</h2>
+      <h2>Add Expense Record</h2>
 
       <form onSubmit={handleSubmit} className={styles.expenseForm}>
         <div className={styles.formGroup}>

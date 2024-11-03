@@ -96,10 +96,10 @@ const ManageExpenses = () => {
   };
 
   const handleEditClick = (expense) => {
-    const date = new Date(expense.expense_date).toISOString().split('T')[0]; setSelectedExpense({
+    setSelectedExpense({
       id: expense.id,
       title: expense.expense_title,
-      date,
+      date: new Date(expense.expense_date).toISOString().split('T')[0],
       category_id: expense.category_id,
       cost: expense.expense_cost,
       description: expense.expense_description,
