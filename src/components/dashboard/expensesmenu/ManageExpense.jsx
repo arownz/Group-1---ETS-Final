@@ -15,6 +15,7 @@ const ManageExpenses = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirmationMessage, setDeleteConfirmationMessage] = useState('');
   const [selectedExpense, setSelectedExpense] = useState(null);
+  const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     category: '',
     costOrder: '',
@@ -38,10 +39,13 @@ const ManageExpenses = () => {
   const fetchExpenses = async () => {
     try {
       const response = await api.get('/expenses');
+      console.log('API response:', response);
       setExpenses(response.data);
+      console.log('Expenses data:', response.data);
       setFilteredExpenses(response.data);
     } catch (error) {
       console.error('Error fetching expenses:', error);
+      setError('Failed to fetch expenses. Please try again later.');
     }
   };
 
@@ -173,6 +177,7 @@ const ManageExpenses = () => {
   return (
     <div className={styles.manageExpenseWrapper}>
       <h2>Manage Expense</h2>
+      {error && <p className={styles.error}>{error}</p>}
 
       <div className={styles.filterContainer}>
         <div className={styles.filterGroup}>
@@ -219,45 +224,48 @@ const ManageExpenses = () => {
         <button onClick={resetFilters} className={styles.resetBtn}>Reset Filters</button>
       </div>
 
-      <table className={styles.expenseTable}>
-        <thead>
-          <tr>
-            {/* <th>Expense ID</th> */}
-            <th>Expense Title</th>
-            <th>Category</th>
-            <th>Cost</th>
-            <th>Expense Date</th>
-            <th>Description</th>
-            <th>Expense Registered Date</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {getPaginatedData().map((expense) => (
-            <tr key={expense.id}>
-              {/* <td>{expense.id}</td> */}
-              <td>{expense.expense_title}</td>
-              <td>{expense.category_name}</td>
-              <td>{expense.expense_cost}</td>
-              <td>{new Date(expense.expense_date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' })}</td>
-              <td>{expense.expense_description}</td>
-              <td>{new Date(expense.expense_registered_date).toLocaleString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</td>
-              <td>
-                <div className={styles.dropdown}>
-                  <button className={styles.dropdownToggle}>
-                    Action
-                  </button>
-                  <div className={styles.dropdownMenu}>
-                    <button onClick={() => handleEditClick(expense)}>Edit</button>
-                    <button onClick={() => handleDeleteClick(expense)}>Delete</button>
-                  </div>
-                </div>
-              </td>
+      {filteredExpenses.length === 0 ? (
+        <p>No expenses records available.</p>
+      ) : (
+        <table className={styles.expenseTable}>
+          <thead>
+            <tr>
+              {/* <th>Expense ID</th> */}
+              <th>Expense Title</th>
+              <th>Category</th>
+              <th>Cost</th>
+              <th>Expense Date</th>
+              <th>Description</th>
+              <th>Expense Registered Date</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
+          </thead>
+          <tbody>
+            {getPaginatedData().map((expense) => (
+              <tr key={expense.id}>
+                {/* <td>{expense.id}</td> */}
+                <td>{expense.expense_title}</td>
+                <td>{expense.category_name}</td>
+                <td>{expense.expense_cost}</td>
+                <td>{new Date(expense.expense_date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' })}</td>
+                <td>{expense.expense_description}</td>
+                <td>{new Date(expense.expense_registered_date).toLocaleString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</td>
+                <td>
+                  <div className={styles.dropdown}>
+                    <button className={styles.dropdownToggle}>
+                      Action
+                    </button>
+                    <div className={styles.dropdownMenu}>
+                      <button onClick={() => handleEditClick(expense)}>Edit</button>
+                      <button onClick={() => handleDeleteClick(expense)}>Delete</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
       {/* Pagination */}
       <div className={styles.pagination}>
         {currentPage > 1 && (

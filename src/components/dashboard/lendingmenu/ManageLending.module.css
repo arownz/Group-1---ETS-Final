@@ -51,15 +51,13 @@
   text-align: center;
 }
 
-.lendingTable td:nth-child(1),
+.lendingTable td:nth-child(2),
 .lendingTable td:nth-child(3),
 .lendingTable td:nth-child(4),
 .lendingTable td:nth-child(5),
-.lendingTable td:nth-child(6),
+.lendingTable td:nth-child(7),
 .lendingTable td:nth-child(8),
-.lendingTable td:nth-child(9),
-.lendingTable td:nth-child(10),
-.lendingTable td:nth-child(11) {
+.lendingTable td:nth-child(9) {
   text-align: center;
 }
 

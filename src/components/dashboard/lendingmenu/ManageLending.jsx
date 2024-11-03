@@ -1,8 +1,6 @@
-// src/components/dashboard/lendingmenu/ManageLending.jsx
 import { useState, useEffect } from 'react';
 import styles from './ManageLending.module.css';
-import api from '../../../api/api'; // Make sure this path is correct
-//import axios from 'axios';
+import api from '../../../api/api';
 
 const ManageLending = () => {
   const [lendings, setLendings] = useState([]);
@@ -13,6 +11,7 @@ const ManageLending = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirmationMessage, setDeleteConfirmationMessage] = useState('');
   const [selectedLending, setSelectedLending] = useState(null);
+  const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     status: '',
     amountOrder: '',
@@ -29,17 +28,27 @@ const ManageLending = () => {
     fetchLendings();
   }, []);
 
+  useEffect(() => {
+    setFilteredLendings(lendings);
+  }, [lendings]);
+
   // Fetch lendings
   const fetchLendings = async () => {
     try {
       const response = await api.get('/lendings');
-      setLendings(response.data);
-      setFilteredLendings(response.data);
+      console.log('API response:', response);
+      if (response.data) {
+        console.log('Lendings data:', response.data); // Add this line to see the data structure
+        setLendings(response.data);
+        setFilteredLendings(response.data);
+      } else {
+        console.error('No data received from API');
+      }
     } catch (error) {
-      console.error('Failed to fetch lending records:', error);
+      console.error('Error fetching lendings:', error);
+      setError('Failed to fetch lendings. Please try again later.');
     }
   };
-
 
   // Apply filters
   useEffect(() => {
@@ -168,6 +177,7 @@ const ManageLending = () => {
   return (
     <div className={styles.manageLendingWrapper}>
       <h2>Manage Lending</h2>
+      {error && <p className={styles.error}>{error}</p>}
 
       <div className={styles.filterContainer}>
         <div className={styles.filterGroup}>
@@ -220,53 +230,57 @@ const ManageLending = () => {
         <button onClick={resetFilters} className={styles.resetBtn}>Reset Filters</button>
       </div>
 
-      <table className={styles.lendingTable}>
-        <thead>
-          <tr>
-            {/* <th>Lending ID</th> */}
-            <th>Title of Lending</th>
-            <th>Name of Borrower</th>
-            <th>Date of Lending</th>
-            <th>Date of Pay Back</th>
-            <th>Amount</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Current Time</th>
-            <th>Lending Registered Date</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {getPaginatedData().map((lending) => (
-            <tr key={lending.id}>
-              {/* <td>{lending.id}</td> */}
-              <td>{lending.lending_title}</td>
-              <td>{lending.lending_borrower_name}</td>
-              <td>{new Date(lending.lending_date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' })}</td>
-              <td>{new Date(lending.lending_payback_date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' })}</td>
-              <td>{lending.lending_amount}</td>
-              <td>{lending.lending_description}</td>
-              <td>
-                <span className={`${styles.statusIndicator} ${styles[lending.status.toLowerCase()]}`}>
-                  {lending.status}
-                </span>
-              </td>
-              <td>{new Date(lending.lending_registered_date).toLocaleString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</td>
-              <td>
-                <div className={styles.dropdown}>
-                  <button className={styles.dropdownToggle}>
-                    Action
-                  </button>
-                  <div className={styles.dropdownMenu}>
-                    <button onClick={() => handleEditClick(lending)}>Edit</button>
-                    <button onClick={() => handleDeleteClick(lending)}>Delete</button>
-                  </div>
-                </div>
-              </td>
+      {filteredLendings.length === 0 ? (
+        <p>No lending records available.</p>
+      ) : (
+
+        <table className={styles.lendingTable}>
+          <thead>
+            <tr>
+              {/* <th>Lending ID</th> */}
+              <th>Title of Lending</th>
+              <th>Name of Borrower</th>
+              <th>Date of Lending</th>
+              <th>Date of Pay Back</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Lending Registered Date</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {getPaginatedData().map((lending) => (
+              <tr key={lending.id}>
+                {/* <td>{lending.id}</td> */}
+                <td>{lending.lending_title}</td>
+                <td>{lending.lending_borrower_name}</td>
+                <td>{new Date(lending.lending_date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' })}</td>
+                <td>{new Date(lending.lending_payback_date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' })}</td>
+                <td>{lending.lending_amount}</td>
+                <td>{lending.lending_description}</td>
+                <td>
+                  <span className={`${styles.statusIndicator} ${styles[lending.lending_status.toLowerCase()]}`}>
+                    {lending.lending_status}
+                  </span>
+                </td>
+                <td>{new Date(lending.lending_registered_date).toLocaleString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</td>
+                <td>
+                  <div className={styles.dropdown}>
+                    <button className={styles.dropdownToggle}>
+                      Action
+                    </button>
+                    <div className={styles.dropdownMenu}>
+                      <button onClick={() => handleEditClick(lending)}>Edit</button>
+                      <button onClick={() => handleDeleteClick(lending)}>Delete</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
 
       {/* Pagination */}
       <div className={styles.pagination}>
@@ -309,11 +323,11 @@ const ManageLending = () => {
               </div>
 
               <div className={styles.formGroup}>
-                <label>Name of Lender</label>
+                <label>Name of Borrower</label>
                 <input
                   type="text"
-                  value={selectedLending.name}
-                  onChange={(e) => setSelectedLending({ ...selectedLending, name: e.target.value })}
+                  value={selectedLending.borrowername}
+                  onChange={(e) => setSelectedLending({ ...selectedLending, borrowername: e.target.value })}
                   required
                 />
               </div>
