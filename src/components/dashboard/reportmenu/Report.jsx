@@ -12,14 +12,14 @@ const Report = () => {
 
   // Dummy data for demonstration
   const expenseData = [
-    { id: 1, title: 'Groceries', category: 'Food', expenseDate: '2024-10-25', description: 'Weekly groceries', registeredDate: '2024-10-24', amount: 150 },
-    { id: 2, title: 'Electricity Bill', category: 'Utilities', expenseDate: '2024-11-01', description: 'Monthly bill', registeredDate: '2024-10-31', amount: 200 },
+    { title: 'Groceries', category: 'Food', expenseDate: '2024-10-25', description: 'Weekly groceries', registeredDate: '2024-10-24', amount: 150 },
+    { title: 'Electricity Bill', category: 'Utilities', expenseDate: '2024-11-01', description: 'Monthly bill', registeredDate: '2024-10-31', amount: 200 },
     // Add more dummy data as needed
   ];
 
   const lendingData = [
-    { id: 1, title: 'Friend Loan', name: 'John Doe', dateLending: '2024-10-22', datePayBack: '2024-11-22', description: 'Emergency loan', status: 'Pending', registeredDate: '2024-10-21', amount: 500 },
-    { id: 2, title: 'Business Loan', name: 'Jane Smith', dateLending: '2024-10-30', datePayBack: '2024-12-30', description: 'Startup funds', status: 'Received', registeredDate: '2024-10-29', amount: 1000 },
+    { title: 'Friend Loan', name: 'John Doe', dateLending: '2024-10-22', datePayBack: '2024-11-22', description: 'Emergency loan', status: 'Pending', registeredDate: '2024-10-21', amount: 500 },
+    { title: 'Business Loan', name: 'Jane Smith', dateLending: '2024-10-30', datePayBack: '2024-12-30', description: 'Startup funds', status: 'Received', registeredDate: '2024-10-29', amount: 1000 },
     // Add more dummy data as needed
   ];
 
@@ -51,7 +51,7 @@ const Report = () => {
     WinPrint.document.write('<style>');
     WinPrint.document.write(`
       table { width: 100%; border-collapse: collapse; }
-      th, td { border: 1px solid black; padding: 8px; text-align: left; }
+      th, td { border: 1px solid black; padding: 8px; text-align: center; }
       th { background-color: #f2f2f2; }
       .justifyCell { text-align: center; }
       .grandTotal { font-weight: bold; }
@@ -82,7 +82,7 @@ const Report = () => {
   return (
     <div className={styles.reportContainer}>
       <div className={styles.formWrapper}>
-      <h2>Generate Report</h2>
+        <h2>Generate Report</h2>
         <div className={styles.reportForm}>
           <div className={styles.formGroup}>
             <label>Report Type:</label>
@@ -126,19 +126,19 @@ const Report = () => {
                 <tr>
                   {reportType === 'expense' ? (
                     <>
-                      <th>Expense ID</th>
-                      <th>Title</th>
+                      {/*<th>Expense ID</th>*/}
+                      <th>Title of Expense</th>
                       <th>Category</th>
-                      <th>Expense Date</th>
+                      <th>Date of Expense</th>
                       <th>Description</th>
-                      <th>Registered Date</th>
-                      <th>Amount</th>
+                      <th>Expense Registered Date</th>
+                      <th>Cost</th>
                     </>
                   ) : (
                     <>
-                      <th>Lending ID</th>
+                      {/* <th>Lending ID</th> */}
                       <th>Title</th>
-                      <th>Name</th>
+                      <th>Name of Borrower</th>
                       <th>Date of Lending</th>
                       <th>Date of Pay Back</th>
                       <th>Description</th>
@@ -154,7 +154,7 @@ const Report = () => {
                   <tr key={item.id}>
                     {reportType === 'expense' ? (
                       <>
-                        <td className={styles.justifyCell}>{item.id}</td>
+                        {/*<td className={styles.justifyCell}>{item.id}</td> */}
                         <td>{item.title}</td>
                         <td className={styles.justifyCell}>{item.category}</td>
                         <td className={styles.justifyCell}>{item.expenseDate}</td>
@@ -164,7 +164,7 @@ const Report = () => {
                       </>
                     ) : (
                       <>
-                        <td className={styles.justifyCell}>{item.id}</td>
+                        {/*<td className={styles.justifyCell}>{item.id}</td>*/}
                         <td>{item.title}</td>
                         <td className={styles.justifyCell}>{item.name}</td>
                         <td className={styles.justifyCell}>{item.dateLending}</td>
@@ -178,7 +178,7 @@ const Report = () => {
                   </tr>
                 ))}
                 <tr className={styles.grandTotal}>
-                  <td colSpan={reportType === 'expense' ? 6 : 8}>Grand Total</td>
+                  <td colSpan={reportType === 'expense' ? 5 : 7}>Grand Total</td>
                   <td className={styles.justifyCell}>{reportData.reduce((sum, item) => sum + item.amount, 0)}</td>
                 </tr>
               </tbody>

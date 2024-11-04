@@ -31,6 +31,7 @@ const ManageExpenses = () => {
     fetchCategories();
   }, []);
 
+    // Apply filters
   useEffect(() => {
     setFilteredExpenses(expenses);
   }, [expenses]);
@@ -233,10 +234,10 @@ const ManageExpenses = () => {
           <thead>
             <tr>
               {/* <th>Expense ID</th> */}
-              <th>Expense Title</th>
+              <th>Title of Expense</th>
               <th>Category</th>
               <th>Cost</th>
-              <th>Expense Date</th>
+              <th>Date of Expense</th>
               <th>Description</th>
               <th>Expense Registered Date</th>
               <th>Action</th>

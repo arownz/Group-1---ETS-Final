@@ -55,7 +55,9 @@ const ManageLending = () => {
     let result = [...lendings];
 
     if (filters.status) {
-      result = result.filter(lending => lending.status === filters.status);
+      result = result.filter(
+        (lending) => lending.lending_status && lending.lending_status.toLowerCase() === filters.status.toLowerCase()
+      );
     }
 
     if (filters.amountOrder) {
@@ -73,6 +75,8 @@ const ManageLending = () => {
     if (filters.registeredDateOrder) {
       result.sort((a, b) => filters.registeredDateOrder === 'asc' ? new Date(a.lending_registered_date) - new Date(b.lending_registered_date) : new Date(b.lending_registered_date) - new Date(a.lending_registered_date));
     }
+
+    console.log("Filtered Lendings:", result); // Check this log to verify filter results
 
     setFilteredLendings(result);
     setCurrentPage(1);
@@ -238,9 +242,9 @@ const ManageLending = () => {
               {/* <th>Lending ID</th> */}
               <th>Title of Lending</th>
               <th>Name of Borrower</th>
+              <th>Amount</th>
               <th>Date of Lending</th>
               <th>Date of Pay Back</th>
-              <th>Amount</th>
               <th>Description</th>
               <th>Status</th>
               <th>Lending Registered Date</th>
@@ -258,7 +262,7 @@ const ManageLending = () => {
                 <td>{lending.lending_amount}</td>
                 <td>{lending.lending_description}</td>
                 <td>
-                  <span className={`${styles.statusIndicator} ${styles[lending.lending_status.toLowerCase()]}`}>
+                  <span className={`${styles.statusIndicator} ${lending.lending_status ? styles[lending.lending_status.toLowerCase()] : ''}`}>
                     {lending.lending_status}
                   </span>
                 </td>

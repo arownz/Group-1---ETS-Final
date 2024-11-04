@@ -53,7 +53,7 @@ router.get('/categories', auth, async (req, res) => {
   }
 });
 
-// Get all expenses for a user (with optional filters)
+// Get all expenses for a user (with created categories)
 router.get('/', auth, async (req, res) => {
   try {
     let query = `
