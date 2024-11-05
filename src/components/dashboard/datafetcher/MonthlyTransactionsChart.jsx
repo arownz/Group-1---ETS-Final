@@ -1,6 +1,6 @@
 import { Bar } from 'react-chartjs-2';
 
-const MonthlyExpenseChart = ({ data }) => {
+const MonthlyTransactionsChart = ({ data }) => {
   return (
     <div className="chart-section card">
       <h3>Monthly Transactions Chart</h3>
@@ -17,4 +17,4 @@ const MonthlyExpenseChart = ({ data }) => {
   );
 };
 
-export default MonthlyExpenseChart;
+export default MonthlyTransactionsChart;

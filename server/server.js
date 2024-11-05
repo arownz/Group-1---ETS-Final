@@ -5,6 +5,7 @@ const userRoutes = require('./routes/userRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
 const lendingRoutes = require('./routes/lendingRoutes');
 const reportRoutes = require('./routes/reportRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
 
 dotenv.config();
 
@@ -21,7 +22,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/lendings', lendingRoutes);
 app.use('/api/reports', reportRoutes);
-
+app.use('/api/dashboard', dashboardRoutes);
 
 app.get('/api/test', (req, res) => {
   res.json({ message: "API is working!" });

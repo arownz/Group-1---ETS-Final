@@ -1,4 +1,4 @@
-//const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt'); hash password
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
