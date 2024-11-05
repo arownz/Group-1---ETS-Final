@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
 const lendingRoutes = require('./routes/lendingRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use('/api/users', userRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/lendings', lendingRoutes);
+app.use('/api/reports', reportRoutes);
+
 
 app.get('/api/test', (req, res) => {
   res.json({ message: "API is working!" });

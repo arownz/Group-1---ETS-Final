@@ -1,29 +1,17 @@
 import { useState } from 'react';
 import styles from './Report.module.css';
+import api from '../../../api/api';
 
 const Report = () => {
   const [reportType, setReportType] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [reportData, setReportData] = useState([]);
+  const [reportData, setReportData] = useState([]); 
   const [showPrintableReport, setShowPrintableReport] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const [messageType, setMessageType] = useState('');
 
-  // Dummy data for demonstration
-  const expenseData = [
-    { title: 'Groceries', category: 'Food', expenseDate: '2024-10-25', description: 'Weekly groceries', registeredDate: '2024-10-24', amount: 150 },
-    { title: 'Electricity Bill', category: 'Utilities', expenseDate: '2024-11-01', description: 'Monthly bill', registeredDate: '2024-10-31', amount: 200 },
-    // Add more dummy data as needed
-  ];
-
-  const lendingData = [
-    { title: 'Friend Loan', name: 'John Doe', dateLending: '2024-10-22', datePayBack: '2024-11-22', description: 'Emergency loan', status: 'Pending', registeredDate: '2024-10-21', amount: 500 },
-    { title: 'Business Loan', name: 'Jane Smith', dateLending: '2024-10-30', datePayBack: '2024-12-30', description: 'Startup funds', status: 'Received', registeredDate: '2024-10-29', amount: 1000 },
-    // Add more dummy data as needed
-  ];
-
-  const handleGenerateReport = () => {
+  const handleGenerateReport = async () => {
     if (!reportType || !startDate || !endDate) {
       setConfirmationMessage('Please select a report type and date range');
       setMessageType('warning');
@@ -31,16 +19,24 @@ const Report = () => {
       return;
     }
 
-    const data = reportType === 'expense' ? expenseData : lendingData;
-    const filteredData = data.filter(item => {
-      const itemDate = new Date(reportType === 'expense' ? item.expenseDate : item.dateLending);
-      return itemDate >= new Date(startDate) && itemDate <= new Date(endDate);
-    });
+    try {
+      const response = await api.get('/reports/generateReport', {
+        params: {
+          reportType,
+          startDate,
+          endDate,
+        },
+      });
 
-    setReportData(filteredData);
-    setShowPrintableReport(true);
-    setConfirmationMessage('Report generated successfully!');
-    setMessageType('success');
+      setReportData(response.data);
+      setShowPrintableReport(true);
+      setConfirmationMessage('Report generated successfully!');
+      setMessageType('success');
+    } catch (error) {
+      console.error("Error fetching report data:", error);
+      setConfirmationMessage('Error generating report');
+      setMessageType('error');
+    }
     setTimeout(() => setConfirmationMessage(''), 3000);
   };
 
@@ -88,8 +84,8 @@ const Report = () => {
             <label>Report Type:</label>
             <select value={reportType} onChange={(e) => setReportType(e.target.value)}>
               <option value="">Choose a Report Type</option>
-              <option value="expense">Expense Report</option>
-              <option value="lending">Lending Report</option>
+              <option value="expenses">Expense Report</option>
+              <option value="lendings">Lending Report</option>
             </select>
           </div>
           <div className={styles.formGroup}>
@@ -119,12 +115,12 @@ const Report = () => {
           </div>
           <div id="printableArea">
             <h3 className={styles.reportTitle}>
-              {reportType === 'expense' ? 'Expense' : 'Lending'}: Datewise Range Report from {startDate} to {endDate}
+              {reportType === 'expenses' ? 'Expense' : 'Lending'}: Datewise Range Report from {startDate} to {endDate}
             </h3>
             <table className={styles.reportTable}>
               <thead>
                 <tr>
-                  {reportType === 'expense' ? (
+                  {reportType === 'expenses' ? (
                     <>
                       {/*<th>Expense ID</th>*/}
                       <th>Title of Expense</th>
@@ -137,7 +133,7 @@ const Report = () => {
                   ) : (
                     <>
                       {/* <th>Lending ID</th> */}
-                      <th>Title</th>
+                      <th>Title of Lending</th>
                       <th>Name of Borrower</th>
                       <th>Date of Lending</th>
                       <th>Date of Pay Back</th>
@@ -152,7 +148,7 @@ const Report = () => {
               <tbody>
                 {reportData.map((item) => (
                   <tr key={item.id}>
-                    {reportType === 'expense' ? (
+                    {reportType === 'expenses' ? (
                       <>
                         {/*<td className={styles.justifyCell}>{item.id}</td> */}
                         <td>{item.title}</td>
@@ -160,7 +156,7 @@ const Report = () => {
                         <td className={styles.justifyCell}>{item.expenseDate}</td>
                         <td>{item.description}</td>
                         <td className={styles.justifyCell}>{item.registeredDate}</td>
-                        <td className={styles.justifyCell}>{item.amount}</td>
+                        <td className={styles.justifyCell}>{item.cost}</td>
                       </>
                     ) : (
                       <>
@@ -178,7 +174,7 @@ const Report = () => {
                   </tr>
                 ))}
                 <tr className={styles.grandTotal}>
-                  <td colSpan={reportType === 'expense' ? 5 : 7}>Grand Total</td>
+                  <td colSpan={reportType === 'expenses' ? 5 : 7}>Grand Total</td>
                   <td className={styles.justifyCell}>{reportData.reduce((sum, item) => sum + item.amount, 0)}</td>
                 </tr>
               </tbody>
