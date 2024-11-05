@@ -11,10 +11,11 @@ const Dashboard = () => {
 
   // Dummy data for expense stats
   const expenseStats = {
-    thisWeekExpense: 270,
-    thisMonthExpense: 250,
-    numberOfExpenses: 2,
-    totalExpense: 520
+    numberOfExpenses: 12,
+    numberOfLendings: 12,
+    thisWeekTransactions: 270,
+    thisMonthTransactions: 250,
+    totalTracker: 520
   };
 
   // Bar chart data (for monthly expenses)
@@ -22,7 +23,7 @@ const Dashboard = () => {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [ 
       {
-        label: 'Monthly Expenses',
+        label: 'Monthly Transactions',
         data: [500, 400, 600, 700, 300, 200, 400, 500, 450, 650, 500, 300], // Sample data
         backgroundColor: 'rgba(54, 162, 235, 0.6)',
         borderColor: 'rgba(54, 162, 235, 1)',
