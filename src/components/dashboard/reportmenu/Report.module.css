@@ -64,7 +64,7 @@
 }
 
 .printBtn {
-    background-color: #4299e1;
+    background-color: #2f855a;
     color: white;
 }
 
@@ -98,6 +98,15 @@
     /* Light orange for background */
     border: 1px solid #f6ad55;
     /* Medium orange for border */
+}
+
+.error {
+    color: #e53e3e;
+    /* Dark red for text */
+    background-color: #fed7d7;
+    /* Light red for background */
+    border: 1px solid #fc8181;
+    /* Medium red for border */
 }
 
 @keyframes fadeIn {
@@ -160,9 +169,12 @@
         visibility: visible;
     }
 
-    #printableArea {
-        position: absolute;
-        left: 0;
-        top: 0;
+    .reportTable th,
+    .reportTable tr:nth-child(even),
+    .grandTotal td {
+        -webkit-print-color-adjust: exact;
+        /* Ensures colors are printed as in display */
+        color-adjust: exact;
+        /* CSS4 property */
     }
 }

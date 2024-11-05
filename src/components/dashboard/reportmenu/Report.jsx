@@ -6,7 +6,7 @@ const Report = () => {
   const [reportType, setReportType] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [reportData, setReportData] = useState([]); 
+  const [reportData, setReportData] = useState([]);
   const [showPrintableReport, setShowPrintableReport] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const [messageType, setMessageType] = useState('');
@@ -43,25 +43,31 @@ const Report = () => {
   const handlePrint = () => {
     const printContent = document.getElementById('printableArea');
     const WinPrint = window.open('', '', 'width=900,height=650');
-    WinPrint.document.write('<html><head><title>Print Report</title>');
-    WinPrint.document.write('<style>');
     WinPrint.document.write(`
-      table { width: 100%; border-collapse: collapse; }
-      th, td { border: 1px solid black; padding: 8px; text-align: center; }
-      th { background-color: #f2f2f2; }
-      .justifyCell { text-align: center; }
-      .grandTotal { font-weight: bold; }
-      .grandTotal td:last-child { border-left: 2px solid #2f855a; }
+      <html>
+        <head>
+          <title style="text-align: center;">Print Report</title>
+          <style>
+            body { font-family: Arial, sans-serif; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid black; padding: 8px; text-align: center; }
+            th { background-color: #f2f2f2; }
+            tr:nth-child(even) { background-color: #f9f9f9; }
+            .justifyCell { text-align: center; }
+            .grandTotal { font-weight: bold; }
+            .grandTotal td:last-child { border-left: 2px solid #2f855a; }
+          </style>
+        </head>
+        <body onload="window.print();window.close()">
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h2>Print Report</h2>
+          </div>
+          ${printContent.innerHTML}
+        </body>
+      </html>
     `);
-    WinPrint.document.write('</style></head><body>');
-    WinPrint.document.write(printContent.innerHTML);
-    WinPrint.document.write('</body></html>');
     WinPrint.document.close();
     WinPrint.focus();
-    setTimeout(() => {
-      WinPrint.print();
-      WinPrint.close();
-    }, 250);
   };
 
   const handleReset = () => {
@@ -114,7 +120,7 @@ const Report = () => {
             <button className={styles.printBtn} onClick={handlePrint}>Print</button>
           </div>
           <div id="printableArea">
-            <h3 className={styles.reportTitle}>
+            <h3 className={styles.reportTitle} style={{ textAlign: 'center', margin: '0 auto', display: 'block' }}>
               {reportType === 'expenses' ? 'Expense' : 'Lending'}: Datewise Range Report from {startDate} to {endDate}
             </h3>
             <table className={styles.reportTable}>
@@ -151,21 +157,21 @@ const Report = () => {
                     {reportType === 'expenses' ? (
                       <>
                         {/*<td className={styles.justifyCell}>{item.id}</td> */}
-                        <td>{item.title}</td>
+                        <td className={styles.leftCell} style={{ textAlign: 'left' }}>{item.title}</td>
                         <td className={styles.justifyCell}>{item.category}</td>
                         <td className={styles.justifyCell}>{item.expenseDate}</td>
-                        <td>{item.description}</td>
+                        <td className={styles.leftCell} style={{ textAlign: 'left' }}>{item.description}</td>
                         <td className={styles.justifyCell}>{item.registeredDate}</td>
                         <td className={styles.justifyCell}>{item.cost}</td>
                       </>
                     ) : (
                       <>
                         {/*<td className={styles.justifyCell}>{item.id}</td>*/}
-                        <td>{item.title}</td>
+                        <td className={styles.leftCell} style={{ textAlign: 'left' }}>{item.title}</td>
                         <td className={styles.justifyCell}>{item.name}</td>
                         <td className={styles.justifyCell}>{item.dateLending}</td>
                         <td className={styles.justifyCell}>{item.datePayBack}</td>
-                        <td>{item.description}</td>
+                        <td className={styles.leftCell} style={{ textAlign: 'left' }}>{item.description}</td>
                         <td className={styles.justifyCell}>{item.status}</td>
                         <td className={styles.justifyCell}>{item.registeredDate}</td>
                         <td className={styles.justifyCell}>{item.amount}</td>
@@ -175,7 +181,12 @@ const Report = () => {
                 ))}
                 <tr className={styles.grandTotal}>
                   <td colSpan={reportType === 'expenses' ? 5 : 7}>Grand Total</td>
-                  <td className={styles.justifyCell}>{reportData.reduce((sum, item) => sum + item.amount, 0)}</td>
+                  <td className={styles.justifyCell}>
+                    {reportType === 'expenses'
+                      ? reportData.reduce((sum, item) => sum + parseFloat(item.cost || 0), 0).toFixed(2)
+                      : reportData.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0).toFixed(2)
+                    }
+                  </td>
                 </tr>
               </tbody>
             </table>

@@ -15,7 +15,6 @@ router.post('/', auth, async (req, res) => {
     }
 
     // Create a expense entry
-    console.log('Request body:', req.body);
     const [result] = await db.execute(
       'INSERT INTO expenses (user_id, expense_title, category_id, expense_cost, expense_date, expense_description) VALUES (?, ?, ?, ?, ?, ?)',
       [req.userId, expense_title, category_id || null, expense_cost, expense_date, expense_description]
@@ -25,6 +24,7 @@ router.post('/', auth, async (req, res) => {
     console.error('Add expense error:', error);
     res.status(500).json({ message: 'Error adding expense', error: error.message });
   }
+  console.log('Request body:', req.body);
 });
 
 // Add a new category
@@ -40,6 +40,7 @@ router.post('/categories', auth, async (req, res) => {
     console.error('Add category error:', error);
     res.status(500).json({ message: 'Error adding category', error: error.message });
   }
+  console.log('Request body:', req.body);
 });
 
 // Get all categories for a user
