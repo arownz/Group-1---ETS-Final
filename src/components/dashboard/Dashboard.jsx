@@ -7,17 +7,30 @@ import CategoryExpenseChart from './datafetcher/CategoryExpenseChart';
 import api from '../../../src/api/api'; // filepath - /src/api/api.js
 import { useState, useEffect } from 'react';
 
-
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
 const Dashboard = () => {
-  const [expenseStats, setExpenseStats] = useState(null);
+  const [expenseStats, setExpenseStats] = useState({
+    thisMonth: { totalNumberOfExpenses: 0, totalExpenses: 0, totalNumberOfLendings: 0, totalLendings: 0 },
+    thisYear: { totalNumberOfExpenses: 0, totalExpenses: 0, totalNumberOfLendings: 0, totalLendings: 0 },
+    totalYearTransactions: 0,
+    monthlyTransactions: 0,
+    monthlyTransactionsData: Array(12).fill(0),
+  });
+  const [monthlyData, setMonthlyData] = useState(Array(12).fill(0)); // Array for monthly transaction data
+  const [categoryData, setCategoryData] = useState([]); // Add this line
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get('/dashboard/dashboard-summary'); // Use the API endpoint
-        setExpenseStats(response.data);
+        const response = await api.get('/dashboard/dashboard-summary');
+        console.log("Fetched expenseStats:", response.data);  // Debug log
+        setExpenseStats(response.data);  // Set the data as-is
+        setMonthlyData(response.data.monthlyTransactionsData);
+        setCategoryData(response.data.categoryExpenses); // Add this line
+        console.log("Fetched monthlyData:", response.data.monthlyTransactionsData);  // Debug log
+        console.log("Fetched categoryData:", response.data.categoryExpenses);  // Debug log
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       }
@@ -28,13 +41,13 @@ const Dashboard = () => {
 
   if (!expenseStats) return <p>Loading...</p>;
 
-  // Prepare data for bar and pie charts based on fetched data (replace sample data)
+  // Prepare data for the bar chart
   const barChartData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
       {
         label: 'Monthly Transactions',
-        data: [500, 400, 600, 700, 300, 200, 400, 500, 450, 650, 500, 300], // Sample data to be replaced with fetched data
+        data: monthlyData, // Use monthlyData state here
         backgroundColor: 'rgba(54, 162, 235, 0.6)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1
@@ -43,11 +56,11 @@ const Dashboard = () => {
   };
 
   const pieChartData = {
-    labels: ['Grocery', 'Entertainment', 'Bills', 'Games', 'Rent'],
+    labels: categoryData.map(category => category.category_name),
     datasets: [
       {
         label: 'Expense Category',
-        data: [200, 150, 100, 50, 20], // Sample data to be replaced with fetched data
+        data: categoryData.map(category => category.totalExpenses),
         backgroundColor: [
           'rgba(255, 99, 132, 0.6)',
           'rgba(54, 162, 235, 0.6)',
@@ -66,7 +79,7 @@ const Dashboard = () => {
       <div className="allmenu-content-inner">
         <ExpenseSummary stats={expenseStats} />
         <MonthlyTransactionsChart data={barChartData} />
-        <CategoryExpenseChart data={pieChartData} />
+        <CategoryExpenseChart data={pieChartData } />
         <button className="floating-add-btn">
           <Link to="/expensewize/ExpenseWizeAI">+</Link>
         </button>
