@@ -128,7 +128,7 @@ function Welcome() {
                           <h5 className="card-title">Financial report</h5>
                           <p className="card-text">
                             Generate comprehensive financial reports summarizing
-                            expenses and income trends. Access detailed breakdowns of
+                            expenses and lendings. Access detailed breakdowns of
                             spending categories and visualize financial data for
                             better insights.
                           </p>
@@ -157,8 +157,8 @@ function Welcome() {
                           <h5 className="card-title">Financial plan</h5>
                           <p className="card-text">
                             Develop personalized financial plans tailored to
-                            individual goals and circumstances. Analyze income,
-                            expenses, assets, and liabilities to create a
+                            simplicity towards individual goals and circumstances. Analyze
+                            expenses and lending to create a
                             comprehensive financial overview.
                           </p>
                         </div>
@@ -180,10 +180,9 @@ function Welcome() {
                       <div className="card h-100">
                         <div className="card-body text-center">
                           <i className="bi bi-gear" style={{ fontSize: "2em" }} />
-                          <h5 className="card-title">Profit Planning</h5>
+                          <h5 className="card-title">CRUD Operation</h5>
                           <p className="card-text">
-                            Monitor performance against profit targets and adjust
-                            plans as needed to ensure financial success.
+                          Users can seamlessly add new expenses and lending entries, view detailed records, update existing entries, and delete inaccurate or outdated information.
                           </p>
                         </div>
                       </div>
