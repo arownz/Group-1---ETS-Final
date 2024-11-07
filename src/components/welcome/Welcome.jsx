@@ -179,7 +179,7 @@ function Welcome() {
                     <div className="col-lg-4">
                       <div className="card h-100">
                         <div className="card-body text-center">
-                          <i className="bi bi-kanban" style={{ fontSize: "2em" }} />
+                          <i className="bi bi-gear" style={{ fontSize: "2em" }} />
                           <h5 className="card-title">Profit Planning</h5>
                           <p className="card-text">
                             Monitor performance against profit targets and adjust

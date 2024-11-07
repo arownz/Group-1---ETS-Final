@@ -55,37 +55,46 @@ const Dashboard = () => {
     ]
   };
 
-  const pieChartData = {
-    labels: categoryData.map(category => category.category_name),
-    datasets: [
-      {
-        label: 'Expense Category',
-        data: categoryData.map(category => category.totalExpenses),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(255, 206, 86, 0.6)',
-          'rgba(75, 192, 192, 0.6)',
-          'rgba(153, 102, 255, 0.6)'
-        ],
-        borderWidth: 1
-      }
-    ]
-  };
-
-  return (
-    <div className="allmenu-container">
-      <h2>User Dashboard</h2>
-      <div className="allmenu-content-inner">
-        <ExpenseSummary stats={expenseStats} />
-        <MonthlyTransactionsChart data={barChartData} />
-        <CategoryExpenseChart data={pieChartData } />
-        <button className="floating-add-btn">
-          <Link to="/expensewize/ExpenseWizeAI">+</Link>
-        </button>
-      </div>
+return (
+  <div className="allmenu-container">
+    <h2>User Dashboard</h2>
+    <div className="allmenu-content-inner">
+      <ExpenseSummary stats={expenseStats} />
+      <MonthlyTransactionsChart data={barChartData} />
+      {categoryData.length > 0 && (
+        <CategoryExpenseChart data={{
+          labels: categoryData.map(category => category.label),
+          datasets: [
+            {
+              label: 'Expense Category',
+              data: categoryData.map(category => category.data),
+              backgroundColor: [ // custom colors
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+                'rgba(75, 192, 192, 0.6)',
+                'rgba(153, 102, 255, 0.6)',
+                'rgba(170, 130, 234, 0.6)',
+                'rgba(134, 163, 213, 0.6)',
+                'rgba(134, 104, 21, 0.6)',
+                'rgba(123, 49, 50, 0.6)',
+                'rgba(432, 31, 51, 0.6)',
+                'rgba(102, 512, 12, 0.6)',
+                'rgba(123, 123, 123, 0.6)',
+                'rgba(251, 61, 12, 0.6)',
+                'rgba(231, 75, 23, 0.6)'
+              ],
+              borderWidth: 1
+            }
+          ]
+        }} />
+      )}
+      <button className="floating-add-btn">
+        <Link to="/expensewize/ExpenseWizeAI">+</Link>
+      </button>
     </div>
-  );
+  </div>
+);
 };
 
 export default Dashboard;

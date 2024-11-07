@@ -3,7 +3,7 @@ import { Bar } from 'react-chartjs-2';
 const MonthlyTransactionsChart = ({ data }) => {
   return (
     <div className="chart-section card">
-      <h3>Monthly Transactions Chart</h3>
+      <h3>This Year Monthly Transactions Chart</h3>
       <div className="chart-container">
         <Bar
           data={data}
