@@ -5,9 +5,7 @@ const auth = require('../middleware/auth');
 
 router.get('/dashboard-summary', auth, async (req, res) => {
     try {
-
       const userId = req.user.id;
-
         const [totalExpenses] = await db.query(`
             SELECT COUNT(*) AS totalNumberOfExpenses 
             FROM expenses 
